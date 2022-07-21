@@ -41,7 +41,7 @@
     "@vue/cli-service": "^4.5.12",
     "eslint": "^8.11.0",
     "eslint-plugin-vue": "^8.5.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "prettier": "^2.2.1",
     "protobufjs": "^6.11.3",
     "sass-loader": "^8.0.2"
