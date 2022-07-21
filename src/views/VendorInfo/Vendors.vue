@@ -1,0 +1,150 @@
+<script>
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+import VendorInfo from "./VendorInfo.vue";
+import { FilterMatchMode } from "primevue/api";
+
+export default {
+  name: "Vendors",
+
+  data() {
+    return {
+      showVendorInfo: false,
+      selectedVendorInfo: null,
+      viewOnly: false,
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+    };
+  },
+
+  methods: {
+    dismissVendorInfoDialog() {
+      this.showVendorInfo = false;
+    },
+    showVendorInfoDialog(vendorInfo, viewOnly) {
+      this.showVendorInfo = true;
+      this.selectedVendorInfo = vendorInfo;
+      this.viewOnly = viewOnly;
+    },
+  },
+  components: {
+    DataTable,
+    Column,
+    Button,
+    Dialog,
+    VendorInfo,
+  },
+
+  computed: {
+    allVendors() {
+      const vendorInfoArray =
+        this.$store.getters[
+          "zigbeealliance.distributedcomplianceledger.vendorinfo/getVendorInfoAll"
+        ]();
+      return vendorInfoArray?.vendorInfo;
+    },
+
+    isSignedIn() {
+      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      return loggedIn;
+    },
+  },
+
+  created: function () {
+    // Get all the accounts
+    this.$store.dispatch(
+      "zigbeealliance.distributedcomplianceledger.vendorinfo/QueryVendorInfoAll",
+      {
+        options: {
+          subscribe: true,
+          all: true,
+        },
+      }
+    );
+  },
+};
+</script>
+
+<template>
+  <div class="prime-vue-container ml-5">
+    <div class="mb-5 ml-2">
+      <Button
+        @click="showVendorInfoDialog"
+        icon="pi pi-check"
+        v-bind:class="{ 'p-disabled': !isSignedIn }"
+        label="New Vendor"
+        >New Vendor</Button
+      >
+    </div>
+    <DataTable
+      :value="allVendors"
+      :auto-layout="true"
+      :paginator="true"
+      :rows="10"
+      v-model:filters="filters"
+      filterDisplay="row"
+      showGridlines
+      stripedRows
+    >
+      <template #header>
+        <div class="flex justify-content-end">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search" />
+            <InputText v-model="filters['global'].value" placeholder="Search" />
+          </span>
+        </div>
+      </template>
+
+      <Column field="vendorID" header="Vendor ID"></Column>
+      <Column field="vendorName" header="Vendor Name"></Column>
+      <Column field="companyLegalName" header="Company Legal Name"></Column>
+      <Column
+        field="vendorID"
+        header="Action"
+        headerStyle="text-align: center"
+        bodyStyle="text-align: center; overflow: visible"
+      >
+        <template #body="{ data }">
+          <span style="margin-right: 1rem">
+            <Button
+              label=""
+              @click="showVendorInfoDialog(data, true)"
+              class="p-button-rounded p-button-primary p-button-text"
+              iconPos="left"
+              icon="pi pi-info-circle"
+              v-tooltip="'Show Vendor info'"
+            />
+          </span>
+          <span>
+            <Button
+              label=""
+              @click="showVendorInfoDialog(data, false)"
+              class="p-button-rounded p-button-secondary p-button-text"
+              iconPos="left"
+              icon="pi pi-pencil"
+              v-bind:class="{ 'p-disabled': !isSignedIn }"
+              v-tooltip="'Update Vendor info'"
+            />
+          </span>
+        </template>
+      </Column>
+    </DataTable>
+
+    <Dialog
+      :visible="showVendorInfo"
+      @update:visible="dismissVendorInfoDialog"
+      :style="{ width: '40vw' }"
+      header="Vendor Info Transaction"
+      :modal="true"
+    >
+      <VendorInfo
+        :viewOnly="viewOnly"
+        :vendorInfo="selectedVendorInfo"
+        @close-dialog="dismissVendorInfoDialog"
+      ></VendorInfo>
+    </Dialog>
+  </div>
+</template>
