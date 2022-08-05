@@ -383,7 +383,7 @@ export default {
 
     validatorCount() {
       const ValidatorInfoArray =
-          "zigbeealliance.distributedcomplianceledger.validator/getValidatorAll"
+          this.$store.getters["zigbeealliance.distributedcomplianceledger.validator/getValidatorAll"
         ]();
       return ValidatorInfoArray?.validator?.length || 0;
     },
