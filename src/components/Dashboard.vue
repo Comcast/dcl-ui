@@ -279,7 +279,7 @@ export default {
 
   created() {
 		// Get the initial values
-		fetch("/rpc/block").then(response => response.json()).then(data => {
+		fetch(process.env.VUE_APP_DCL_RPC_NODE + "/block").then(response => response.json()).then(data => {
 			this.loadValues = data;
 		});
 

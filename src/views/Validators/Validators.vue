@@ -114,14 +114,14 @@ export default {
 
 	created: function () {
 		// Get the consensus state to get the status for each validator
-		fetch("/rpc/dump_consensus_state")
+		fetch(process.env.VUE_APP_DCL_RPC_NODE + "/dump_consensus_state")
 			.then((response) => response.json())
 			.then((data) => {
 				this.consensusState = data;
 				this.consensusValidatorInfos =
 					data.result.round_state.validators.validators;
 			});
-		fetch("/rpc/block")
+		fetch(process.env.VUE_APP_DCL_RPC_NODE + "/block")
 			.then((response) => response.json())
 			.then((data) => {
 				this.lastBlock = data;
