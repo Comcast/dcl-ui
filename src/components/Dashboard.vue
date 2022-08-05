@@ -8,7 +8,7 @@
             <div class="text-900 font-medium text-lg mb-3">
               Active
               <Badge
-                :value="allActiveAccounts.length"
+                :value="allActiveAccounts.length || '0'"
                 severity="success"
                 class="ml-2"
               ></Badge>
@@ -105,7 +105,7 @@
             <div class="text-900 font-medium text-lg mb-3">
               Total
               <Badge
-                :value="validatorCount"
+                :value="validatorCount || '0'"
                 severity="info"
                 class="ml-2"
               ></Badge>
@@ -113,7 +113,7 @@
             <div class="text-900 font-medium text-lg mb-3">
               Jailed
               <Badge
-                :value="jailedValidatorCount"
+                :value="jailedValidatorCount || '0'"
                 severity="warning"
                 class="ml-2"
               ></Badge>
@@ -121,7 +121,7 @@
 						<div class="text-900 font-medium text-lg mb-3">
               Active
               <Badge
-                :value="lastBlockParticipatingNodes.length || 0"
+                :value="lastBlockParticipatingNodes.length || '0'"
                 severity="success"
                 class="ml-2"
               ></Badge>
@@ -383,7 +383,6 @@ export default {
 
     validatorCount() {
       const ValidatorInfoArray =
-        this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.validator/getValidatorAll"
         ]();
       return ValidatorInfoArray?.validator?.length || 0;
