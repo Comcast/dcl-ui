@@ -26,7 +26,9 @@ export default {
     },
     showVendorInfoDialog(vendorInfo, viewOnly) {
       this.showVendorInfo = true;
-      this.selectedVendorInfo = vendorInfo;
+			if(vendorInfo) {
+				this.selectedVendorInfo = vendorInfo;
+			}
       this.viewOnly = viewOnly;
     },
   },
@@ -72,7 +74,7 @@ export default {
   <div class="prime-vue-container ml-5">
     <div class="mb-5 ml-2">
       <Button
-        @click="showVendorInfoDialog"
+        @click="showVendorInfoDialog(nil, false)"
         icon="pi pi-check"
         v-bind:class="{ 'p-disabled': !isSignedIn }"
         label="New Vendor"
