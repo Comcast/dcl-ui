@@ -1,7 +1,8 @@
 <template>
 	<div class="layout-menu-container">
 		<AppSubmenu :items="model" class="layout-menu" :root="true" @menuitem-click="onMenuItemClick" @keydown="onKeyDown" />
-		<div style="position:absolute;bottom:4rem;">
+		<div style="position:absolute;bottom:1rem; font-size:0.85rem">
+						DCL UI Version {{this.appVersion}}
 		</div>
 
 	</div>
@@ -14,7 +15,7 @@ export default {
 	props: {
 		model: Array
 	},
-    methods: {
+  methods: {
         onMenuItemClick(event) {
             this.$emit('menuitem-click', event);
         },
@@ -30,6 +31,9 @@ export default {
 		}
     },
 	computed: {
+		appVersion() {
+			return this.$store.getters.appVersion;
+		},
 		darkTheme() {
 			return this.$appState.darkTheme;
 		}

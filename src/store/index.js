@@ -3,10 +3,17 @@ import init from './config'
 
 const store = createStore({
   state () {
-    return {}
+    return {
+			packageVersion: process.env.PACKAGE_VERSION || '0'
+		}
   },
   mutations: {},
-  actions: {}
+  actions: {},
+	getters: {
+		appVersion: (state) => {
+			return state.packageVersion;
+		}
+	}
 })
 init(store)
 export default store
