@@ -7,6 +7,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import ValidatorInfo from "./ValidatorInfo.vue";
 import { FilterMatchMode } from "primevue/api";
+import GrantActionValidator from "./GrantActionValidator.vue";
 
 export default {
 	name: "Validators",
@@ -14,7 +15,9 @@ export default {
 	data() {
 		return {
 			showValidatorInfo: false,
+			showGrantActionValidator: false,
 			selectedValidatorInfo: null,
+			grantAction: null,
 			consensusState: null,
 			lastBlock: null,
 			consensusValidatorInfos: [],
@@ -29,11 +32,19 @@ export default {
 		dismissValidatorInfoDialog() {
 			this.showValidatorInfo = false;
 		},
-		showValidatorInfoDialog(ValidatorInfo, viewOnly) {
+		showValidatorInfoDialog(validatorInfo, viewOnly) {
 			this.showValidatorInfo = true;
-			this.selectedValidatorInfo = ValidatorInfo;
+			this.selectedValidatorInfo = validatorInfo;
 			this.viewOnly = viewOnly;
 		},
+    showGrantActionValidatorDialog(validatorInfo, action) {
+      this.showGrantActionValidator = true;
+      this.selectedValidatorInfo = validatorInfo;
+      this.grantAction = action;
+    },
+    dismissGrantActionValidatorDialog() {
+      this.showGrantActionValidator = false;
+    },
 		jailedValidators(validators) {
 			if (validators && validators.length > 0) {
 				return validators.filter((validator) => validator.jailed);
@@ -55,6 +66,7 @@ export default {
 		ValidatorInfo,
 		TabView,
 		TabPanel,
+		GrantActionValidator,
 	},
 
 	computed: {
@@ -110,6 +122,18 @@ export default {
 		validatorDialogHeader() {
 			return this.viewOnly ? "Validator Info" : "Add a new Validator";
 		},
+    grantActionHeader() {
+      switch (this.grantAction) {
+        case "ApproveDisableValidator":
+          return "Approve Disable Validator";
+        case "ProposeDisableValidator":
+          return "Propose Disable Validator";
+				case "RejectDisableValidator"	:
+					return "Reject Disable Validator";
+        default:
+          return "Grant Action Failed";
+      }
+    },
 	},
 
 	created: function () {
@@ -187,7 +211,12 @@ export default {
 						</div>
 					</template>
 
-					<Column field="description.moniker" header="Moniker" :sortable="true"></Column>
+					<Column field="description.moniker" header="Moniker" :sortable="true">
+						<template #body="{data}">
+							<a href="#" @click.prevent="showValidatorInfoDialog(data,true)">
+								{{ data.description.moniker }}</a>
+						</template>
+					</Column>
 					<Column field="owner" header="Owner"></Column>
 					<Column field="address" header="Address"></Column>
 					<Column header="Consensus Participation">
@@ -209,15 +238,19 @@ export default {
 						<template #body="{ data }">
 							<span style="margin-right: 1rem">
 								<Button
-									label=""
-									@click="showValidatorInfoDialog(data, true)"
-									class="p-button-rounded p-button-primary p-button-text"
-									iconPos="left"
-									icon="pi pi-info-circle"
-									v-tooltip="'Show Validator info'"
-								/>
+                label="Disable"
+                @click="
+                  showGrantActionValidatorDialog(data, 'ProposeDisableValidator')
+                "
+                iconPos="left"
+                icon="pi pi-ban"
+                class="p-button-danger"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+              />
 							</span>
+
 						</template>
+
 					</Column>
 				</DataTable>
 			</TabPanel>
@@ -307,7 +340,20 @@ export default {
               </ol>
             </template>
           </Column>
-
+					<Column field="action" header="Action">
+            <template #body="{ data }">
+              <Button
+                label="Disable"
+                @click="
+                  showGrantActionValidatorDialog(data, 'ApproveDisableValidator')
+                "
+                iconPos="left"
+                icon="pi pi-ban"
+                class="p-button-danger"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+              />
+            </template>
+					</Column>
 				</DataTable>
 			</TabPanel>
 
@@ -325,5 +371,21 @@ export default {
 				@close-dialog="dismissValidatorInfoDialog"
 			></ValidatorInfo>
 		</Dialog>
+
+    <Dialog
+      :header="grantActionHeader"
+      @update:visible="dismissGrantActionValidatorDialog"
+      :visible="showGrantActionValidator"
+      :style="{ width: '50vw' }"
+      :modal="true"
+    >
+      <GrantActionValidator
+        :validator="selectedValidatorInfo"
+        :action="grantAction"
+        @close-dialog="dismissGrantActionValidatorDialog"
+      ></GrantActionValidator>
+    </Dialog>
+
+
 	</div>
 </template>
