@@ -134,7 +134,7 @@ export default {
 				proposedCertificateRevocation = proposedCertificateRevocation
 					.map((item) => {
 						item.subjectAsText = this.allApprovedRootCertificates.find(
-							(cert) => cert.subjectAsKeyId === item.subjectAsKeyId
+							(cert) => cert.subjectKeyId === item.subjectKeyId
 						).subjectAsText;
 						return item;
 					})
