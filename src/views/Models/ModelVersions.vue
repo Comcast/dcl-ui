@@ -146,7 +146,13 @@ export default {
         return null;
       }
     },
-  },
+		getHexValue(value) {
+			if (value)
+				return `${value} (0x${value.toString(16)})`;
+			else
+				return value;
+		},
+	},
   components: {
     DataTable,
     Column,
@@ -180,6 +186,12 @@ export default {
             modelVersions.push(modelVersion.modelVersion);
         }
       }
+			// Add hex values to vid and pid
+			modelVersions.forEach((modelVersion) => {
+				modelVersion.vidHex = this.getHexValue(modelVersion.vid);
+				modelVersion.pidHex = this.getHexValue(modelVersion.pid);
+			});
+
       return modelVersions;
     },
 

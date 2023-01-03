@@ -24,7 +24,6 @@ export default {
     };
   },
 
-  methods: {},
   components: {
     DataTable,
     Column,
@@ -38,19 +37,17 @@ export default {
   },
 
   computed: {
-    allComplianceInfo() {
-      const certifiedModelArray =
-        this.$store.getters[
-          "zigbeealliance.distributedcomplianceledger.compliance/getComplianceInfoAll"
-        ]();
-      return certifiedModelArray?.certifiedModel;
-    },
 
     allCertifiedModels() {
       const certifiedModelArray =
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.compliance/getCertifiedModelAll"
         ]();
+			// Add Hex Values for vid, pid
+			certifiedModelArray?.certifiedModel?.forEach((certifiedModel) => {
+				certifiedModel.vidHex = this.hexValue(certifiedModel.vid);
+				certifiedModel.pidHex = this.hexValue(certifiedModel.pid);
+			});
       return certifiedModelArray?.certifiedModel;
     },
 
@@ -59,6 +56,11 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.compliance/getRevokedModelAll"
         ]();
+			// Add Hex Values for vid, pid
+			revokedModelArray?.revokedModel?.forEach((revokedModel) => {
+				revokedModel.vidHex = this.hexValue(revokedModel.vid);
+				revokedModel.pidHex = this.hexValue(revokedModel.pid);
+			});
       return revokedModelArray?.revokedModel;
     },
 
@@ -67,6 +69,12 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.compliance/getProvisionalModelAll"
         ]();
+			// Add Hex Values for vid, pid
+			allProvisionalModels?.provisionalModel?.forEach((provisionalModel) => {
+				provisionalModel.vidHex = this.hexValue(provisionalModel.vid);
+				provisionalModel.pidHex = this.hexValue(provisionalModel.pid);
+			});
+
       return allProvisionalModels?.provisionalModel;
     },
 
@@ -142,6 +150,12 @@ export default {
     dismissProvisionalModelDialog() {
       this.showProvisionalModel = false;
     },
+		hexValue(value) {
+			if (value)
+				return `${value} (0x${value.toString(16)})`;
+			else
+				return value
+		},
   },
 };
 </script>
@@ -184,8 +198,8 @@ export default {
             header="Certification Type"
             :sortable="true"
           ></Column>
-          <Column field="vid" header="Vendor ID" :sortable="true"></Column>
-          <Column field="pid" header="Product ID" :sortable="true"></Column>
+          <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
+          <Column field="pidHex" header="Product ID" :sortable="true"></Column>
           <Column
             field="softwareVersion"
             header="Software Version"
@@ -243,8 +257,8 @@ export default {
             header="Certification Type"
             :sortable="true"
           ></Column>
-          <Column field="vid" header="Vendor ID" :sortable="true"></Column>
-          <Column field="pid" header="Product ID" :sortable="true"></Column>
+          <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
+          <Column field="pidHex" header="Product ID" :sortable="true"></Column>
           <Column
             field="softwareVersion"
             header="Software Version"
@@ -300,8 +314,8 @@ export default {
             header="Certification Type"
             :sortable="true"
           ></Column>
-          <Column field="vid" header="Vendor ID" :sortable="true"></Column>
-          <Column field="pid" header="Product ID" :sortable="true"></Column>
+          <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
+          <Column field="pidHex" header="Product ID" :sortable="true"></Column>
           <Column
             field="softwareVersion"
             header="Software Version"

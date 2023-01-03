@@ -155,6 +155,7 @@ export default {
         vid: this.vid,
         pid: this.pid,
 				softwareVersionValid: true,
+				cdVersionNumber: 1,
       });
       this.update = false;
     }
@@ -171,11 +172,11 @@ export default {
       <table>
         <tr>
           <td class="p-text">Vendor ID</td>
-          <td>{{ selectedModelVersion.vid }}</td>
+          <td>{{ selectedModelVersion.vidHex }}</td>
         </tr>
         <tr>
           <td>Product ID</td>
-          <td>{{ selectedModelVersion.pid }}</td>
+          <td>{{ selectedModelVersion.pidHex }}</td>
         </tr>
         <tr>
           <td>Software Version</td>
@@ -322,7 +323,7 @@ export default {
 
           <!-- Field for cdVersionNumber -->
           <div class="field">
-            <label for="cdVersionNumber">Cd Version Number</label>
+            <label for="cdVersionNumber">CD Version Number</label>
             <InputText
               id="cdVersionNumber"
               type="text"

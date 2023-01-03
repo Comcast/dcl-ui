@@ -46,6 +46,10 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.vendorinfo/getVendorInfoAll"
         ]();
+			// Add the vendorID as Hex String to all the vendorInfo
+			vendorInfoArray?.vendorInfo?.forEach((vendorInfo) => {
+				vendorInfo.vendorIDHex = `${vendorInfo.vendorID} (0x${vendorInfo.vendorID.toString(16)})`;
+			});
       return vendorInfoArray?.vendorInfo;
     },
 
@@ -100,7 +104,8 @@ export default {
         </div>
       </template>
 
-      <Column field="vendorID" header="Vendor ID"></Column>
+      <Column field="vendorIDHex" header="Vendor ID">
+			</Column>
       <Column field="vendorName" header="Vendor Name"></Column>
       <Column field="companyLegalName" header="Company Legal Name"></Column>
       <Column
