@@ -29,7 +29,7 @@ export default {
       vendorID: null,
       vendorName: null,
       companyLegalName: null,
-      companyPrefferedName: null,
+      companyPreferredName: null,
       vendorLandingPageURL: null
     }
   },
@@ -46,7 +46,7 @@ export default {
       companyLegalName: {
         required
       },
-      companyPrefferedName: {},
+      companyPreferredName: {},
 
       vendorLandingPageURL: {}
     }
@@ -76,7 +76,7 @@ export default {
             vendorID: this.vendorID,
             vendorName: this.vendorName,
             companyLegalName: this.companyLegalName,
-            companyPrefferedName: this.companyPrefferedName,
+            companyPreferredName: this.companyPreferredName,
             vendorLandingPageURL: this.vendorLandingPageURL
           }
         })
@@ -122,7 +122,7 @@ export default {
       this.vendorID = this.vendorInfo.vendorID
       this.vendorName = this.vendorInfo.vendorName
       this.companyLegalName = this.vendorInfo.companyLegalName
-      this.companyPrefferedName = this.vendorInfo.companyPrefferedName
+      this.companyPreferredName = this.vendorInfo.companyPreferredName
       this.vendorLandingPageURL = this.vendorInfo.vendorLandingPageURL
       this.update = true
     } else {
@@ -141,7 +141,7 @@ export default {
       <table>
 				<tr>
 					<td class="p-text">Vendor ID</td>
-					<td>{{vendorInfo.vendorID}}</td>
+					<td>{{vendorInfo.vendorIDHex}}</td>
 				</tr>
 				<tr>
 					<td>Vendor Name</td>
@@ -152,8 +152,8 @@ export default {
 					<td>{{vendorInfo.companyLegalName}}</td>
 				</tr>
 				<tr>
-					<td>Company Preffered Name</td>
-					<td>{{vendorInfo.companyPrefferedName}}</td>
+					<td>Company Preferred Name</td>
+					<td>{{vendorInfo.companyPreferredName}}</td>
 				</tr>
 				<tr>
 					<td>Vendor Landing Page URL</td>
@@ -189,14 +189,14 @@ export default {
             />
           </div>
 
-          <!-- Field for companyPrefferedName -->
+          <!-- Field for companyPreferredName -->
           <div class="field">
-            <label for="companyPrefferedName">Company Preffered Name</label>
+            <label for="companyPreferredName">Company Preferred Name</label>
             <InputText
-              id="companyPrefferedName"
+              id="companyPreferredName"
               type="text"
-              v-model="v$.companyPrefferedName.$model"
-              :class="{ 'p-invalid': v$.companyPrefferedName.$invalid && submitted }"
+              v-model="v$.companyPreferredName.$model"
+              :class="{ 'p-invalid': v$.companyPreferredName.$invalid && submitted }"
             />
           </div>
 

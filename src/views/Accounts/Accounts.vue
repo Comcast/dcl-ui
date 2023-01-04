@@ -61,6 +61,13 @@ export default {
 			document.execCommand('copy');
 			document.body.removeChild(el);
 		},
+
+		addHexValueToVendorID(vendorID) {
+			if (vendorID)
+				return `${vendorID} (0x${vendorID.toString(16)})`;
+			else
+				return "Not Set";
+		},
   },
   components: {
     DataTable,
@@ -80,6 +87,10 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.dclauth/getPendingAccountAll"
         ]();
+			// Add the hex value to the vendor ID to all the accounts
+			pendingAccountsArray?.pendingAccount?.forEach(account => {
+				account.vendorIDHex = this.addHexValueToVendorID(account.vendorID);
+			});
       return pendingAccountsArray?.pendingAccount;
     },
 
@@ -96,6 +107,10 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll"
         ]();
+			// Add the hex value to the vendor ID to all the accounts
+			allAccountsArray?.account?.forEach(account => {
+				account.vendorIDHex = this.addHexValueToVendorID(account.vendorID);
+			});
       return allAccountsArray?.account;
     },
 
@@ -218,7 +233,7 @@ export default {
 						<span class="mt-3  pi pi-copy p-button-copy"></span></button> </span>
           </template>
 					</Column> -->
-          <Column field="vendorID" header="Vendor ID" :sortable="true"></Column>
+          <Column field="vendorIDHex" header="Vendor ID" :sortable="true"></Column>
           <Column field="approvals" header="Approvals">
             <template #body="row">
               <ol>
@@ -294,7 +309,7 @@ export default {
             field="account.base_account.address"
             header="Address"
           ></Column>
-          <Column field="account.vendorID" header="Vendor ID"></Column>
+          <Column field="account.vendorIDHex" header="Vendor ID"></Column>
           <Column field="account.approvals" header="Approvals">
             <template #body="row">
               <ol>

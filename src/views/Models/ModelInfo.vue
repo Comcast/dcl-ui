@@ -145,15 +145,15 @@ export default {
       <table>
         <tr>
           <td class="p-text">Vendor ID</td>
-          <td>{{ selectedModel.vid }}</td>
+          <td>{{ selectedModel.vidHex }}</td>
         </tr>
         <tr>
           <td>Product ID</td>
-          <td>{{ selectedModel.pid }}</td>
+          <td>{{ selectedModel.pidHex }}</td>
         </tr>
         <tr>
           <td>Device Type ID</td>
-          <td>{{ selectedModel.deviceTypeId }}</td>
+          <td>{{ selectedModel.deviceTypeIdHex }}</td>
         </tr>
         <tr>
           <td>Product Name</td>

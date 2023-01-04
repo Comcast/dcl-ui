@@ -127,6 +127,13 @@ export default {
         return null;
       }
     },
+
+		getHexValue(value) {
+			if (value)
+				return `${value} (0x${value.toString(16)})`;
+			else
+				return value;
+		},
   },
 
   computed: {
@@ -135,6 +142,14 @@ export default {
         this.$store.getters[
           "zigbeealliance.distributedcomplianceledger.model/getModelAll"
         ]();
+			// Add hex values for vid and pid
+			if (ModelInfoArray && ModelInfoArray.model) {
+				ModelInfoArray.model.forEach((model) => {
+					model.vidHex = this.getHexValue(model.vid);
+					model.pidHex = this.getHexValue(model.pid);
+					model.deviceTypeIdHex = this.getHexValue(model.deviceTypeId);
+				});
+			}
       return ModelInfoArray?.model;
     },
 
@@ -199,10 +214,10 @@ export default {
       </template>
 
       <Column :expander="true" headerStyle="width: 3rem" />
-      <Column field="vid" header="Vendor ID" :sortable="true"></Column>
-      <Column field="pid" header="Product ID" :sortable="true"></Column>
+      <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
+      <Column field="pidHex" header="Product ID" :sortable="true"></Column>
       <Column
-        field="deviceTypeId"
+        field="deviceTypeIdHex"
         header="Device Type ID"
         :sortable="true"
       ></Column>
