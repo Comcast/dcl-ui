@@ -328,12 +328,10 @@ export default {
               id="cdVersionNumber"
               type="text"
               v-model="v$.modelVersion.cdVersionNumber.$model"
-              :class="{
-                'p-invalid':
-                  v$.modelVersion.cdVersionNumber.$invalid && submitted,
-              }"
+							class="p-disabled"
             />
           </div>
+
 
           <!-- Field for firmwareDigests -->
           <div class="field">
@@ -345,6 +343,7 @@ export default {
               :class="{
                 'p-invalid':
                   v$.modelVersion.firmwareDigests.$invalid && submitted,
+								'p-disabled': this.update
               }"
             />
           </div>
@@ -385,6 +384,7 @@ export default {
               v-model="v$.modelVersion.otaFileSize.$model"
               :class="{
                 'p-invalid': v$.modelVersion.otaFileSize.$invalid && submitted,
+								'p-disabled': this.update
               }"
             />
           </div>
@@ -398,6 +398,7 @@ export default {
               v-model="v$.modelVersion.otaChecksum.$model"
               :class="{
                 'p-invalid': v$.modelVersion.otaChecksum.$invalid && submitted,
+								'p-disabled': this.update
               }"
             />
           </div>
@@ -412,6 +413,7 @@ export default {
               :class="{
                 'p-invalid':
                   v$.modelVersion.otaChecksumType.$invalid && submitted,
+									'p-disabled': this.update
               }"
             />
           </div>
