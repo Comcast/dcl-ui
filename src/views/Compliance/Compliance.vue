@@ -48,6 +48,7 @@ export default {
 				certifiedModel.vidHex = this.hexValue(certifiedModel.vid);
 				certifiedModel.pidHex = this.hexValue(certifiedModel.pid);
 			});
+			this.populateModelData(certifiedModelArray?.certifiedModel, this.allComplianceInfo);
       return certifiedModelArray?.certifiedModel;
     },
 
@@ -61,6 +62,7 @@ export default {
 				revokedModel.vidHex = this.hexValue(revokedModel.vid);
 				revokedModel.pidHex = this.hexValue(revokedModel.pid);
 			});
+			this.populateModelData(revokedModelArray?.revokedModel, this.allComplianceInfo);
       return revokedModelArray?.revokedModel;
     },
 
@@ -77,6 +79,14 @@ export default {
 
       return allProvisionalModels?.provisionalModel;
     },
+
+		allComplianceInfo() {
+			const allComplianceInfo =
+				this.$store.getters[
+					"zigbeealliance.distributedcomplianceledger.compliance/getComplianceInfoAll"
+				]();
+			return allComplianceInfo?.complianceInfo;
+		},
 
     isSignedIn() {
       const loggedIn = this.$store.getters["common/wallet/loggedIn"];
@@ -156,8 +166,19 @@ export default {
 			else
 				return value
 		},
-  },
-};
+		populateModelData(complianceArray, allComplianceInfo) {
+			complianceArray?.forEach((certifiedModel) => {
+				const complianceInfo = allComplianceInfo?.find((complianceInfo) => {
+					return complianceInfo.vid === certifiedModel.vid && complianceInfo.pid === certifiedModel.pid;
+				});
+				if (complianceInfo) {
+					certifiedModel.softwareVersionString = complianceInfo.softwareVersionString;
+					certifiedModel.cDCertificateId = complianceInfo.cDCertificateId;
+				}
+			});
+  	},
+	}
+}
 </script>
 
 <template>
@@ -205,6 +226,12 @@ export default {
             header="Software Version"
             :sortable="true"
           ></Column>
+          <Column
+            field="softwareVersionString"
+            header="Software Version String"
+            :sortable="true"
+          ></Column>
+					<Column field="cDCertificateId" header="CD Certificate ID" :sortable="true"></Column>
           <Column
             headerStyle="width: 4rem; text-align: center"
             bodyStyle="text-align: center; overflow: visible"
@@ -265,6 +292,12 @@ export default {
             :sortable="true"
           ></Column>
           <Column
+            field="softwareVersionString"
+            header="Software Version String"
+            :sortable="true"
+          ></Column>
+					<Column field="cDCertificateId" header="CD Certificate ID" :sortable="true"></Column>
+          <Column
             headerStyle="width: 4rem; text-align: center"
             bodyStyle="text-align: center; overflow: visible"
           >
@@ -321,6 +354,12 @@ export default {
             header="Software Version"
             :sortable="true"
           ></Column>
+          <Column
+            field="softwareVersionString"
+            header="Software Version String"
+            :sortable="true"
+          ></Column>
+					<Column field="cDCertificateId" header="CD Certificate ID" :sortable="true"></Column>
           <Column
             headerStyle="width: 4rem; text-align: center"
             bodyStyle="text-align: center; overflow: visible"
@@ -382,5 +421,3 @@ export default {
     </Dialog>
   </div>
 </template>
-
-

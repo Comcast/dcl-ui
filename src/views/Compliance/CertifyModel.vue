@@ -169,6 +169,28 @@ export default {
           />
         </div>
 
+				<!-- Field for cDCertificateId -->
+				<div class="field">
+					<label for="cDCertificateId">CD Certificate Id <span class="required">*</span></label>
+					<InputText
+						id="cDCertificateId"
+						type="text"
+						v-model="v$.msgCertifyModel.cDCertificateId.$model"
+						:class="{ 'p-invalid': v$.msgCertifyModel.cDCertificateId.$invalid && submitted }"
+					/>
+				</div>
+
+				<!-- Field for CD Version Number -->
+				<div class="field">
+					<label for="cDVersionNumber">CD Version Number</label>
+					<InputText
+						id="cDVersionNumber"
+						type="text"
+						v-model="v$.msgCertifyModel.cDVersionNumber.$model"
+						:class="{ 'p-invalid': v$.msgCertifyModel.cDVersionNumber.$invalid && submitted }"
+					/>
+				</div>
+
         <!-- Field for certificationDate -->
         <div class="field">
           <label for="certificationDate">Certification Date <span class="required">*</span></label>
@@ -191,18 +213,7 @@ export default {
           />
         </div>
 
-				<!-- Field for cDCertificateId -->
-				<div class="field">
-					<label for="cDCertificateId">CD Certificate Id <span class="required">*</span></label>
-					<InputText
-						id="cDCertificateId"
-						type="text"
-						v-model="v$.msgCertifyModel.cDCertificateId.$model"
-						:class="{ 'p-invalid': v$.msgCertifyModel.cDCertificateId.$invalid && submitted }"
-					/>
-				</div>
-
-        <!-- Field for reason -->
+				<!-- Field for reason -->
         <div class="field">
           <label for="reason">Reason</label>
           <InputText
