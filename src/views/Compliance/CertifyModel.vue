@@ -135,43 +135,65 @@ export default {
     <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
     <div class="p-fluid">
       <form @submit.prevent="handleSubmit(!v$.$invalid)" class="">
-        <!-- Field for vid -->
+				<!-- Field for vid -->
         <div class="field">
-          <label for="vid">Vendor ID</label>
-          <InputText id="vid" type="text" v-model="v$.msgCertifyModel.vid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.vid.$invalid && submitted }" />
+          <label for="vid">Vendor ID <span class="required">*</span></label>
+					<InputText id="vid" type="text" v-model="v$.msgCertifyModel.vid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.vid.$invalid && submitted }" :readonly="model.vid" />
         </div>
 
         <!-- Field for pid -->
         <div class="field">
-          <label for="pid">Product ID</label>
-          <InputText id="pid" type="text" v-model="v$.msgCertifyModel.pid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.pid.$invalid && submitted }" />
+          <label for="pid">Product ID <span class="required">*</span></label>
+          <InputText id="pid" type="text" v-model="v$.msgCertifyModel.pid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.pid.$invalid && submitted }" :readonly="model.pid"/>
         </div>
 
         <!-- Field for softwareVersion -->
         <div class="field">
-          <label for="softwareVersion">Software Version</label>
+          <label for="softwareVersion">Software Version <span class="required">*</span></label>
           <InputText
             id="softwareVersion"
             type="text"
             v-model="v$.msgCertifyModel.softwareVersion.$model"
-            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersion.$invalid && submitted }"
+            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersion.$invalid && submitted }" :readonly="model.softwareVersion"
           />
         </div>
 
         <!-- Field for softwareVersionString -->
         <div class="field">
-          <label for="softwareVersionString">Software Version String</label>
+          <label for="softwareVersionString">Software Version String <span class="required">*</span></label>
           <InputText
             id="softwareVersionString"
             type="text"
             v-model="v$.msgCertifyModel.softwareVersionString.$model"
-            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersionString.$invalid && submitted }"
+            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersionString.$invalid && submitted }" :readonly="model.softwareVersionString"
           />
         </div>
 
+				<!-- Field for cDCertificateId -->
+				<div class="field">
+					<label for="cDCertificateId">CD Certificate Id <span class="required">*</span></label>
+					<InputText
+						id="cDCertificateId"
+						type="text"
+						v-model="v$.msgCertifyModel.cDCertificateId.$model"
+						:class="{ 'p-invalid': v$.msgCertifyModel.cDCertificateId.$invalid && submitted }"
+					/>
+				</div>
+
+				<!-- Field for CD Version Number -->
+				<div class="field">
+					<label for="cDVersionNumber">CD Version Number</label>
+					<InputText
+						id="cDVersionNumber"
+						type="text"
+						v-model="v$.msgCertifyModel.cDVersionNumber.$model"
+						:class="{ 'p-invalid': v$.msgCertifyModel.cDVersionNumber.$invalid && submitted }"
+					/>
+				</div>
+
         <!-- Field for certificationDate -->
         <div class="field">
-          <label for="certificationDate">Certification Date</label>
+          <label for="certificationDate">Certification Date <span class="required">*</span></label>
           <InputText
             id="certificationDate"
             type="text"
@@ -182,7 +204,7 @@ export default {
 
         <!-- Field for certificationType -->
         <div class="field">
-          <label for="certificationType">Certification Type</label>
+          <label for="certificationType">Certification Type <span class="required">*</span></label>
           <InputText
             id="certificationType"
             type="text"
@@ -191,7 +213,7 @@ export default {
           />
         </div>
 
-        <!-- Field for reason -->
+				<!-- Field for reason -->
         <div class="field">
           <label for="reason">Reason</label>
           <InputText
@@ -210,17 +232,6 @@ export default {
 						type="text"
 						v-model="v$.msgCertifyModel.programTypeVersion.$model"
 						:class="{ 'p-invalid': v$.msgCertifyModel.programTypeVersion.$invalid && submitted }"
-					/>
-				</div>
-
-				<!-- Field for cDCertificateId -->
-				<div class="field">
-					<label for="cDCertificateId">CD Certificate Id</label>
-					<InputText
-						id="cDCertificateId"
-						type="text"
-						v-model="v$.msgCertifyModel.cDCertificateId.$model"
-						:class="{ 'p-invalid': v$.msgCertifyModel.cDCertificateId.$invalid && submitted }"
 					/>
 				</div>
 

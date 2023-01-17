@@ -4,6 +4,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import ModelVersionInfo from "./ModelVersionInfo.vue";
+import CertifyModel from "../Compliance/CertifyModel.vue";
 import Message from "primevue/message";
 
 export default {
@@ -14,6 +15,7 @@ export default {
     return {
       showModelVersionInfo: false,
       selectedModelVersionInfo: null,
+			showCertifyModel: false,
       viewOnly: false,
       error: null,
       modelVersionArray: [],
@@ -23,6 +25,14 @@ export default {
   methods: {
     dismissModelVersionInfoDialog() {
       this.showModelVersionInfo = false;
+    },
+		dismissCertifyModelDialog() {
+			this.showCertifyModel = false;
+		},
+		showCertifyModelDialog(modelVersionInfo) {
+			this.showModelVersionInfo = false;
+      this.selectedModelVersionInfo = modelVersionInfo;
+      this.showCertifyModel = true;
     },
     showModelVersionInfoDialog(modelVersionInfo, viewOnly) {
       this.showModelVersionInfo = true;
@@ -159,6 +169,7 @@ export default {
     Button,
     Dialog,
     ModelVersionInfo,
+		CertifyModel,
     Message,
   },
 
@@ -274,6 +285,18 @@ export default {
                 v-tooltip="'Update Model Version'"
               />
             </span>
+						<!-- Add button to approve the model version -->
+						<span style="margin-right: 0.1rem">
+							<Button
+								label=""
+								@click="showCertifyModelDialog(data)"
+								iconPos="left"
+								icon="pi pi-check"
+								class="p-button-rounded p-button-success p-button-text"
+								v-bind:class="{ 'p-disabled': !isSignedIn }"
+								v-tooltip="'Certify Model Version'"
+							/>
+						</span>
 
           </template>
         </Column>
@@ -303,5 +326,20 @@ export default {
         @close-dialog="dismissModelVersionInfoDialog"
       ></ModelVersionInfo>
     </Dialog>
+
+    <Dialog
+      header="Certify a Device Model"
+      @update:visible="dismissCertifyModelDialog"
+      :visible="showCertifyModel"
+      :style="{ width: '50vw' }"
+      class="p-fluid"
+      :modal="true"
+    >
+      <CertifyModel
+        :model="selectedModelVersionInfo"
+        @close-dialog="dismissCertifyModelDialog"
+      ></CertifyModel>
+    </Dialog>
+
   </div>
 </template>
