@@ -128,10 +128,8 @@ export default {
   },
 	created() {
 		this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
-		// Set the current date in RFC3339 format for certificationDate, default to 1 for cDVersionNumber
-		// and default to 'matter' for certificationType
+		// Set default as 1 for cDVersionNumber and 'matter' for certificationType
 		this.msgCertifyModel.cDVersionNumber = 1
-		this.msgCertifyModel.certificationDate = new Date().toISOString()
 		this.msgCertifyModel.certificationType = 'matter'
 	}
 }
