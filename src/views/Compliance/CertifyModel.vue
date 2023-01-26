@@ -1,5 +1,6 @@
 <script>
 import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
 import Button from 'primevue/button'
 import { required } from '@vuelidate/validators'
@@ -13,6 +14,7 @@ export default {
 
   components: {
     InputText,
+    Dropdown,
     MultiSelect,
     Button,
     Message
@@ -126,6 +128,11 @@ export default {
   },
 	created() {
 		this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
+		// Set the current date in RFC3339 format for certificationDate, default to 1 for cDVersionNumber
+		// and default to 'matter' for certificationType
+		this.msgCertifyModel.cDVersionNumber = 1
+		this.msgCertifyModel.certificationDate = new Date().toISOString()
+		this.msgCertifyModel.certificationType = 'matter'
 	}
 }
 </script>
@@ -205,12 +212,13 @@ export default {
         <!-- Field for certificationType -->
         <div class="field">
           <label for="certificationType">Certification Type <span class="required">*</span></label>
-          <InputText
+          <Dropdown
             id="certificationType"
-            type="text"
             v-model="v$.msgCertifyModel.certificationType.$model"
+            :options="certificationType"
             :class="{ 'p-invalid': v$.msgCertifyModel.certificationType.$invalid && submitted }"
           />
+
         </div>
 
 				<!-- Field for reason -->

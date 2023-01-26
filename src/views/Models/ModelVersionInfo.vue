@@ -50,7 +50,7 @@ export default {
           required,
         },
         cdVersionNumber: {},
-        firmwareDigests: {},
+        firmwareInformation: {},
         softwareVersionValid: {},
         otaUrl: {},
         otaFileSize: {},
@@ -191,8 +191,8 @@ export default {
           <td>{{ selectedModelVersion.cdVersionNumber }}</td>
         </tr>
         <tr>
-          <td>Firmware Digests</td>
-          <td>{{ selectedModelVersion.firmwareDigests }}</td>
+          <td>Firmware Information</td>
+          <td>{{ selectedModelVersion.firmwareInformation }}</td>
         </tr>
         <tr>
           <td>Software Version Valid</td>
@@ -333,16 +333,16 @@ export default {
           </div>
 
 
-          <!-- Field for firmwareDigests -->
+          <!-- Field for firmwareInformation -->
           <div class="field">
-            <label for="firmwareDigests">Firmware Digests</label>
+            <label for="firmwareInformation">Firmware Information</label>
             <InputText
-              id="firmwareDigests"
+              id="firmwareInformation"
               type="text"
-              v-model="v$.modelVersion.firmwareDigests.$model"
+              v-model="v$.modelVersion.firmwareInformation.$model"
               :class="{
                 'p-invalid':
-                  v$.modelVersion.firmwareDigests.$invalid && submitted,
+                  v$.modelVersion.firmwareInformation.$invalid && submitted,
 								'p-disabled': this.update
               }"
             />
