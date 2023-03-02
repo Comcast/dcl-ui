@@ -167,16 +167,20 @@ export default {
 				return value
 		},
 		populateModelData(complianceArray, allComplianceInfo) {
-			complianceArray?.forEach((certifiedModel) => {
-				const complianceInfo = allComplianceInfo?.find((complianceInfo) => {
-					return complianceInfo.vid === certifiedModel.vid && complianceInfo.pid === certifiedModel.pid;
-				});
-				if (complianceInfo) {
-					certifiedModel.softwareVersionString = complianceInfo.softwareVersionString;
-					certifiedModel.cDCertificateId = complianceInfo.cDCertificateId;
-				}
-			});
-  	},
+      if (!allComplianceInfo || allComplianceInfo.length === 0) {
+          return;
+      }
+      for (const certifiedModel of complianceArray || []) {
+          const { vid, pid, softwareVersion } = certifiedModel;
+          const complianceInfo = allComplianceInfo.find((complianceInfo) => {
+              return complianceInfo.vid === vid && complianceInfo.pid === pid && complianceInfo.softwareVersion === softwareVersion;
+          });
+          if (complianceInfo) {
+              certifiedModel.softwareVersionString = complianceInfo.softwareVersionString;
+              certifiedModel.cDCertificateId = complianceInfo.cDCertificateId;
+          }
+      }
+    },
 	}
 }
 </script>
