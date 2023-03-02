@@ -140,6 +140,55 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
+						<span class="block text-500 font-medium mb-3">Data Summary</span>
+						<div class="text-900 font-medium text-lg mb-3">
+							<div class="text-900 font-medium text-lg mb-3">
+							<span>Vendor Info</span>
+							<i class="pi pi-briefcase ml-2 text-grey-500"></i>
+							<Badge
+								:value="vendorInfoCount || '0'"
+								class="ml-2 p-badge-secondary"
+							></Badge>
+						</div>							
+							<span>Device Models</span>
+							<i class="pi pi-database ml-2 text-primary"></i>
+							<Badge
+								:value="modelCount || '0'"
+								class="ml-2 badge-primary"
+							></Badge>
+						</div>
+
+						<div class="text-900 font-medium text-lg mb-3">
+							<span>PKI Certificates</span>
+							<i class="pi pi-lock ml-2 text-orange-500"></i>
+							<Badge
+								:value="certificateCount || '0'"
+								class="ml-2 p-badge-warning"
+							></Badge>
+							<i class="pi pi-certificate ml-2 text-info"></i>
+						</div>
+						<div class="text-900 font-medium text-lg mb-3">
+							<span>Compliance Devices</span>
+							<i class="pi pi-check-circle ml-2 text-green-500"></i>
+							<Badge
+								:value="certifiedModelCount || '0'"
+								class="ml-2 p-badge-success"
+							></Badge>
+						</div>
+					</div>
+					<div
+						class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+						style="width: 2.5rem; height: 2.5rem"
+					>
+						<i class="pi pi-chart-bar text-cyan-500 text-xl"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 lg:col-6 xl:col-3">
+			<div class="card mb-0">
+				<div class="flex justify-content-between mb-3">
+					<div>
 						<span class="block text-500 font-medium mb-3">Block Height</span>
 
 						<span class="bold transition" :class="{ scaleBig: scaleClass }">
@@ -282,6 +331,40 @@ export default {
 			scaleClass: false,
 			pubKey: null,
 			loadValues: {},
+			queries: [
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.model",
+					method: "QueryModelAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.dclauth",
+					method: "QueryAccountAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.dclauth",
+					method: "QueryPendingAccountAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.dclauth",
+					method: "QueryPendingAccountRevocationAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.validator",
+					method: "QueryValidatorAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.compliance",
+					method: "QueryCertifiedModelAll"
+				},
+				{	
+					namespace: "zigbeealliance.distributedcomplianceledger.pki",
+					method: "QueryApprovedCertificatesAll"
+				},
+				{
+					namespace: "zigbeealliance.distributedcomplianceledger.vendorinfo",
+					method: "QueryVendorInfoAll"
+				}
+		],			
 		};
 	},
 	watch: {},
@@ -293,59 +376,15 @@ export default {
 			.then((data) => {
 				this.loadValues = data;
 			});
-
-		// Get all the models
-		this.$store.dispatch(
-			"zigbeealliance.distributedcomplianceledger.model/QueryModelAll",
-			{
+			
+		this.queries.forEach((query) => {
+			this.$store.dispatch(`${query.namespace}/${query.method}`, {
 				options: {
 					subscribe: true,
-					all: true,
-				},
-			}
-		);
-
-		// Get all the accounts
-		this.$store.dispatch(
-			"zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll",
-			{
-				options: {
-					subscribe: true,
-					all: true,
-				},
-			}
-		);
-		// Get all the pending accounts
-		this.$store.dispatch(
-			"zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountAll",
-			{
-				options: {
-					subscribe: true,
-					all: true,
-				},
-			}
-		);
-		// Get all the revoked accounts
-		this.$store.dispatch(
-			"zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountRevocationAll",
-			{
-				options: {
-					subscribe: true,
-					all: true,
-				},
-			}
-		);
-
-		// Get all the validators
-		this.$store.dispatch(
-			"zigbeealliance.distributedcomplianceledger.validator/QueryValidatorAll",
-			{
-				options: {
-					subscribe: true,
-					all: true,
-				},
-			}
-		);
+					all: true
+				}
+			});
+		});
 	},
 	computed: {
 		currentKey: {
@@ -382,11 +421,28 @@ export default {
 		},
 
 		modelCount() {
-			const ModelInfoArray =
+			const modelInfoArray =
 				this.$store.getters[
 					"zigbeealliance.distributedcomplianceledger.model/getModelAll"
 				]();
-			return ModelInfoArray?.model.length || 0;
+			return modelInfoArray?.model?.length || 0;
+		},
+
+		certificateCount() {
+			const approvedCertificates =
+				this.$store.getters[
+					"zigbeealliance.distributedcomplianceledger.pki/getApprovedCertificatesAll"
+				]();
+				
+			return approvedCertificates?.approvedCertificates?.length || 0;
+		},
+
+		certifiedModelCount() {
+			const certifiedModelInfoArray =
+				this.$store.getters[
+					"zigbeealliance.distributedcomplianceledger.compliance/getCertifiedModelAll"
+				]();
+			return certifiedModelInfoArray?.certifiedModel?.length || 0;
 		},
 
 		validatorCount() {
@@ -427,6 +483,14 @@ export default {
 					"zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll"
 				]();
 			return allAccountsArray?.account || 0;
+		},
+
+		vendorInfoCount() {
+			const vendorInfoArray =
+				this.$store.getters[
+					"zigbeealliance.distributedcomplianceledger.vendorinfo/getVendorInfoAll"
+				]();
+			return vendorInfoArray?.vendorInfo?.length || 0;
 		},
 
 		trusteeCount() {
