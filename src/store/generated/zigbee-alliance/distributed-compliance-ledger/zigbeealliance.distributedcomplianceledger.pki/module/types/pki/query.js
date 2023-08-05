@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal';
+import { Reader, util, configure, Writer } from 'protobufjs/minimal';
+import * as Long from 'long';
 import { ApprovedCertificates } from '../pki/approved_certificates';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { ProposedCertificate } from '../pki/proposed_certificate';
