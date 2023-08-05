@@ -48,31 +48,34 @@
 							Trustee
 							<Badge
 								:value="trusteeCount || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
 							Vendor
 							<Badge
 								:value="vendorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
 							NodeAdmin
 							<Badge
 								:value="nodeAdminCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-warning"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							VendorAdmin
+							<Badge
+								:value="vendorAdminCount || '0'"
+								class="ml-2 p-badge-primary"
+							></Badge>
+						</div>						
+						<div class="text-900 font-medium text-lg mb-3">
 							CertificationCenter<Badge
 								:value="certificationCenterCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>
@@ -94,24 +97,22 @@
 							Total
 							<Badge
 								:value="validatorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
 							Jailed
 							<Badge
 								:value="jailedValidatorCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-warning"
+								
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
 							Active
 							<Badge
 								:value="lastBlockParticipatingNodes.length || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -122,8 +123,7 @@
 										jailedValidatorCount -
 										lastBlockParticipatingNodes.length || '0'
 								"
-								severity="danger"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>
