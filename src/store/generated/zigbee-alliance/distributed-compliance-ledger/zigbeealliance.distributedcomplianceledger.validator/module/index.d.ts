@@ -4,8 +4,8 @@ import { Api } from "./rest";
 import { MsgEnableValidator } from "./types/validator/tx";
 import { MsgProposeDisableValidator } from "./types/validator/tx";
 import { MsgCreateValidator } from "./types/validator/tx";
-import { MsgApproveDisableValidator } from "./types/validator/tx";
 import { MsgRejectDisableValidator } from "./types/validator/tx";
+import { MsgApproveDisableValidator } from "./types/validator/tx";
 import { MsgDisableValidator } from "./types/validator/tx";
 export declare const MissingWalletError: Error;
 export declare const registry: Registry;
@@ -21,8 +21,8 @@ declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions
     msgEnableValidator: (data: MsgEnableValidator) => EncodeObject;
     msgProposeDisableValidator: (data: MsgProposeDisableValidator) => EncodeObject;
     msgCreateValidator: (data: MsgCreateValidator) => EncodeObject;
-    msgApproveDisableValidator: (data: MsgApproveDisableValidator) => EncodeObject;
     msgRejectDisableValidator: (data: MsgRejectDisableValidator) => EncodeObject;
+    msgApproveDisableValidator: (data: MsgApproveDisableValidator) => EncodeObject;
     msgDisableValidator: (data: MsgDisableValidator) => EncodeObject;
 }>;
 interface QueryClientOptions {
