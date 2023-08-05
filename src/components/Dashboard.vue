@@ -52,8 +52,7 @@
 							Trustee
 							<Badge
 								:value="trusteeCount || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -61,8 +60,7 @@
 							Vendor
 							<Badge
 								:value="vendorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -85,8 +83,7 @@
 							<i class="pi pi-flag-fill mr-1 p-text-primary"></i>
 							CertificationCenter<Badge
 								:value="certificationCenterCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>
@@ -109,8 +106,7 @@
 							<span>Total</span>
 							<Badge
 								:value="validatorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -118,8 +114,8 @@
 							<span>Jailed</span>
 							<Badge
 								:value="jailedValidatorCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-warning"
+								
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -127,8 +123,7 @@
 							<span>Active</span>
 							<Badge
 								:value="lastBlockParticipatingNodes.length || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
@@ -140,8 +135,7 @@
 										jailedValidatorCount -
 										lastBlockParticipatingNodes.length || '0'
 								"
-								severity="danger"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>

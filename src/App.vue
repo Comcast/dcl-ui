@@ -180,14 +180,22 @@ export default {
 </script>
 
 <style lang="scss">
-.p-toast.p-toast-top-right {
-    z-index: 1000;
-    top: 7rem;
-}
-.sp-key-area {
-	-webkit-text-security : circle
-}
-.required {
-	color: #e24c4c;
-}
+  .p-toast.p-toast-top-right {
+      z-index: 1000;
+      top: 7rem;
+  }
+  .sp-key-area {
+    -webkit-text-security : circle
+  }
+  .required {
+    color: #e24c4c;
+  }
+  /* Apply the disabled styles to the read-only fields */
+  input:read-only {
+    background-color: #f9f9f9;
+    cursor: not-allowed;
+    color: #777;
+  }
 </style>
+
+
