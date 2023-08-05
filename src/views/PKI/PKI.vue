@@ -256,7 +256,6 @@ export default {
 
 		selectCertificate(certificate) {
 			alert(certificate);
-			console.log(certificate);
 			this.selectedCertificate = certificate;
 		},
 		trimAddress(address) {

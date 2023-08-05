@@ -48,8 +48,8 @@ export default {
             { label: 'Accounts', icon: 'pi pi-fw pi-id-card', to: '/accounts' },
             { label: 'Vendor Info', icon: 'pi pi-fw pi-briefcase', to: '/vendors' },
             { label: 'Model', icon: 'pi pi-fw pi-database', to: '/models' },
-            { label: 'Compliance', icon: 'pi pi-fw pi-bookmark', to: '/compliance' },
-            { label: 'PKI', icon: 'pi pi-fw pi-exclamation-circle', to: '/pki' },
+            { label: 'Compliance', icon: 'pi pi-fw pi-check-circle', to: '/compliance' },
+            { label: 'PKI', icon: 'pi pi-fw pi-lock', to: '/pki' },
 						{ label: 'Validators', icon: 'pi pi-fw pi-server', to: '/validators' },
 						{ label: 'Upgrades', icon: 'pi pi-fw pi-history', to: '/upgrades' }
           ]

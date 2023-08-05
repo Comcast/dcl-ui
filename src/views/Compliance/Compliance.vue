@@ -143,7 +143,6 @@ export default {
     showCertifyModelDialog(model, viewOnly = false) {
       this.selectedRevokedModel = model;
       this.showCertifyModel = true;
-      console.log('Value for viewOnly is ', viewOnly)
       this.showCertifyModelViewOnly = viewOnly; 
     },
     dismissCertifyModelDialog() {

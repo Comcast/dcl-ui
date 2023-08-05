@@ -149,10 +149,8 @@ export default {
       };
 
       try {
-        console.log('Connecting to keplr')
         await keplr.experimentalSuggestChain(chainInfo);
       } catch (error) {
-        console.log('Error connecting to keplr', error)
         // This error might be thrown if the chain already exists, but you should inspect the error message to determine this
         if (error.message !== "Chain already exists.") {
           this.$toast.add({
@@ -166,9 +164,7 @@ export default {
       }
 
       try {
-        console.log('Enabling keplr')
         await keplr.enable(chainId);
-        console.log('Enabled keplr')
       } catch (error) {
         this.$toast.add({
                   severity: 'error',
@@ -179,11 +175,8 @@ export default {
       }
 
       try {
-        console.log('Setting keplr signer')
         await this.$store.dispatch("setKeplrSigner");
-        console.log('Fetching account name')
         const key = await keplr.getKey(process.env.VUE_APP_DCL_CHAIN_ID);
-        console.log('Fetched account name', key)
         this.accountName = key.name;
         this.$toast.add({
           severity: "success",
@@ -197,7 +190,6 @@ export default {
 
     disconnect() {
       this.$store.dispatch("disconnectKeplr");
-      console.log("Disconnected from Keplr wallet");
     },
     
     closeDialog() {
