@@ -177,7 +177,7 @@ export default {
                   v-if="!txProcessing"
                   type="submit"
                   label="Propose Upgrade"
-                  icon="pi pi-check-circle"
+                  icon="pi pi-history"
                   iconPos="left"
                   v-bind:class="[v$.$invalid ? 'p-disabled' : '']"
                 />
