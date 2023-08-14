@@ -169,6 +169,7 @@ export const MsgCreateVestingAccountResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

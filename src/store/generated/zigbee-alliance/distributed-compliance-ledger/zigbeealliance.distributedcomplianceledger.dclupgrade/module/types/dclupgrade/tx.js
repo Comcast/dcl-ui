@@ -424,6 +424,7 @@ export const MsgRejectUpgradeResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

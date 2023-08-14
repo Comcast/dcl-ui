@@ -1488,6 +1488,7 @@ export const MsgUpdateModelVersionResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

@@ -45,8 +45,9 @@ export default {
       this.viewOnly = false;
     },
     confirmDeleteModelVersion(modelVersion) {
+      console.log('inside conformation dialog');
       this.$confirm.require({
-        message: "Are you sure you want to proceed?",
+        message: "Are you sure you want to delete this model version ?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
@@ -67,6 +68,8 @@ export default {
           account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
       }
       const creatorAddress = account.address;
+      this.txProcessing = true;
+			let loader = this.$loading.show();
       this.$store
         .dispatch(
           `zigbeealliance.distributedcomplianceledger.model/sendMsgDeleteModelVersion`,
@@ -82,6 +85,8 @@ export default {
         )
         .then(
           (response) => {
+            this.txProcessing = false;
+						loader.hide();
             if (response.code == 0) {
               this.error = null;
               this.$toast.add({
@@ -95,6 +100,8 @@ export default {
             }
           },
           (error) => {
+            this.txProcessing = false;
+						loader.hide();
             this.error = error.message;
           }
         );
@@ -226,7 +233,6 @@ export default {
 
 <template>
   <div class="prime-vue-container ml-5">
-    <ConfirmDialog></ConfirmDialog>
     <Message :closable="false" v-if="error" severity="error">{{
       errorMessage()
     }}</Message>
@@ -303,6 +309,18 @@ export default {
 								v-tooltip="'Certify Model Version'"
 							/>
 						</span>
+            <!-- Add button to delete the model version -->
+            <span style="margin-right: 0.1rem">
+              <Button
+                label=""
+                @click="confirmDeleteModelVersion(data)"
+                iconPos="left"
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+                v-tooltip="'Delete Model Version'"
+              />
+            </span>  
 
           </template>
         </Column>

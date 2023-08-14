@@ -36,6 +36,9 @@ export default {
         cert: {
 					required
         },
+        vid: {
+          required  
+        },
         info: {
         }
       }
@@ -63,7 +66,6 @@ export default {
 			let loader = this.$loading.show();
       this.msgProposeAddX509RootCert.signer = creatorAddress
 			this.msgProposeAddX509RootCert.time = parseInt(new Date().getTime() / 1000)
-
       this.$store
         .dispatch(`zigbeealliance.distributedcomplianceledger.pki/sendMsgProposeAddX509RootCert`, {
           value: this.msgProposeAddX509RootCert
@@ -114,14 +116,21 @@ export default {
     <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
     <div class="p-fluid  ">
       <form @submit.prevent="handleSubmit(!v$.$invalid)" class="">
-        <!-- Field for vid -->
+        <!-- Field for Certificate -->
         <div class="field">
           <label for="cert">Certificate</label>
           <Textarea v-model="v$.msgProposeAddX509RootCert.$model.cert"
               :class="{ 'p-invalid': v$.msgProposeAddX509RootCert.$model.cert.$invalid && submitted }" style="display:block;width:100%" rows="10"    />
         </div>
 
-        <!-- Field for pid -->
+        <!-- Field for vid -->
+        <div class="field">
+          <label for="vid">Vendor ID</label>
+          <InputText id="vid" type="text" v-model="v$.msgProposeAddX509RootCert.$model.vid"
+               />
+        </div>
+
+        <!-- Field for Info -->
         <div class="field">
           <label for="info">Info</label>
           <InputText id="info" type="text" v-model="v$.msgProposeAddX509RootCert.info.$model"
