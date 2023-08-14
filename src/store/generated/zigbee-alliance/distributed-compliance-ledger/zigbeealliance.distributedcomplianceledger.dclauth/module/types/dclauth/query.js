@@ -1238,6 +1238,7 @@ export const QueryAllRejectedAccountResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

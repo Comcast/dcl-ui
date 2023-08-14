@@ -18,7 +18,7 @@ const basePkiRevocationDistributionPoint = {
 export const PkiRevocationDistributionPoint = {
     encode(message, writer = Writer.create()) {
         if (message.vid !== 0) {
-            writer.uint32(8).uint64(message.vid);
+            writer.uint32(8).int32(message.vid);
         }
         if (message.label !== '') {
             writer.uint32(18).string(message.label);
@@ -27,7 +27,7 @@ export const PkiRevocationDistributionPoint = {
             writer.uint32(26).string(message.issuerSubjectKeyID);
         }
         if (message.pid !== 0) {
-            writer.uint32(32).uint64(message.pid);
+            writer.uint32(32).int32(message.pid);
         }
         if (message.isPAA === true) {
             writer.uint32(40).bool(message.isPAA);
@@ -45,10 +45,10 @@ export const PkiRevocationDistributionPoint = {
             writer.uint32(74).string(message.dataDigest);
         }
         if (message.dataDigestType !== 0) {
-            writer.uint32(80).uint64(message.dataDigestType);
+            writer.uint32(80).uint32(message.dataDigestType);
         }
         if (message.revocationType !== 0) {
-            writer.uint32(88).uint64(message.revocationType);
+            writer.uint32(88).uint32(message.revocationType);
         }
         return writer;
     },
@@ -60,7 +60,7 @@ export const PkiRevocationDistributionPoint = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.vid = longToNumber(reader.uint64());
+                    message.vid = reader.int32();
                     break;
                 case 2:
                     message.label = reader.string();
@@ -69,7 +69,7 @@ export const PkiRevocationDistributionPoint = {
                     message.issuerSubjectKeyID = reader.string();
                     break;
                 case 4:
-                    message.pid = longToNumber(reader.uint64());
+                    message.pid = reader.int32();
                     break;
                 case 5:
                     message.isPAA = reader.bool();
@@ -87,10 +87,10 @@ export const PkiRevocationDistributionPoint = {
                     message.dataDigest = reader.string();
                     break;
                 case 10:
-                    message.dataDigestType = longToNumber(reader.uint64());
+                    message.dataDigestType = reader.uint32();
                     break;
                 case 11:
-                    message.revocationType = longToNumber(reader.uint64());
+                    message.revocationType = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);

@@ -8,6 +8,7 @@ import SplitButton from "primevue/splitbutton";
 import Dialog from "primevue/dialog";
 import ProposeRootCertificate from "./ProposeRootCertificate.vue";
 import GrantActionRootCertificate from "./GrantActionRootCertificate.vue";
+import PkiRevocationDistributionPoint from "./PkiRevocationDistributionPoint.vue";
 import AddLeafCertificate from "./AddLeafCertificate.vue";
 import LeafCertificates from "./LeafCertificates.vue";
 import { FilterMatchMode } from "primevue/api";
@@ -18,6 +19,9 @@ export default {
 		return {
 			showGrantActionRootCert: false,
 			showProposeRootCert: false,
+			showPkiRevocationDistributionPoint: false,
+			selectedPkiRevocationDistributionPoint: null,
+			viewOnly: false,
 			showAddLeafCert: false,
 			action: null,
 			expandedRows: [],
@@ -66,9 +70,11 @@ export default {
 		ProposeRootCertificate,
 		AddLeafCertificate,
 		LeafCertificates,
+		PkiRevocationDistributionPoint
 	},
 
 	computed: {
+
 		allApprovedRootCertificates() {
 			let rootCertificates = [];
 			const approvedCertificatesArray =
@@ -89,6 +95,14 @@ export default {
 			}
 			return rootCertificates;
 		},
+
+		allPkiRevocationDistributionPoints() {
+			const pkiRevocationDistributionPointArray =
+				this.$store.getters[
+					"zigbeealliance.distributedcomplianceledger.pki/getPkiRevocationDistributionPointAll"
+				]();
+			return pkiRevocationDistributionPointArray?.PkiRevocationDistributionPoint;
+		},		
 
 		allApprovedCertificates() {
 			let allCerts = [];
@@ -180,6 +194,17 @@ export default {
 			}
 		);
 
+		// Get all the revocation distribution points
+		this.$store.dispatch(
+			"zigbeealliance.distributedcomplianceledger.pki/QueryPkiRevocationDistributionPointAll",
+			{
+				options: {
+					subscribe: true,
+					all: true,
+				},
+			}
+		);
+
 		// Get all the proposed certificates
 		this.$store.dispatch(
 			"zigbeealliance.distributedcomplianceledger.pki/QueryProposedCertificateAll",
@@ -214,6 +239,21 @@ export default {
 	},
 
 	methods: {
+
+    dismissPkiRevocationDistributionPointDialog() {
+      this.showPkiRevocationDistributionPoint = false;
+    },
+    showPkiRevocationDistributionPointDialog(pkiRevocationDistributionPoint, viewOnly) {
+      this.showPkiRevocationDistributionPoint = true;
+      this.selectedPkiRevocationDistributionPoint = pkiRevocationDistributionPoint;
+      this.viewOnly = viewOnly;
+    },
+    showNewPkiRevocationDistributionPoint() {
+      this.showPkiRevocationDistributionPoint = true;
+      this.selectedPkiRevocationDistributionPoint = null;
+      this.viewOnly = false;
+    },
+
 		selectCertificate(certificate) {
 			alert(certificate);
 			console.log(certificate);
@@ -288,6 +328,14 @@ export default {
 			}
 		},
 
+		pkiRevocationDistributionPointHeader() {
+			if (this.viewOnly) {
+				return "View PKI Revocation Distribution Point";
+			} else {
+				return "Add / Update PKI Revocation Distribution Point";
+			} 
+		},
+
 		// Download the certificate in PEM format
 		downloadCertificate(certificates) {
 			let filename = "certificate.pem";
@@ -318,12 +366,82 @@ export default {
 			}
 			return childCertificates;
 		},
+
+
+    confirmDeletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint) {
+      this.$confirm.require({
+        message: `Are you sure you want to delete the PkiRevocationDistributionPoint with Label : ${pkiRevocationDistributionPoint.label} ?` ,
+        header: "Delete Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.deletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint);
+        },
+        reject: () => {
+          //callback to execute when user rejects the action
+        },
+      });
+    },
+    deletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint) {
+      const wallet = this.$store.getters["common/wallet/wallet"];
+      const account = wallet.accounts[0];
+      const creatorAddress = account.address;
+			let loader = this.$loading.show();
+      this.$store
+        .dispatch(
+          `zigbeealliance.distributedcomplianceledger.pki/sendMsgDeletePkiRevocationDistributionPoint`,
+          {
+            value: {
+              signer: creatorAddress,
+              vid: pkiRevocationDistributionPoint.vid,
+              label: pkiRevocationDistributionPoint.label,
+							issuerSubjectKeyID: pkiRevocationDistributionPoint.issuerSubjectKeyID
+            },
+          }
+        )
+        .then(
+          (response) => {
+						loader.hide();
+            if (response.code == 0) {
+              this.error = null;
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful Tx",
+                detail: "Delete PkiRevocationDistributionPoint Tx sent successfully",
+                life: 3000,
+              });
+            } else {
+              this.error = response;
+							this.$toast.add({
+								severity: "error",
+								summary: "Error while processing Tx",
+								detail: "Delete PkiRevocationDistributionPoint Tx failed",
+								life: 3000,
+							});
+            }
+          },
+          (error) => {
+						loader.hide();
+						this.$toast.add({
+							severity: "error",
+							summary: "Error while processing Tx",
+							detail: "Delete PkiRevocationDistributionPoint Tx failed",
+							life: 3000,
+						});
+            this.error = error.message;
+          }
+        );
+    },
+
 	},
 };
 </script>
 
 <template>
 	<div class="prime-vue-container">
+		<ConfirmDialog></ConfirmDialog>
+    <Message :closable="false" v-if="error" severity="error">{{
+      errorMessage()
+    }}</Message>		
 		<TabView>
 			<TabPanel header="All Approved Certificates">
 				<Button
@@ -419,6 +537,81 @@ export default {
 					</template>
 				</DataTable>
 			</TabPanel>
+
+			<TabPanel header="PKI Revocation Distribution Point">
+				<Button
+					@click="showPkiRevocationDistributionPointDialog(null, false)"
+					class="p-button-primary mb-4 mr-4"
+					v-bind:class="{ 'p-disabled': !isSignedIn }"
+					label="Add Revocation Distribution Point"
+				/>
+
+				<DataTable
+					:value="allPkiRevocationDistributionPoints"
+					:auto-layout="true"
+					:paginator="true"
+					:rows="10"
+					v-model:filters="filters"
+					v-model:expandedRows="expandedRows"
+					filterDisplay="row"
+					showGridlines
+					stripedRows
+				>
+					<template #header>
+						<div class="flex justify-content-end">
+							<span class="p-input-icon-left">
+								<i class="pi pi-search" />
+								<InputText
+									v-model="filters['global'].value"
+									placeholder="Search"
+								/>
+							</span>
+						</div>
+					</template>
+					<Column field="vid" header="Vendor ID" :sortable="true" />
+					<Column field="label" header="Label"></Column>
+					<Column field="issuerSubjectKeyID" header="Issuer Subject KeyID"></Column>
+					<Column field="dataURL" header="Data URL"></Column>
+			    <Column header="Action">
+						<template #body="{ data }">
+							<span style="margin-right: 0.1rem">
+								<Button
+									label=""
+									@click="showPkiRevocationDistributionPointDialog(data, true)"
+									iconPos="left"
+									icon="pi pi-info-circle"
+									class="
+										p-button-rounded p-button-primary p-button-text p-button-info
+									"
+									v-tooltip="'Show PKI Revocation Distribution Point'"
+								/>
+							</span>
+							<span style="margin-right: 0.1rem">
+								<Button
+									label=""
+									@click="showPkiRevocationDistributionPointDialog(data, false)"
+									iconPos="left"
+									icon="pi pi-pencil"
+									class="p-button-rounded p-button-secondary p-button-text"
+									v-bind:class="{ 'p-disabled': !isSignedIn }"
+									v-tooltip="'Update PKI Revocation Distribution Point'"
+								/>
+							</span>
+							<span style="margin-right: 0.1rem">
+								<Button
+									label=""
+									@click="confirmDeletePkiRevocationDistributionPoint(data)"
+									iconPos="left"
+									icon="pi pi-trash"
+									class="p-button-rounded p-button-danger p-button-text"
+									v-bind:class="{ 'p-disabled': !isSignedIn }"
+									v-tooltip="'Delete PKI Revocation Distribution Point'"
+								/>
+							</span>
+						</template>					
+					</Column>
+				</DataTable>
+			</TabPanel>			
 
 			<TabPanel header="All Proposed Certificates">
 				<DataTable
@@ -691,6 +884,22 @@ export default {
 				:certificate="selectedCertificate"
 				@close-dialog="dismissGrantActionRootCertificateDialog"
 			></GrantActionRootCertificate>
+		</Dialog>
+
+		<Dialog
+			:header="pkiRevocationDistributionPointHeader()"
+			@update:visible="dismissPkiRevocationDistributionPointDialog"
+			:visible="showPkiRevocationDistributionPoint"
+			:style="{ width: '50vw' }"
+			class="p-fluid"
+			:modal="true"
+		>
+			<PkiRevocationDistributionPoint
+				:action="action"
+				:selectedPkiRevocationDistributionPoint="selectedPkiRevocationDistributionPoint"
+				:viewOnly="viewOnly"
+				@close-dialog="dismissPkiRevocationDistributionPointDialog"
+			></PkiRevocationDistributionPoint>
 		</Dialog>
 	</div>
 </template>

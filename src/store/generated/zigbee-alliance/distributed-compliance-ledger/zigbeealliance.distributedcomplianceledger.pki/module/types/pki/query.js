@@ -1,6 +1,5 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal';
-import * as Long from 'long';
+import { Reader, Writer } from 'protobufjs/minimal';
 import { ApprovedCertificates } from '../pki/approved_certificates';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { ProposedCertificate } from '../pki/proposed_certificate';
@@ -12,6 +11,7 @@ import { RevokedRootCertificates } from '../pki/revoked_root_certificates';
 import { ApprovedCertificatesBySubject } from '../pki/approved_certificates_by_subject';
 import { RejectedCertificate } from '../pki/rejected_certificate';
 import { PkiRevocationDistributionPoint } from '../pki/pki_revocation_distribution_point';
+import { PkiRevocationDistributionPointsByIssuerSubjectKeyID } from '../pki/pki_revocation_distribution_points_by_issuer_subject_key_id';
 export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki';
 const baseQueryGetApprovedCertificatesRequest = { subject: '', subjectKeyId: '' };
 export const QueryGetApprovedCertificatesRequest = {
@@ -1659,7 +1659,7 @@ const baseQueryGetPkiRevocationDistributionPointRequest = { vid: 0, label: '', i
 export const QueryGetPkiRevocationDistributionPointRequest = {
     encode(message, writer = Writer.create()) {
         if (message.vid !== 0) {
-            writer.uint32(8).uint64(message.vid);
+            writer.uint32(8).int32(message.vid);
         }
         if (message.label !== '') {
             writer.uint32(18).string(message.label);
@@ -1677,7 +1677,7 @@ export const QueryGetPkiRevocationDistributionPointRequest = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.vid = longToNumber(reader.uint64());
+                    message.vid = reader.int32();
                     break;
                 case 2:
                     message.label = reader.string();
@@ -1925,7 +1925,125 @@ export const QueryAllPkiRevocationDistributionPointResponse = {
         return message;
     }
 };
+const baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest = { issuerSubjectKeyID: '' };
+export const QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.issuerSubjectKeyID !== '') {
+            writer.uint32(10).string(message.issuerSubjectKeyID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.issuerSubjectKeyID = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = String(object.issuerSubjectKeyID);
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.issuerSubjectKeyID !== undefined && (obj.issuerSubjectKeyID = message.issuerSubjectKeyID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = object.issuerSubjectKeyID;
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    }
+};
+const baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse = {};
+export const QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined) {
+            PkiRevocationDistributionPointsByIssuerSubjectKeyID.encode(message.pkiRevocationDistributionPointsByIssuerSubjectKeyID, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        if (object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined && object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== null) {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.fromJSON(object.pkiRevocationDistributionPointsByIssuerSubjectKeyID);
+        }
+        else {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined &&
+            (obj.pkiRevocationDistributionPointsByIssuerSubjectKeyID = message.pkiRevocationDistributionPointsByIssuerSubjectKeyID
+                ? PkiRevocationDistributionPointsByIssuerSubjectKeyID.toJSON(message.pkiRevocationDistributionPointsByIssuerSubjectKeyID)
+                : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        if (object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined && object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== null) {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.fromPartial(object.pkiRevocationDistributionPointsByIssuerSubjectKeyID);
+        }
+        else {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = undefined;
+        }
+        return message;
+    }
+};
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }
@@ -2009,25 +2127,9 @@ export class QueryClientImpl {
         const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'PkiRevocationDistributionPointAll', data);
         return promise.then((data) => QueryAllPkiRevocationDistributionPointResponse.decode(new Reader(data)));
     }
-}
-var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
-        return globalThis;
-    if (typeof self !== 'undefined')
-        return self;
-    if (typeof window !== 'undefined')
-        return window;
-    if (typeof global !== 'undefined')
-        return global;
-    throw 'Unable to locate global object';
-})();
-function longToNumber(long) {
-    if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+    PkiRevocationDistributionPointsByIssuerSubjectKeyID(request) {
+        const data = QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest.encode(request).finish();
+        const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'PkiRevocationDistributionPointsByIssuerSubjectKeyID', data);
+        return promise.then((data) => QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse.decode(new Reader(data)));
     }
-    return long.toNumber();
-}
-if (util.Long !== Long) {
-    util.Long = Long;
-    configure();
 }

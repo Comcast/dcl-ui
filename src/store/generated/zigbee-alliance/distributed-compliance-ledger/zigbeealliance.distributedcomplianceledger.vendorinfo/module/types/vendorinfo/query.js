@@ -233,6 +233,7 @@ export const QueryAllVendorInfoResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

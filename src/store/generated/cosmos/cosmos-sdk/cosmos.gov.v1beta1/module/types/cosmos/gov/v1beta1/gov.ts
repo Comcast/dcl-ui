@@ -1182,7 +1182,7 @@ function longToNumber(long: Long): number {
   return long.toNumber()
 }
 
-if (util.Long !== Long) {
+if ((util.Long as any) !== Long) {
   util.Long = Long as any
   configure()
 }

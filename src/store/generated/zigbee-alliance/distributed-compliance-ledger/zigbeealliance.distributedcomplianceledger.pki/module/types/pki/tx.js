@@ -2,7 +2,7 @@
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
 export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki';
-const baseMsgProposeAddX509RootCert = { signer: '', cert: '', info: '', time: 0 };
+const baseMsgProposeAddX509RootCert = { signer: '', cert: '', info: '', time: 0, vid: 0 };
 export const MsgProposeAddX509RootCert = {
     encode(message, writer = Writer.create()) {
         if (message.signer !== '') {
@@ -16,6 +16,9 @@ export const MsgProposeAddX509RootCert = {
         }
         if (message.time !== 0) {
             writer.uint32(32).int64(message.time);
+        }
+        if (message.vid !== 0) {
+            writer.uint32(40).int32(message.vid);
         }
         return writer;
     },
@@ -37,6 +40,9 @@ export const MsgProposeAddX509RootCert = {
                     break;
                 case 4:
                     message.time = longToNumber(reader.int64());
+                    break;
+                case 5:
+                    message.vid = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -71,6 +77,12 @@ export const MsgProposeAddX509RootCert = {
         else {
             message.time = 0;
         }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = Number(object.vid);
+        }
+        else {
+            message.vid = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -79,6 +91,7 @@ export const MsgProposeAddX509RootCert = {
         message.cert !== undefined && (obj.cert = message.cert);
         message.info !== undefined && (obj.info = message.info);
         message.time !== undefined && (obj.time = message.time);
+        message.vid !== undefined && (obj.vid = message.vid);
         return obj;
     },
     fromPartial(object) {
@@ -106,6 +119,12 @@ export const MsgProposeAddX509RootCert = {
         }
         else {
             message.time = 0;
+        }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = object.vid;
+        }
+        else {
+            message.vid = 0;
         }
         return message;
     }
@@ -1127,7 +1146,7 @@ export const MsgAddPkiRevocationDistributionPoint = {
             writer.uint32(88).uint32(message.dataDigestType);
         }
         if (message.revocationType !== 0) {
-            writer.uint32(96).uint64(message.revocationType);
+            writer.uint32(96).uint32(message.revocationType);
         }
         return writer;
     },
@@ -1172,7 +1191,7 @@ export const MsgAddPkiRevocationDistributionPoint = {
                     message.dataDigestType = reader.uint32();
                     break;
                 case 12:
-                    message.revocationType = longToNumber(reader.uint64());
+                    message.revocationType = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1767,7 +1786,148 @@ export const MsgDeletePkiRevocationDistributionPointResponse = {
         return message;
     }
 };
+const baseMsgAssignVid = { signer: '', subject: '', subjectKeyId: '', vid: 0 };
+export const MsgAssignVid = {
+    encode(message, writer = Writer.create()) {
+        if (message.signer !== '') {
+            writer.uint32(10).string(message.signer);
+        }
+        if (message.subject !== '') {
+            writer.uint32(18).string(message.subject);
+        }
+        if (message.subjectKeyId !== '') {
+            writer.uint32(26).string(message.subjectKeyId);
+        }
+        if (message.vid !== 0) {
+            writer.uint32(32).int32(message.vid);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgAssignVid };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.signer = reader.string();
+                    break;
+                case 2:
+                    message.subject = reader.string();
+                    break;
+                case 3:
+                    message.subjectKeyId = reader.string();
+                    break;
+                case 4:
+                    message.vid = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgAssignVid };
+        if (object.signer !== undefined && object.signer !== null) {
+            message.signer = String(object.signer);
+        }
+        else {
+            message.signer = '';
+        }
+        if (object.subject !== undefined && object.subject !== null) {
+            message.subject = String(object.subject);
+        }
+        else {
+            message.subject = '';
+        }
+        if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
+            message.subjectKeyId = String(object.subjectKeyId);
+        }
+        else {
+            message.subjectKeyId = '';
+        }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = Number(object.vid);
+        }
+        else {
+            message.vid = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.signer !== undefined && (obj.signer = message.signer);
+        message.subject !== undefined && (obj.subject = message.subject);
+        message.subjectKeyId !== undefined && (obj.subjectKeyId = message.subjectKeyId);
+        message.vid !== undefined && (obj.vid = message.vid);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgAssignVid };
+        if (object.signer !== undefined && object.signer !== null) {
+            message.signer = object.signer;
+        }
+        else {
+            message.signer = '';
+        }
+        if (object.subject !== undefined && object.subject !== null) {
+            message.subject = object.subject;
+        }
+        else {
+            message.subject = '';
+        }
+        if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
+            message.subjectKeyId = object.subjectKeyId;
+        }
+        else {
+            message.subjectKeyId = '';
+        }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = object.vid;
+        }
+        else {
+            message.vid = 0;
+        }
+        return message;
+    }
+};
+const baseMsgAssignVidResponse = {};
+export const MsgAssignVidResponse = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgAssignVidResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseMsgAssignVidResponse };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseMsgAssignVidResponse };
+        return message;
+    }
+};
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }
@@ -1820,6 +1980,11 @@ export class MsgClientImpl {
         const data = MsgDeletePkiRevocationDistributionPoint.encode(request).finish();
         const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Msg', 'DeletePkiRevocationDistributionPoint', data);
         return promise.then((data) => MsgDeletePkiRevocationDistributionPointResponse.decode(new Reader(data)));
+    }
+    AssignVid(request) {
+        const data = MsgAssignVid.encode(request).finish();
+        const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Msg', 'AssignVid', data);
+        return promise.then((data) => MsgAssignVidResponse.decode(new Reader(data)));
     }
 }
 var globalThis = (() => {

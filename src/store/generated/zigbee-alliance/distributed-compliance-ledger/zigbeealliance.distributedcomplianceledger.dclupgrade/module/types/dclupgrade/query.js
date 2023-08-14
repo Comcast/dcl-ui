@@ -693,6 +693,7 @@ export const QueryAllRejectedUpgradeResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

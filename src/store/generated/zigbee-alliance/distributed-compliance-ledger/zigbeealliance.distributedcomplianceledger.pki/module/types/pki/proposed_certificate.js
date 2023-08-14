@@ -2,7 +2,7 @@
 import { Grant } from '../pki/grant';
 import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki';
-const baseProposedCertificate = { subject: '', subjectKeyId: '', pemCert: '', serialNumber: '', owner: '', subjectAsText: '' };
+const baseProposedCertificate = { subject: '', subjectKeyId: '', pemCert: '', serialNumber: '', owner: '', subjectAsText: '', vid: 0 };
 export const ProposedCertificate = {
     encode(message, writer = Writer.create()) {
         if (message.subject !== '') {
@@ -28,6 +28,9 @@ export const ProposedCertificate = {
         }
         for (const v of message.rejects) {
             Grant.encode(v, writer.uint32(66).fork()).ldelim();
+        }
+        if (message.vid !== 0) {
+            writer.uint32(72).int32(message.vid);
         }
         return writer;
     },
@@ -63,6 +66,9 @@ export const ProposedCertificate = {
                     break;
                 case 8:
                     message.rejects.push(Grant.decode(reader, reader.uint32()));
+                    break;
+                case 9:
+                    message.vid = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -121,6 +127,12 @@ export const ProposedCertificate = {
                 message.rejects.push(Grant.fromJSON(e));
             }
         }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = Number(object.vid);
+        }
+        else {
+            message.vid = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -143,6 +155,7 @@ export const ProposedCertificate = {
         else {
             obj.rejects = [];
         }
+        message.vid !== undefined && (obj.vid = message.vid);
         return obj;
     },
     fromPartial(object) {
@@ -194,6 +207,12 @@ export const ProposedCertificate = {
             for (const e of object.rejects) {
                 message.rejects.push(Grant.fromPartial(e));
             }
+        }
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = object.vid;
+        }
+        else {
+            message.vid = 0;
         }
         return message;
     }
