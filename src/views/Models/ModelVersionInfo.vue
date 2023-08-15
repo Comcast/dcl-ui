@@ -76,7 +76,7 @@ export default {
       }
 
       const wallet = this.$store.getters["common/wallet/wallet"];
-      const account = wallet.accounts[0];
+      const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address;
 
       this.txProcessing = true;

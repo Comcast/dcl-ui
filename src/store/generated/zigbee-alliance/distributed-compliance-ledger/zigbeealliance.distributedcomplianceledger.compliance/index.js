@@ -9,7 +9,7 @@ import { ProvisionalModel } from "./module/types/compliance/provisional_model";
 import { RevokedModel } from "./module/types/compliance/revoked_model";
 export { CertifiedModel, ComplianceHistoryItem, ComplianceInfo, DeviceSoftwareCompliance, ProvisionalModel, RevokedModel };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters["keplrSigner"], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

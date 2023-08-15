@@ -8,7 +8,7 @@ import { EventRevoke } from "./module/types/cosmos/authz/v1beta1/event";
 import { GrantAuthorization } from "./module/types/cosmos/authz/v1beta1/genesis";
 export { GenericAuthorization, Grant, EventGrant, EventRevoke, GrantAuthorization };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters["keplrSigner"], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

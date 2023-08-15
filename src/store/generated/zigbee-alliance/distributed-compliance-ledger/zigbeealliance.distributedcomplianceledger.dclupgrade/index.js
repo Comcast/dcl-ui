@@ -7,7 +7,7 @@ import { ProposedUpgrade } from "./module/types/dclupgrade/proposed_upgrade";
 import { RejectedUpgrade } from "./module/types/dclupgrade/rejected_upgrade";
 export { ApprovedUpgrade, Grant, ProposedUpgrade, RejectedUpgrade };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters["keplrSigner"], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

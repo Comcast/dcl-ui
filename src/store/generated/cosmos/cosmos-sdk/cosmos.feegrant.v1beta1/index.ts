@@ -11,7 +11,7 @@ import { Grant } from "./module/types/cosmos/feegrant/v1beta1/feegrant"
 export { BasicAllowance, PeriodicAllowance, AllowedMsgAllowance, Grant };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters["keplrSigner"], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

@@ -177,7 +177,7 @@ export default {
 		},
 
 		isSignedIn() {
-			const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+			const loggedIn = this.$store.getters["loggedIn"];
 			return loggedIn;
 		},
 	},
@@ -383,7 +383,7 @@ export default {
     },
     deletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint) {
       const wallet = this.$store.getters["common/wallet/wallet"];
-      const account = wallet.accounts[0];
+      const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address;
 			let loader = this.$loading.show();
       this.$store

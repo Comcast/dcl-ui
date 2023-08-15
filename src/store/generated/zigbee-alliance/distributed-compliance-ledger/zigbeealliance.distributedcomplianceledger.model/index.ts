@@ -12,7 +12,7 @@ import { VendorProducts } from "./module/types/model/vendor_products"
 export { Model, ModelVersion, ModelVersions, Product, VendorProducts };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters["keplrSigner"], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

@@ -276,39 +276,6 @@
 					<div>
 						<span class="block text-500 font-medium text-lg">Current User</span>
 						<div class="text-900 font-medium text-lg">
-							Public Key :
-							<span class="text-500 font-medium">{{
-								shortenKey(pubKey?.value)
-							}}</span>
-							<button
-								@click="copyToClipboard(pubKey?.value)"
-								class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
-								type="button"
-							>
-								<span class="mt-3 pi pi-copy p-button-copy"></span>
-							</button>
-						</div>
-						<div class="text-900 font-medium text-lg">
-							CLI Format Public Key :
-							<span class="text-500 font-medium">{{
-								shortenKey(JSON.stringify(pubKey))
-							}}</span>
-							<button
-								@click="
-									copyToClipboard(
-										JSON.stringify({
-											type: '/cosmos.crypto.secp256k1.PubKey',
-											key: pubKey.value,
-										})
-									)
-								"
-								class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
-								type="button"
-							>
-								<span class="mt-3 pi pi-copy p-button-copy"></span>
-							</button>
-						</div>
-						<div class="text-900 font-medium text-lg">
 							Address :
 							<span class="text-500 font-medium">{{
 								shortenAddress(currentAddress)
@@ -409,17 +376,15 @@ export default {
 			},
 		},
 		isSignedIn() {
-			const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+			const loggedIn = this.$store.getters["loggedIn"];
 			if (loggedIn) {
-				this.updatePubKey();
+				// this.updatePubKey();
 			}
 			return loggedIn;
 		},
 		currentAddress() {
-			if (this.$store.getters["common/wallet/loggedIn"]) {
-				const wallet = this.$store.getters["common/wallet/wallet"];
-				const accounts = wallet.accounts;
-				const account = wallet.accounts[0];
+			if (this.$store.state.selectedKeplrAccount) {
+				const account = this.$store.state.selectedKeplrAccount;
 				return account.address;
 			}
 			return "";
@@ -607,26 +572,24 @@ export default {
 			document.body.removeChild(el);
 		},
 		updatePubKey() {
-			if (this.$store.getters["common/wallet/loggedIn"]) {
-				DirectSecp256k1HdWallet.fromMnemonic(
-					this.$store.state["common"]["wallet"]["activeWallet"].mnemonic
-				).then((data) => {
-					data.getAccountsWithPrivkeys().then((data) => {
-						const defaultPubkeyBytes = data[0].pubkey;
-						const defaultPubkeyProtoBytes = Uint8Array.from([
-							0x0a,
-							defaultPubkeyBytes.length,
-							...defaultPubkeyBytes,
-						]);
-						const decodedPubKey = decodePubkey({
-							typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-							value: defaultPubkeyProtoBytes,
-						});
-						this.currentKey = decodedPubKey;
-					});
-				});
-			}
-		},
+			if (this.$store.state.selectedKeplrAccount) {
+							const publicKey = this.$store.state.selectedKeplrAccount.pubkey;
+							if (!publicKey) {
+								console.error("No public key found in Keplr account");
+								return;
+							}
+							// convert publicKey (Uint8Array) to the protobuf format
+							const defaultPubkeyProtoBytes = Uint8Array.from([
+								0x0a,
+								publicKey.length,
+								...publicKey,
+							]);
+							const decodedPubKey = decodePubkey({
+								typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+								value: defaultPubkeyProtoBytes,
+							});
+							this.currentKey = decodedPubKey;}
+			},
 	},
 };
 </script>

@@ -29,9 +29,9 @@ export default {
       this.txProcessing = true;
 			let loader = this.$loading.show();
 
-      const wallet = this.$store.getters['common/wallet/wallet']
-      const accounts = wallet.accounts
-      const account = wallet.accounts[0]
+      
+      
+      const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address
 
       this.$store

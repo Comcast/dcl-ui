@@ -62,9 +62,9 @@ export default {
       } catch (e) {
         this.error = e.message
       }
-      const wallet = this.$store.getters['common/wallet/wallet']
-      const accounts = wallet.accounts
-      const account = wallet.accounts[0]
+      
+      
+      const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address
 
       //this.$store.dispatch('zigbeealliance.distributedcomplianceledger.model/sendMsgCreateModel', {

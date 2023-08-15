@@ -60,7 +60,7 @@ export default {
     },
     deleteModelVersion(modelVersion) {
       const wallet = this.$store.getters["common/wallet/wallet"];
-      const account = wallet.accounts[0];
+      const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address;
       this.txProcessing = true;
 			let loader = this.$loading.show();
@@ -214,7 +214,7 @@ export default {
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      const loggedIn = this.$store.getters["loggedIn"];
       return loggedIn;
     },
   },
