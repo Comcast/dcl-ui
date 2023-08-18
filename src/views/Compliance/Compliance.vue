@@ -179,9 +179,9 @@ export default {
               return complianceInfo.vid === vid && complianceInfo.pid === pid && complianceInfo.softwareVersion === softwareVersion;
           });
           if (complianceInfo) {
-              certifiedModel.softwareVersionString = complianceInfo.softwareVersionString;
-              certifiedModel.cDCertificateId = complianceInfo.cDCertificateId;
-              certifiedModel.certificationDate = complianceInfo.date;
+            // Populate all properties from complianceInfo into certifiedModel
+            Object.assign(certifiedModel, complianceInfo);
+            certifiedModel.certificationDate = complianceInfo.date;
           }
       }
     },
@@ -277,7 +277,7 @@ export default {
 									icon="pi pi-trash"
 									class="p-button-rounded p-button-danger p-button-text"
 									v-bind:class="{ 'p-disabled': !isSignedIn }"
-									v-tooltip="'Revoke Compliance Info'"
+									v-tooltip="'Revoke Certified Model'"
 								/>
               </span>
             </template>
