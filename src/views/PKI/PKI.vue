@@ -382,7 +382,6 @@ export default {
       });
     },
     deletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint) {
-      const wallet = this.$store.getters["common/wallet/wallet"];
       const account = this.$store.state.selectedKeplrAccount;
       const creatorAddress = account.address;
 			let loader = this.$loading.show();

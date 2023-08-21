@@ -98,7 +98,8 @@ export default {
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/wallet"];
+      debugger;
+      const loggedIn = this.$store.getters["loggedIn"];
       return loggedIn;
     },
 
