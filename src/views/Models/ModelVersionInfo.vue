@@ -1,5 +1,6 @@
 <script>
 import InputText from "primevue/inputtext";
+import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
 import { required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
@@ -20,6 +21,7 @@ export default {
   name: "ModelVersionInfo",
   components: {
     InputText,
+    Dropdown,
     Button,
     Message,
   },
@@ -351,15 +353,14 @@ export default {
           <!-- Field for softwareVersionValid -->
           <div class="field">
             <label for="softwareVersionValid">Software Version Valid</label>
-            <InputText
-              id="softwareVersionValid"
-              type="text"
-              v-model="v$.modelVersion.softwareVersionValid.$model"
-              :class="{
-                'p-invalid':
-                  v$.modelVersion.softwareVersionValid.$invalid && submitted,
-              }"
-            />
+            <Dropdown
+            id="softwareVersionValid"
+            v-model="v$.modelVersion.softwareVersionValid.$model"
+            :options="[{ label: 'True', value: true }, { label: 'False', value: false }]"
+            optionLabel="label"
+            optionValue="value"
+            :class="{ 'p-invalid': v$.modelVersion.softwareVersionValid.$invalid && submitted }"
+          />
           </div>
 
           <!-- Field for otaUrl -->
