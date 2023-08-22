@@ -16,10 +16,12 @@ import { Any } from "cosmjs-types/google/protobuf/any";
 import { decodePubkey, encodePubkey } from "@cosmjs/proto-signing";
 import { ModelVersion } from "../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.model/module/types/model/model_version";
 import Message from "primevue/message";
+import Dropdown from 'primevue/dropdown';
 export default {
   name: "ModelVersionInfo",
   components: {
     InputText,
+    Dropdown,
     Button,
     Message,
   },
@@ -350,14 +352,13 @@ export default {
           <!-- Field for softwareVersionValid -->
           <div class="field">
             <label for="softwareVersionValid">Software Version Valid</label>
-            <InputText
+            <Dropdown
               id="softwareVersionValid"
-              type="text"
               v-model="v$.modelVersion.softwareVersionValid.$model"
-              :class="{
-                'p-invalid':
-                  v$.modelVersion.softwareVersionValid.$invalid && submitted,
-              }"
+              :options="[{ label: 'True', value: true }, { label: 'False', value: false }]"
+              optionLabel="label"
+              optionValue="value"
+              :class="{ 'p-invalid': v$.modelVersion.softwareVersionValid.$invalid && submitted }"
             />
           </div>
 
