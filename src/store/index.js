@@ -29,6 +29,7 @@ const store = createStore({
 			const chainId = process.env.VUE_APP_DCL_CHAIN_ID; // Replace with your chain ID
 			await keplr.enable(chainId);
 			const signer = keplr.getOfflineSigner(chainId);
+			signer.key = await signer.keplr.getKey(signer.chainId);
 			commit("setKeplrSigner", signer);
 
 			const accounts = await signer.getAccounts();

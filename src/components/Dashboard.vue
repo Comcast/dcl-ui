@@ -276,6 +276,39 @@
 					<div>
 						<span class="block text-500 font-medium text-lg">Current User</span>
 						<div class="text-900 font-medium text-lg">
+							Public Key :
+							<span class="text-500 font-medium">{{
+								shortenKey(pubKey?.value)
+							}}</span>
+							<button
+								@click="copyToClipboard(pubKey?.value)"
+								class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
+								type="button"
+							>
+								<span class="mt-3 pi pi-copy p-button-copy"></span>
+							</button>
+						</div>
+						<div class="text-900 font-medium text-lg">
+							CLI Format Public Key :
+							<span class="text-500 font-medium">{{
+								shortenKey(JSON.stringify(pubKey))
+							}}</span>
+							<button
+								@click="
+									copyToClipboard(
+										JSON.stringify({
+											type: '/cosmos.crypto.secp256k1.PubKey',
+											key: pubKey.value,
+										})
+									)
+								"
+								class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
+								type="button"
+							>
+								<span class="mt-3 pi pi-copy p-button-copy"></span>
+							</button>
+						</div>						
+						<div class="text-900 font-medium text-lg">
 							Address :
 							<span class="text-500 font-medium">{{
 								shortenAddress(currentAddress)
@@ -298,7 +331,6 @@
 <script>
 import Vue3autocounter from "vue3-autocounter";
 import { decodePubkey } from "@cosmjs/proto-signing";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 export default {
 	name: "Dashboard",
@@ -378,7 +410,7 @@ export default {
 		isSignedIn() {
 			const loggedIn = this.$store.getters["loggedIn"];
 			if (loggedIn) {
-				// this.updatePubKey();
+				this.updatePubKey();
 			}
 			return loggedIn;
 		},
@@ -572,24 +604,22 @@ export default {
 			document.body.removeChild(el);
 		},
 		updatePubKey() {
-			if (this.$store.state.selectedKeplrAccount) {
-							const publicKey = this.$store.state.selectedKeplrAccount.pubkey;
-							if (!publicKey) {
-								console.error("No public key found in Keplr account");
-								return;
-							}
-							// convert publicKey (Uint8Array) to the protobuf format
-							const defaultPubkeyProtoBytes = Uint8Array.from([
-								0x0a,
-								publicKey.length,
-								...publicKey,
-							]);
-							const decodedPubKey = decodePubkey({
-								typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-								value: defaultPubkeyProtoBytes,
-							});
-							this.currentKey = decodedPubKey;}
-			},
+			const account = this.$store.state.keplrSigner;
+			if (account) {
+				const publicKey = account.key.pubKey;
+				// convert publicKey (Uint8Array) to the protobuf format
+				const defaultPubkeyProtoBytes = Uint8Array.from([
+					0x0a,
+					publicKey.length,
+					...publicKey,
+				]);
+				const decodedPubKey = decodePubkey({
+					typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+					value: defaultPubkeyProtoBytes,
+				});
+				this.currentKey = decodedPubKey;
+			}
+		},
 	},
 };
 </script>
