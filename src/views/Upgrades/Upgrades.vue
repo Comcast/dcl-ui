@@ -10,6 +10,8 @@ import Dialog from "primevue/dialog";
 import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import { FilterMatchMode } from "primevue/api";
+import GrantActionUpgrade from "./GrantActionUpgrade.vue";
+import ProposeUpgrade from "./ProposeUpgrade.vue";
 
 
 export default {
@@ -17,8 +19,8 @@ export default {
 
   data() {
     return {
-      showProposeNewAccount: false,
-      showGrantActionAccount: false,
+      showProposeUpgrade: false,
+      showGrantActionUpgrade: false,
       selectedAccount: null,
       grantAction: null,
       filters: {
@@ -28,19 +30,19 @@ export default {
   },
 
   methods: {
-    showProposeNewAccountDialog() {
-      this.showProposeNewAccount = true;
+    showProposeUpgradeDialog() {
+      this.showProposeUpgrade = true;
     },
-    dismissProposeNewAccountDialog() {
-      this.showProposeNewAccount = false;
+    dismissProposeUpgradeDialog() {
+      this.showProposeUpgrade = false;
     },
-    showGrantActionAccountDialog(account, action) {
-      this.showGrantActionAccount = true;
-      this.selectedAccount = account;
+    showGrantActionUpgradeDialog(upgradePlanName, action) {
+      this.showGrantActionUpgrade = true;
+      this.upgradePlanName = upgradePlanName;
       this.grantAction = action;
     },
-    dismissGrantActionAccountDialog() {
-      this.showGrantActionAccount = false;
+    dismissGrantActionUpgradeDialog() {
+      this.showGrantActionUpgrade = false;
     },
 		trimAddress(address) {
 			// Return first 6 and last 4 characters
@@ -66,7 +68,8 @@ export default {
     TabPanel,
     Button,
     Dialog,
-
+    GrantActionUpgrade,
+    ProposeUpgrade,
   },
 
   computed: {
@@ -95,20 +98,16 @@ export default {
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      const loggedIn = this.$store.getters["common/wallet/wallet"];
       return loggedIn;
     },
 
     grantActionHeader() {
       switch (this.grantAction) {
-        case "ApproveAddAccount":
-          return "Approve Add Account";
-        case "RejectAddAccount":
-          return "Reject Add Account";
-        case "ProposeRevokeAccount":
-          return "Propose Revoke Account";
-        case "ApproveRevokeAccount":
-          return "Approve Revoke Account";
+        case "ApproveUpgrade":
+          return "Approve Upgrade";
+        case "RejectUpgrade":
+          return "Reject Upgrade";
         default:
           return "Grant Action Failed";
       }
@@ -154,6 +153,14 @@ export default {
   <div class="prime-vue-container">
     <TabView>
       <TabPanel header="All Approved Upgrades">
+
+        <Button
+          @click="showProposeUpgradeDialog"
+          icon="pi pi-check"
+          v-bind:class="{ 'p-disabled': !isSignedIn }"
+          label="Propose-Upgrade"
+          >Propose Upgrade</Button
+        >
 
         <div class="mb-4"></div>
         <DataTable
@@ -290,6 +297,39 @@ export default {
               </ol>
             </template>
           </Column>
+          <Column
+            field="account"
+            headerStyle="width: 4rem; text-align: left"
+            bodyStyle="text-align: left; overflow: visible"
+          >
+            <template #body="{ data }">
+              <Button
+                label="Approve"
+                @click="
+                  showGrantActionUpgradeDialog(
+                    data.plan.name,
+                    'ApproveUpgrade'
+                  )
+                "
+                iconPos="left"
+                icon="pi pi-check"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+              />
+              <Button
+                label="Reject"
+                @click="
+                  showGrantActionUpgradeDialog(
+                    data.plan.name,
+                    'RejectUpgrade'
+                  )
+                "
+                iconPos="left"
+                icon="pi pi-ban"
+                class="mt-3 p-button-danger"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+              />
+            </template>
+          </Column>
 
         </DataTable>
       </TabPanel>
@@ -366,24 +406,32 @@ export default {
 
     <Dialog
       :header="grantActionHeader"
-      @update:visible="dismissGrantActionAccountDialog"
-      :visible="showGrantActionAccount"
+      @update:visible="dismissGrantActionUpgradeDialog"
+      :visible="showGrantActionUpgrade"
       :style="{ width: '50vw' }"
       :modal="true"
     >
-
+      <GrantActionUpgrade
+        :upgradePlanName="upgradePlanName"
+        :action="grantAction"
+        @close-dialog="dismissGrantActionUpgradeDialog"
+      ></GrantActionUpgrade>
     </Dialog>
 
+
     <Dialog
-      header="Propose a new account"
-      @update:visible="dismissProposeNewAccountDialog"
-      :visible="showProposeNewAccount"
+      header="Propose Upgrade"
+      @update:visible="dismissProposeUpgradeDialog"
+      :visible="showProposeUpgrade"
       :style="{ width: '50vw' }"
       class="p-fluid"
       :modal="true"
     >
-
+      <ProposeUpgrade
+        @close-dialog="dismissProposeUpgradeDialog"
+      ></ProposeUpgrade>
     </Dialog>
+
   </div>
 </template>
 

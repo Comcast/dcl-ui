@@ -767,6 +767,7 @@ export const MsgRejectAddAccountResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

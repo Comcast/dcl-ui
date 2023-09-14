@@ -1,11 +1,41 @@
 <template>
 	<div class="grid">
+    <!-- Warning Block -->
+    <div v-if="isTestnetOrLocalhost" class="card mb-0 col-12 mb-3 mt-3">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium text-lg mb-3">
+            Important Notice
+          </span>
+					<p>
+						The current wallet is not recommended and will be decommissioned soon. Please use our alternative site 
+						<a href="https://testnet-keplr.iotledger.io" target="_blank" rel="noopener noreferrer">
+							https://testnet-keplr.iotledger.io 
+							<i class="pi pi-external-link"></i>
+						</a>
+						that supports Keplr wallet.
+					</p>
+					<p>
+						One of the key features of the Keplr wallet is its support for hardware wallets, ensuring a higher level of security. For a more detailed overview and support, 
+						<a href="https://keplr.app/" target="_blank" rel="noopener noreferrer">
+							check out Keplr's official documentation 
+							<i class="pi pi-external-link"></i>
+						</a>.
+				</p>					
+        </div>
+        <div class="flex align-items-center justify-content-center bg-yellow-100 border-round" style="width: 2.5rem; height: 2.5rem">
+          <i class="pi pi-exclamation-triangle text-yellow-500 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
 		<div class="col-12 lg:col-6 xl:col-3">
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3">Accounts</span>
+						<span class="block text-500 text-lg mb-3">Accounts</span>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-users mr-1"></i>
 							Active
 							<Badge
 								:value="allActiveAccounts.length || '0'"
@@ -14,6 +44,7 @@
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-user-plus mr-1 p-text-primary"></i>
 							Proposed
 							<Badge
 								:value="allProposedAccounts.length || '0'"
@@ -22,6 +53,7 @@
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-user-minus mr-1 p-text-primary"></i>
 							Proposed Revokes
 							<Badge
 								:value="allActiveRevocations.length || '0'"
@@ -43,36 +75,44 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3">Roles</span>
+						<span class="block text-500 font-medium text-lg  mb-3">Roles</span>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-shield mr-1 text-grey-500"></i>
 							Trustee
 							<Badge
 								:value="trusteeCount || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-user mr-1"></i>
 							Vendor
 							<Badge
 								:value="vendorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-user-plus mr-1"></i>
+							VendorAdmin
+							<Badge
+								:value="vendorAdminCount || '0'"
+								class="ml-2 p-badge-warning"
+							></Badge>
+						</div>
+						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-server mr-1 p-text-primary"></i>
 							NodeAdmin
 							<Badge
 								:value="nodeAdminCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-primary"
 							></Badge>
-						</div>
+						</div>						
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-flag-fill mr-1 p-text-primary"></i>
 							CertificationCenter<Badge
 								:value="certificationCenterCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>
@@ -89,41 +129,42 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3">Validator Nodes</span>
+						<span class="block text-500 font-medium text-lg mb-3">Validator Nodes</span>
 						<div class="text-900 font-medium text-lg mb-3">
-							Total
+							<i class="pi pi-users mr-1"></i>
+							<span>Total</span>
 							<Badge
 								:value="validatorCount || '0'"
-								severity="info"
-								class="ml-2"
+								class="ml-2 p-badge-secondary"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
-							Jailed
+							<i class="pi pi-lock mr-1"></i>
+							<span>Jailed</span>
 							<Badge
 								:value="jailedValidatorCount || '0'"
-								severity="warning"
-								class="ml-2"
+								class="ml-2 p-badge-warning"
+								
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
-							Active
+							<i class="pi pi-check-circle mr-1"></i>
+							<span>Active</span>
 							<Badge
 								:value="lastBlockParticipatingNodes.length || '0'"
-								severity="success"
-								class="ml-2"
+								class="ml-2 p-badge-success"
 							></Badge>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
-							Inactive
+							<i class="pi pi-times-circle mr-1 text-r"></i>
+							<span>Inactive</span>
 							<Badge
 								:value="
 									validatorCount -
 										jailedValidatorCount -
 										lastBlockParticipatingNodes.length || '0'
 								"
-								severity="danger"
-								class="ml-2"
+								class="ml-2 p-badge-danger"
 							></Badge>
 						</div>
 					</div>
@@ -140,36 +181,37 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3">Data Summary</span>
+						<span class="block text-500 font-medium text-lg  mb-3">Data Summary</span>
 						<div class="text-900 font-medium text-lg mb-3">
 							<div class="text-900 font-medium text-lg mb-3">
-							<span>Vendor Info</span>
-							<i class="pi pi-briefcase ml-2 text-grey-500"></i>
-							<Badge
-								:value="vendorInfoCount || '0'"
-								class="ml-2 p-badge-secondary"
-							></Badge>
-						</div>							
-							<span>Device Models</span>
-							<i class="pi pi-database ml-2 text-primary"></i>
-							<Badge
-								:value="modelCount || '0'"
-								class="ml-2 badge-primary"
-							></Badge>
+								<i class="pi pi-briefcase mr-1"></i>
+								<span>Vendor Info</span>
+								<Badge
+									:value="vendorInfoCount || '0'"
+									class="ml-2 p-badge-secondary"
+								></Badge>
+							</div>							
+							<div class="text-900 font-medium text-lg mb-3">
+								<i class="pi pi-database mr-1"></i>
+								<span>Device Models</span>
+								<Badge
+									:value="modelCount || '0'"
+									class="ml-2 badge-primary"
+								></Badge>
+							</div>
 						</div>
 
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-lock mr-1"></i>
 							<span>PKI Certificates</span>
-							<i class="pi pi-lock ml-2 text-orange-500"></i>
 							<Badge
 								:value="certificateCount || '0'"
 								class="ml-2 p-badge-warning"
 							></Badge>
-							<i class="pi pi-certificate ml-2 text-info"></i>
 						</div>
 						<div class="text-900 font-medium text-lg mb-3">
+							<i class="pi pi-check-circle mr-1"></i>
 							<span>Compliance Devices</span>
-							<i class="pi pi-check-circle ml-2 text-green-500"></i>
 							<Badge
 								:value="certifiedModelCount || '0'"
 								class="ml-2 p-badge-success"
@@ -189,7 +231,7 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3">Block Height</span>
+						<span class="block text-500 font-medium text-lg mb-3">Block Height</span>
 
 						<span class="bold transition" :class="{ scaleBig: scaleClass }">
 							<vue3-autocounter
@@ -221,7 +263,7 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium mb-3"
+						<span class="block text-500 font-medium text-lg mb-3"
 							>Last Block Consensus %</span
 						>
 
@@ -261,7 +303,7 @@
 			<div class="card mb-0">
 				<div class="flex justify-content-between mb-3">
 					<div>
-						<span class="block text-500 font-medium">Current User</span>
+						<span class="block text-500 font-medium text-lg">Current User</span>
 						<div class="text-900 font-medium text-lg">
 							Public Key :
 							<span class="text-500 font-medium">{{
@@ -387,6 +429,12 @@ export default {
 		});
 	},
 	computed: {
+		
+		isTestnetOrLocalhost() {
+			const currentHref = window.location.href;
+			return currentHref.includes('testnet.iotledger.io') || currentHref.includes('localhost');
+  	},
+
 		currentKey: {
 			get() {
 				return this.pubKey;
@@ -509,6 +557,12 @@ export default {
 			if (!this.allActiveAccounts) return 0;
 			return this.allActiveAccounts.filter((account) =>
 				account.roles.includes("NodeAdmin")
+			).length;
+		},
+		vendorAdminCount() {
+			if (!this.allActiveAccounts) return 0;
+			return this.allActiveAccounts.filter((account) =>
+				account.roles.includes("VendorAdmin")
 			).length;
 		},
 		certificationCenterCount() {

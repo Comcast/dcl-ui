@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // or your desired ECMAScript target
+    "module": "esnext",
+    "outDir": "src",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
