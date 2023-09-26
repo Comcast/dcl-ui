@@ -7,7 +7,7 @@ import { SpVuexError } from '@starport/vuex'
 export {  };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

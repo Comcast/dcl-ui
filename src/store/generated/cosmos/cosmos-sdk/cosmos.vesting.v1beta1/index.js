@@ -9,7 +9,7 @@ import { PeriodicVestingAccount } from "./module/types/cosmos/vesting/v1beta1/ve
 import { PermanentLockedAccount } from "./module/types/cosmos/vesting/v1beta1/vesting";
 export { BaseVestingAccount, ContinuousVestingAccount, DelayedVestingAccount, Period, PeriodicVestingAccount, PermanentLockedAccount };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

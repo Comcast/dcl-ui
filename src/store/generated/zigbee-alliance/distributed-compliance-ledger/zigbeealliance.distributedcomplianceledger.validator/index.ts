@@ -14,7 +14,7 @@ import { Validator } from "./module/types/validator/validator"
 export { Description, DisabledValidator, Grant, LastValidatorPower, ProposedDisableValidator, RejectedDisableValidator, Validator };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

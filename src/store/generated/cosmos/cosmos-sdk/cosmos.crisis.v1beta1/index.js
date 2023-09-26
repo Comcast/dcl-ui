@@ -2,7 +2,7 @@ import { txClient, queryClient, MissingWalletError } from './module';
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex';
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }
