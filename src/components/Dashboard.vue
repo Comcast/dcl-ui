@@ -588,24 +588,41 @@ export default {
 			document.body.removeChild(el);
 		},
 		updatePubKey() {
-			if (this.$store.getters["common/wallet/loggedIn"]) {
-				DirectSecp256k1HdWallet.fromMnemonic(
-					this.$store.state["common"]["wallet"]["activeWallet"].mnemonic
-				).then((data) => {
-					data.getAccountsWithPrivkeys().then((data) => {
-						const defaultPubkeyBytes = data[0].pubkey;
-						const defaultPubkeyProtoBytes = Uint8Array.from([
-							0x0a,
-							defaultPubkeyBytes.length,
-							...defaultPubkeyBytes,
-						]);
-						const decodedPubKey = decodePubkey({
-							typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-							value: defaultPubkeyProtoBytes,
+			if (this.$store.state.selectedKeplrAccount) {
+							const publicKey = this.$store.state.selectedKeplrAccount.pubkey;
+							if (!publicKey) {
+								console.error("No public key found in Keplr account");
+								return;
+							}
+							// convert publicKey (Uint8Array) to the protobuf format
+							const defaultPubkeyProtoBytes = Uint8Array.from([
+								0x0a,
+								publicKey.length,
+								...publicKey,
+							]);
+							const decodedPubKey = decodePubkey({
+								typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+								value: defaultPubkeyProtoBytes,
+							});
+							this.currentKey = decodedPubKey;}
+			 else if (this.$store.getters["common/wallet/loggedIn"]) {
+					DirectSecp256k1HdWallet.fromMnemonic(
+						this.$store.state["common"]["wallet"]["activeWallet"].mnemonic
+					).then((data) => {
+						data.getAccountsWithPrivkeys().then((data) => {
+							const defaultPubkeyBytes = data[0].pubkey;
+							const defaultPubkeyProtoBytes = Uint8Array.from([
+								0x0a,
+								defaultPubkeyBytes.length,
+								...defaultPubkeyBytes,
+							]);
+							const decodedPubKey = decodePubkey({
+								typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+								value: defaultPubkeyProtoBytes,
+							});
+							this.currentKey = decodedPubKey;
 						});
-						this.currentKey = decodedPubKey;
 					});
-				});
 			}
 		},
 	},
