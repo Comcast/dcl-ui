@@ -40,8 +40,6 @@ export default {
         this.$toast.add({ severity: 'warn', summary: 'Please sign in', detail: 'Please sign in to at least one account', life: 3000 })
         return
       }
-      const wallet = this.$store.getters['common/wallet/wallet']
-      const accounts = wallet.accounts
       let account;
       if(this.$store.state.selectedKeplrAccount) {
           account = this.$store.state.selectedKeplrAccount;

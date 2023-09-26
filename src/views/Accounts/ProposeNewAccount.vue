@@ -62,8 +62,6 @@ export default {
       } catch (e) {
         this.error = e.message
       }
-      const wallet = this.$store.getters['common/wallet/wallet']
-      const accounts = wallet.accounts
       let account;
 
       if(this.$store.state.selectedKeplrAccount) {
