@@ -11,14 +11,14 @@ module.exports = {
 		disableHostCheck: true,
 		proxy: {
       "/api": {
-        target: "https://on.test-net.dcl.csa-iot.org",
+				target: "http://localhost:26640",
 				pathRewrite: {
 					'^/api': '/'
 				}
 
       },
 			'/rpc' : {
-				target: 'https://on.test-net.dcl.csa-iot.org:26657',
+				target: 'http://localhost:26657',
 				pathRewrite: {
 					'^/rpc': '/'
 				},
@@ -27,7 +27,7 @@ module.exports = {
 
 			},
 			'/websocket' : {
-				target: 'https://on.test-net.dcl.csa-iot.org:26657',
+				target: 'http://localhost:26657',
 				changeOrigin: true,
 			 	ws: true,
 				upgrade: true,

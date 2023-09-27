@@ -17,7 +17,7 @@ const store = createStore({
 		},
 		setSelectedKeplrAccount(state, account) {
 			state.selectedKeplrAccount = account;
-			state.selectedKeplrAccountName = account.name;
+			state.selectedKeplrAccountName = account?.name;
 		},
 	},
 	actions: {
