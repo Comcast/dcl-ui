@@ -4407,6 +4407,7 @@ export const Snapshot = {
     }
 };
 export class ABCIApplicationClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

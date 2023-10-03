@@ -121,6 +121,7 @@ export const MsgSubmitEvidenceResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

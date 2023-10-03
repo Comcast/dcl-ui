@@ -618,6 +618,7 @@ export const QueryGetModelVersionsResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

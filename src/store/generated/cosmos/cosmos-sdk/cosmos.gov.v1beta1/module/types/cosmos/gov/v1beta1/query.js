@@ -1067,6 +1067,7 @@ export const QueryTallyResultResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

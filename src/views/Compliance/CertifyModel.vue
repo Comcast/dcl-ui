@@ -10,7 +10,7 @@ import { MsgCertifyModel } from '../../store/generated/zigbee-alliance/distribut
 
 export default {
   name: 'CertifyModel',
-  props: ['model'],
+  props: ['model', 'viewOnly'],
 
   components: {
     InputText,
@@ -87,12 +87,14 @@ export default {
           account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
       }
       const creatorAddress = account.address
+      const method = this.update ? 'sendMsgUpdateComplianceInfo' : 'sendMsgCertifyModel'
 
       this.txProcessing = true;
 			let loader = this.$loading.show();
       this.msgCertifyModel.signer = creatorAddress
+      this.msgCertifyModel.creator = creatorAddress
       this.$store
-        .dispatch(`zigbeealliance.distributedcomplianceledger.compliance/sendMsgCertifyModel`, {
+        .dispatch(`zigbeealliance.distributedcomplianceledger.compliance/${method}`, {
           value: this.msgCertifyModel
         })
         .then(
@@ -133,7 +135,14 @@ export default {
     }
   },
 	created() {
-		this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
+    if (this.model) {
+      this.update = true
+      this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
+    } else {
+      this.update = false
+      this.msgCertifyModel = MsgCertifyModel.fromPartial({})
+    }
+		
 		// Set default as 1 for cDVersionNumber and 'matter' for certificationType
 		this.msgCertifyModel.cDVersionNumber = 1
 		this.msgCertifyModel.certificationType = 'matter'
@@ -144,7 +153,92 @@ export default {
 	<template>
   <div>
     <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
-    <div class="p-fluid">
+    <div v-if="viewOnly === true">
+      <table>
+        <tr>
+          <td class="p-text">Vendor ID</td>
+          <td>{{ msgCertifyModel.vid }}</td>
+        </tr>
+        <tr>
+          <td>Product ID</td>
+          <td>{{ msgCertifyModel.pid }}</td>
+        </tr>
+        <tr>
+          <td>Software Version</td>
+          <td>{{ msgCertifyModel.softwareVersion }}</td>
+        </tr>
+        <tr>
+          <td>Software Version String</td>
+          <td>{{ msgCertifyModel.softwareVersionString }}</td>
+        </tr>
+        <tr>
+          <td>CD Version Number</td>
+          <td>{{ msgCertifyModel.cDVersionNumber }}</td>
+        </tr>
+        <tr>
+          <td>Certification Date</td>
+          <td>{{ msgCertifyModel.certificationDate }}</td>
+        </tr>
+        <tr>
+          <td>Certification Type</td>
+          <td>{{ msgCertifyModel.certificationType }}</td>
+        </tr>
+        <tr>
+          <td>Reason</td>
+          <td>{{ msgCertifyModel.reason }}</td>
+        </tr>
+        <tr>
+          <td>Program Type Version</td>
+          <td>{{ msgCertifyModel.programTypeVersion }}</td>
+        </tr>
+        <tr>
+          <td>CD Certificate Id</td>
+          <td>{{ msgCertifyModel.cDCertificateId }}</td>
+        </tr>
+        <tr>
+          <td>Family Id</td>
+          <td>{{ msgCertifyModel.familyId }}</td>
+        </tr>
+        <tr>
+          <td>Supported Clusters</td>
+          <td>{{ msgCertifyModel.supportedClusters }}</td>
+        </tr>
+        <tr>
+          <td>Compliant Platform Used</td>
+          <td>{{ msgCertifyModel.compliantPlatformUsed }}</td>
+        </tr>
+        <tr>
+          <td>Compliant Platform Version</td>
+          <td>{{ msgCertifyModel.compliantPlatformVersion }}</td>
+        </tr>
+        <tr>
+          <td>OS Version</td>
+          <td>{{ msgCertifyModel.OSVersion }}</td>
+        </tr>
+        <tr>
+          <td>Certification Route</td>
+          <td>{{ msgCertifyModel.certificationRoute }}</td>
+        </tr>
+        <tr>
+          <td>Program Type</td>
+          <td>{{ msgCertifyModel.programType }}</td>
+        </tr>
+        <tr>
+          <td>Transport</td>
+          <td>{{ msgCertifyModel.transport }}</td>
+        </tr>
+        <tr>
+          <td>ParentChild</td>
+          <td>{{ msgCertifyModel.parentChild }}</td>
+        </tr>
+        <tr>
+          <td>CertificationId Of SoftwareComponent</td>
+          <td>{{ msgCertifyModel.certificationIdOfSoftwareComponent }}</td>
+        </tr>
+      </table>
+
+    </div>
+    <div v-else class="p-fluid">
       <form @submit.prevent="handleSubmit(!v$.$invalid)" class="">
 				<!-- Field for vid -->
         <div class="field">

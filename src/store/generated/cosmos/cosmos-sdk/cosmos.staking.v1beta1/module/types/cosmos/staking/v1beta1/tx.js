@@ -763,6 +763,7 @@ export const MsgUndelegateResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

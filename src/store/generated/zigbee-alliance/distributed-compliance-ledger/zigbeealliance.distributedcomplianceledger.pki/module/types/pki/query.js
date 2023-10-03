@@ -10,6 +10,8 @@ import { ApprovedRootCertificates } from '../pki/approved_root_certificates';
 import { RevokedRootCertificates } from '../pki/revoked_root_certificates';
 import { ApprovedCertificatesBySubject } from '../pki/approved_certificates_by_subject';
 import { RejectedCertificate } from '../pki/rejected_certificate';
+import { PkiRevocationDistributionPoint } from '../pki/pki_revocation_distribution_point';
+import { PkiRevocationDistributionPointsByIssuerSubjectKeyID } from '../pki/pki_revocation_distribution_points_by_issuer_subject_key_id';
 export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki';
 const baseQueryGetApprovedCertificatesRequest = { subject: '', subjectKeyId: '' };
 export const QueryGetApprovedCertificatesRequest = {
@@ -1653,7 +1655,395 @@ export const QueryAllRejectedCertificatesResponse = {
         return message;
     }
 };
+const baseQueryGetPkiRevocationDistributionPointRequest = { vid: 0, label: '', issuerSubjectKeyID: '' };
+export const QueryGetPkiRevocationDistributionPointRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.vid !== 0) {
+            writer.uint32(8).int32(message.vid);
+        }
+        if (message.label !== '') {
+            writer.uint32(18).string(message.label);
+        }
+        if (message.issuerSubjectKeyID !== '') {
+            writer.uint32(26).string(message.issuerSubjectKeyID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetPkiRevocationDistributionPointRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.vid = reader.int32();
+                    break;
+                case 2:
+                    message.label = reader.string();
+                    break;
+                case 3:
+                    message.issuerSubjectKeyID = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetPkiRevocationDistributionPointRequest };
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = Number(object.vid);
+        }
+        else {
+            message.vid = 0;
+        }
+        if (object.label !== undefined && object.label !== null) {
+            message.label = String(object.label);
+        }
+        else {
+            message.label = '';
+        }
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = String(object.issuerSubjectKeyID);
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.vid !== undefined && (obj.vid = message.vid);
+        message.label !== undefined && (obj.label = message.label);
+        message.issuerSubjectKeyID !== undefined && (obj.issuerSubjectKeyID = message.issuerSubjectKeyID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetPkiRevocationDistributionPointRequest };
+        if (object.vid !== undefined && object.vid !== null) {
+            message.vid = object.vid;
+        }
+        else {
+            message.vid = 0;
+        }
+        if (object.label !== undefined && object.label !== null) {
+            message.label = object.label;
+        }
+        else {
+            message.label = '';
+        }
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = object.issuerSubjectKeyID;
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    }
+};
+const baseQueryGetPkiRevocationDistributionPointResponse = {};
+export const QueryGetPkiRevocationDistributionPointResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.PkiRevocationDistributionPoint !== undefined) {
+            PkiRevocationDistributionPoint.encode(message.PkiRevocationDistributionPoint, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetPkiRevocationDistributionPointResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.PkiRevocationDistributionPoint = PkiRevocationDistributionPoint.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetPkiRevocationDistributionPointResponse };
+        if (object.PkiRevocationDistributionPoint !== undefined && object.PkiRevocationDistributionPoint !== null) {
+            message.PkiRevocationDistributionPoint = PkiRevocationDistributionPoint.fromJSON(object.PkiRevocationDistributionPoint);
+        }
+        else {
+            message.PkiRevocationDistributionPoint = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.PkiRevocationDistributionPoint !== undefined &&
+            (obj.PkiRevocationDistributionPoint = message.PkiRevocationDistributionPoint
+                ? PkiRevocationDistributionPoint.toJSON(message.PkiRevocationDistributionPoint)
+                : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetPkiRevocationDistributionPointResponse };
+        if (object.PkiRevocationDistributionPoint !== undefined && object.PkiRevocationDistributionPoint !== null) {
+            message.PkiRevocationDistributionPoint = PkiRevocationDistributionPoint.fromPartial(object.PkiRevocationDistributionPoint);
+        }
+        else {
+            message.PkiRevocationDistributionPoint = undefined;
+        }
+        return message;
+    }
+};
+const baseQueryAllPkiRevocationDistributionPointRequest = {};
+export const QueryAllPkiRevocationDistributionPointRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryAllPkiRevocationDistributionPointRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryAllPkiRevocationDistributionPointRequest };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryAllPkiRevocationDistributionPointRequest };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    }
+};
+const baseQueryAllPkiRevocationDistributionPointResponse = {};
+export const QueryAllPkiRevocationDistributionPointResponse = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.PkiRevocationDistributionPoint) {
+            PkiRevocationDistributionPoint.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryAllPkiRevocationDistributionPointResponse };
+        message.PkiRevocationDistributionPoint = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.PkiRevocationDistributionPoint.push(PkiRevocationDistributionPoint.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryAllPkiRevocationDistributionPointResponse };
+        message.PkiRevocationDistributionPoint = [];
+        if (object.PkiRevocationDistributionPoint !== undefined && object.PkiRevocationDistributionPoint !== null) {
+            for (const e of object.PkiRevocationDistributionPoint) {
+                message.PkiRevocationDistributionPoint.push(PkiRevocationDistributionPoint.fromJSON(e));
+            }
+        }
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageResponse.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.PkiRevocationDistributionPoint) {
+            obj.PkiRevocationDistributionPoint = message.PkiRevocationDistributionPoint.map((e) => (e ? PkiRevocationDistributionPoint.toJSON(e) : undefined));
+        }
+        else {
+            obj.PkiRevocationDistributionPoint = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryAllPkiRevocationDistributionPointResponse };
+        message.PkiRevocationDistributionPoint = [];
+        if (object.PkiRevocationDistributionPoint !== undefined && object.PkiRevocationDistributionPoint !== null) {
+            for (const e of object.PkiRevocationDistributionPoint) {
+                message.PkiRevocationDistributionPoint.push(PkiRevocationDistributionPoint.fromPartial(e));
+            }
+        }
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageResponse.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    }
+};
+const baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest = { issuerSubjectKeyID: '' };
+export const QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.issuerSubjectKeyID !== '') {
+            writer.uint32(10).string(message.issuerSubjectKeyID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.issuerSubjectKeyID = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = String(object.issuerSubjectKeyID);
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.issuerSubjectKeyID !== undefined && (obj.issuerSubjectKeyID = message.issuerSubjectKeyID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest
+        };
+        if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
+            message.issuerSubjectKeyID = object.issuerSubjectKeyID;
+        }
+        else {
+            message.issuerSubjectKeyID = '';
+        }
+        return message;
+    }
+};
+const baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse = {};
+export const QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined) {
+            PkiRevocationDistributionPointsByIssuerSubjectKeyID.encode(message.pkiRevocationDistributionPointsByIssuerSubjectKeyID, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        if (object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined && object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== null) {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.fromJSON(object.pkiRevocationDistributionPointsByIssuerSubjectKeyID);
+        }
+        else {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined &&
+            (obj.pkiRevocationDistributionPointsByIssuerSubjectKeyID = message.pkiRevocationDistributionPointsByIssuerSubjectKeyID
+                ? PkiRevocationDistributionPointsByIssuerSubjectKeyID.toJSON(message.pkiRevocationDistributionPointsByIssuerSubjectKeyID)
+                : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse
+        };
+        if (object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== undefined && object.pkiRevocationDistributionPointsByIssuerSubjectKeyID !== null) {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = PkiRevocationDistributionPointsByIssuerSubjectKeyID.fromPartial(object.pkiRevocationDistributionPointsByIssuerSubjectKeyID);
+        }
+        else {
+            message.pkiRevocationDistributionPointsByIssuerSubjectKeyID = undefined;
+        }
+        return message;
+    }
+};
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }
@@ -1726,5 +2116,20 @@ export class QueryClientImpl {
         const data = QueryAllRejectedCertificatesRequest.encode(request).finish();
         const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'RejectedCertificateAll', data);
         return promise.then((data) => QueryAllRejectedCertificatesResponse.decode(new Reader(data)));
+    }
+    PkiRevocationDistributionPoint(request) {
+        const data = QueryGetPkiRevocationDistributionPointRequest.encode(request).finish();
+        const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'PkiRevocationDistributionPoint', data);
+        return promise.then((data) => QueryGetPkiRevocationDistributionPointResponse.decode(new Reader(data)));
+    }
+    PkiRevocationDistributionPointAll(request) {
+        const data = QueryAllPkiRevocationDistributionPointRequest.encode(request).finish();
+        const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'PkiRevocationDistributionPointAll', data);
+        return promise.then((data) => QueryAllPkiRevocationDistributionPointResponse.decode(new Reader(data)));
+    }
+    PkiRevocationDistributionPointsByIssuerSubjectKeyID(request) {
+        const data = QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDRequest.encode(request).finish();
+        const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Query', 'PkiRevocationDistributionPointsByIssuerSubjectKeyID', data);
+        return promise.then((data) => QueryGetPkiRevocationDistributionPointsByIssuerSubjectKeyIDResponse.decode(new Reader(data)));
     }
 }

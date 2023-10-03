@@ -345,14 +345,14 @@ export type DeepPartial<T> = T extends Builtin
   : Partial<T>
 
 function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000
-  const nanos = (date.getTime() % 1_000) * 1_000_000
+  const seconds = date.getTime() / 1000
+  const nanos = (date.getTime() % 1000) * 1000000
   return { seconds, nanos }
 }
 
 function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000
-  millis += t.nanos / 1_000_000
+  let millis = t.seconds * 1000
+  millis += t.nanos / 1000000
   return new Date(millis)
 }
 
@@ -373,7 +373,7 @@ function longToNumber(long: Long): number {
   return long.toNumber()
 }
 
-if (util.Long !== Long) {
+if ((util.Long as any) !== Long) {
   util.Long = Long as any
   configure()
 }

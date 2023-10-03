@@ -31,7 +31,7 @@ export default {
       pubKey: '',
       info: '',
       vendorID: '',
-      roles: ['Vendor', 'NodeAdmin', 'Trustee', 'CertificationCenter']
+      roles: ['Vendor', 'NodeAdmin', 'VendorAdmin', 'Trustee', 'CertificationCenter']
     }
   },
   validations() {
