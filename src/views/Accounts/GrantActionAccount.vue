@@ -35,11 +35,6 @@ export default {
       this.txProcessing = true;
 			let loader = this.$loading.show();
 
-
-      if (!this.isSignedIn()) {
-        this.$toast.add({ severity: 'warn', summary: 'Please sign in', detail: 'Please sign in to at least one account', life: 3000 })
-        return
-      }
       let account;
       if(this.$store.state.selectedKeplrAccount) {
           account = this.$store.state.selectedKeplrAccount;
