@@ -88,8 +88,8 @@ export default {
           "zigbeealliance.distributedcomplianceledger.dclauth/getPendingAccountAll"
         ]();
 			// Add the hex value to the vendor ID to all the accounts
-			pendingAccountsArray?.pendingAccount?.forEach(account => {
-				account.vendorIDHex = this.addHexValueToVendorID(account.vendorID);
+      pendingAccountsArray?.pendingAccount?.forEach(pendingAccount => {
+        pendingAccount.account.vendorIDHex = this.addHexValueToVendorID(pendingAccount.account.vendorID);
 			});
       return pendingAccountsArray?.pendingAccount;
     },

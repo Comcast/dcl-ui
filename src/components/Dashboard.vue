@@ -533,6 +533,12 @@ export default {
 				account.roles.includes("NodeAdmin")
 			).length;
 		},
+		vendorAdminCount() {
+			if (!this.allActiveAccounts) return 0;
+			return this.allActiveAccounts.filter((account) =>
+				account.roles.includes("VendorAdmin")
+			).length;
+		},
 		certificationCenterCount() {
 			if (!this.allActiveAccounts) return 0;
 			return this.allActiveAccounts.filter((account) =>
