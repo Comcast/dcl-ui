@@ -105,10 +105,11 @@ export default {
         return;
       }
       const chainId = process.env.VUE_APP_DCL_CHAIN_ID
+      const chainName = process.env.VUE_APP_DCL_CHAIN_NAME || "DCL Chain";
       const chainInfo = {
         // Update this with actual values
         chainId,
-        chainName: "DCL Chain",
+        chainName: chainName,
         rpc: process.env.VUE_APP_DCL_RPC_NODE,
         rest: process.env.VUE_APP_DCL_API_NODE,
         stakeCurrency: {
