@@ -87,12 +87,14 @@ export default {
           account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
       }
       const creatorAddress = account.address
+      const method = this.update ? 'sendMsgUpdateComplianceInfo' : 'sendMsgCertifyModel'
 
       this.txProcessing = true;
 			let loader = this.$loading.show();
       this.msgCertifyModel.signer = creatorAddress
+      this.msgCertifyModel.creator = creatorAddress
       this.$store
-        .dispatch(`zigbeealliance.distributedcomplianceledger.compliance/sendMsgCertifyModel`, {
+        .dispatch(`zigbeealliance.distributedcomplianceledger.compliance/${method}`, {
           value: this.msgCertifyModel
         })
         .then(
@@ -133,7 +135,14 @@ export default {
     }
   },
 	created() {
-		this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
+    if (this.model) {
+      this.update = true
+      this.msgCertifyModel = MsgCertifyModel.fromPartial(this.model)
+    } else {
+      this.update = false
+      this.msgCertifyModel = MsgCertifyModel.fromPartial({})
+    }
+		
 		// Set default as 1 for cDVersionNumber and 'matter' for certificationType
 		this.msgCertifyModel.cDVersionNumber = 1
 		this.msgCertifyModel.certificationType = 'matter'

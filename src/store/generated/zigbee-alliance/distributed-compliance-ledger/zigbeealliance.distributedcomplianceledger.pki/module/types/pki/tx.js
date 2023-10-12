@@ -1982,7 +1982,7 @@ export class MsgClientImpl {
         return promise.then((data) => MsgDeletePkiRevocationDistributionPointResponse.decode(new Reader(data)));
     }
     AssignVid(request) {
-       const data = MsgAssignVid.encode(request).finish();
+        const data = MsgAssignVid.encode(request).finish();
         const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.pki.Msg', 'AssignVid', data);
         return promise.then((data) => MsgAssignVidResponse.decode(new Reader(data)));
     }

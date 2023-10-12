@@ -45,6 +45,7 @@ export default {
       this.viewOnly = false;
     },
     confirmDeleteModelVersion(modelVersion) {
+      console.log('inside conformation dialog');
       this.$confirm.require({
         message: "Are you sure you want to delete this model version ?",
         header: "Confirmation",
