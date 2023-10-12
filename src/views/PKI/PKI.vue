@@ -177,7 +177,7 @@ export default {
 		},
 
 		isSignedIn() {
-			const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+			const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
 			return loggedIn;
 		},
 	},
@@ -256,7 +256,6 @@ export default {
 
 		selectCertificate(certificate) {
 			alert(certificate);
-			console.log(certificate);
 			this.selectedCertificate = certificate;
 		},
 		trimAddress(address) {

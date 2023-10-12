@@ -62,8 +62,14 @@ export default {
       });
     },
     deleteModel(model) {
-      const wallet = this.$store.getters["common/wallet/wallet"];
-      const account = wallet.accounts[0];
+      let account;
+
+      if(this.$store.state.selectedKeplrAccount) {
+          account = this.$store.state.selectedKeplrAccount;
+      } else {
+          const wallet = this.$store.getters['common/wallet/wallet'];
+          account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
+      }
       const creatorAddress = account.address;
 			let loader = this.$loading.show();
       this.$store
@@ -154,7 +160,7 @@ export default {
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
       return loggedIn;
     },
   },

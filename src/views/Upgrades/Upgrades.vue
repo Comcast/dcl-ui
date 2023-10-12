@@ -98,7 +98,7 @@ export default {
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/wallet"];
+      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
       return loggedIn;
     },
 

@@ -90,7 +90,7 @@ export default {
 		},
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
       return loggedIn;
     },
   },
@@ -143,7 +143,6 @@ export default {
     showCertifyModelDialog(model, viewOnly = false) {
       this.selectedRevokedModel = model;
       this.showCertifyModel = true;
-      console.log('Value for viewOnly is ', viewOnly)
       this.showCertifyModelViewOnly = viewOnly; 
     },
     dismissCertifyModelDialog() {

@@ -444,14 +444,17 @@ export default {
 			},
 		},
 		isSignedIn() {
-			const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+			const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
 			if (loggedIn) {
 				this.updatePubKey();
 			}
 			return loggedIn;
 		},
 		currentAddress() {
-			if (this.$store.getters["common/wallet/loggedIn"]) {
+			if (this.$store.state.selectedKeplrAccount) {
+				const account = this.$store.state.selectedKeplrAccount;
+				return account.address;
+			} else if (this.$store.getters["common/wallet/loggedIn"]) {
 				const wallet = this.$store.getters["common/wallet/wallet"];
 				const accounts = wallet.accounts;
 				const account = wallet.accounts[0];
@@ -642,24 +645,38 @@ export default {
 			document.body.removeChild(el);
 		},
 		updatePubKey() {
-			if (this.$store.getters["common/wallet/loggedIn"]) {
-				DirectSecp256k1HdWallet.fromMnemonic(
-					this.$store.state["common"]["wallet"]["activeWallet"].mnemonic
-				).then((data) => {
-					data.getAccountsWithPrivkeys().then((data) => {
-						const defaultPubkeyBytes = data[0].pubkey;
-						const defaultPubkeyProtoBytes = Uint8Array.from([
-							0x0a,
-							defaultPubkeyBytes.length,
-							...defaultPubkeyBytes,
-						]);
-						const decodedPubKey = decodePubkey({
-							typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-							value: defaultPubkeyProtoBytes,
-						});
-						this.currentKey = decodedPubKey;
-					});
+			if (this.$store.state.selectedKeplrAccount) {
+				const account = this.$store.state.keplrSigner;
+				const publicKey = account.key.pubKey;
+				// convert publicKey (Uint8Array) to the protobuf format
+				const defaultPubkeyProtoBytes = Uint8Array.from([
+					0x0a,
+					publicKey.length,
+					...publicKey,
+				]);
+				const decodedPubKey = decodePubkey({
+					typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+					value: defaultPubkeyProtoBytes,
 				});
+				this.currentKey = decodedPubKey;
+			} else if (this.$store.getters["common/wallet/loggedIn"]) {
+					DirectSecp256k1HdWallet.fromMnemonic(
+						this.$store.state["common"]["wallet"]["activeWallet"].mnemonic
+					).then((data) => {
+						data.getAccountsWithPrivkeys().then((data) => {
+							const defaultPubkeyBytes = data[0].pubkey;
+							const defaultPubkeyProtoBytes = Uint8Array.from([
+								0x0a,
+								defaultPubkeyBytes.length,
+								...defaultPubkeyBytes,
+							]);
+							const decodedPubKey = decodePubkey({
+								typeUrl: "/cosmos.crypto.secp256k1.PubKey",
+								value: defaultPubkeyProtoBytes,
+							});
+							this.currentKey = decodedPubKey;
+						});
+					});
 			}
 		},
 	},

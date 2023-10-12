@@ -4,7 +4,7 @@ import { SpVuexError } from '@starport/vuex';
 import { Equivocation } from "./module/types/cosmos/evidence/v1beta1/evidence";
 export { Equivocation };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }
