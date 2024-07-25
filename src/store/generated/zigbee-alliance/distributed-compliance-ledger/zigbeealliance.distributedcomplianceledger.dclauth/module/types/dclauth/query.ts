@@ -1,1529 +1,1659 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal'
-import { Account } from '../dclauth/account'
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
-import { PendingAccount } from '../dclauth/pending_account'
-import { PendingAccountRevocation } from '../dclauth/pending_account_revocation'
-import { AccountStat } from '../dclauth/account_stat'
-import { RevokedAccount } from '../dclauth/revoked_account'
-import { RejectedAccount } from '../dclauth/rejected_account'
+import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Account } from "./account";
+import { AccountStat } from "./account_stat";
+import { PendingAccount } from "./pending_account";
+import { PendingAccountRevocation } from "./pending_account_revocation";
+import { RejectedAccount } from "./rejected_account";
+import { RevokedAccount } from "./revoked_account";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.dclauth'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.dclauth";
 
 export interface QueryGetAccountRequest {
-  address: string
+  address: string;
 }
 
 export interface QueryGetAccountResponse {
-  account: Account | undefined
+  account: Account | undefined;
 }
 
 export interface QueryAllAccountRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllAccountResponse {
-  account: Account[]
-  pagination: PageResponse | undefined
+  account: Account[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetPendingAccountRequest {
-  address: string
+  address: string;
 }
 
 export interface QueryGetPendingAccountResponse {
-  pendingAccount: PendingAccount | undefined
+  pendingAccount: PendingAccount | undefined;
 }
 
 export interface QueryAllPendingAccountRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllPendingAccountResponse {
-  pendingAccount: PendingAccount[]
-  pagination: PageResponse | undefined
+  pendingAccount: PendingAccount[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetPendingAccountRevocationRequest {
-  address: string
+  address: string;
 }
 
 export interface QueryGetPendingAccountRevocationResponse {
-  pendingAccountRevocation: PendingAccountRevocation | undefined
+  pendingAccountRevocation: PendingAccountRevocation | undefined;
 }
 
 export interface QueryAllPendingAccountRevocationRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllPendingAccountRevocationResponse {
-  pendingAccountRevocation: PendingAccountRevocation[]
-  pagination: PageResponse | undefined
+  pendingAccountRevocation: PendingAccountRevocation[];
+  pagination: PageResponse | undefined;
 }
 
-export interface QueryGetAccountStatRequest {}
+export interface QueryGetAccountStatRequest {
+}
 
 export interface QueryGetAccountStatResponse {
-  AccountStat: AccountStat | undefined
+  AccountStat: AccountStat | undefined;
 }
 
 export interface QueryGetRevokedAccountRequest {
-  address: string
+  address: string;
 }
 
 export interface QueryGetRevokedAccountResponse {
-  revokedAccount: RevokedAccount | undefined
+  revokedAccount: RevokedAccount | undefined;
 }
 
 export interface QueryAllRevokedAccountRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllRevokedAccountResponse {
-  revokedAccount: RevokedAccount[]
-  pagination: PageResponse | undefined
+  revokedAccount: RevokedAccount[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetRejectedAccountRequest {
-  address: string
+  address: string;
 }
 
 export interface QueryGetRejectedAccountResponse {
-  rejectedAccount: RejectedAccount | undefined
+  rejectedAccount: RejectedAccount | undefined;
 }
 
 export interface QueryAllRejectedAccountRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllRejectedAccountResponse {
-  rejectedAccount: RejectedAccount[]
-  pagination: PageResponse | undefined
+  rejectedAccount: RejectedAccount[];
+  pagination: PageResponse | undefined;
 }
 
-const baseQueryGetAccountRequest: object = { address: '' }
+function createBaseQueryGetAccountRequest(): QueryGetAccountRequest {
+  return { address: "" };
+}
 
 export const QueryGetAccountRequest = {
-  encode(message: QueryGetAccountRequest, writer: Writer = Writer.create()): Writer {
-    if (message.address !== '') {
-      writer.uint32(10).string(message.address)
+  encode(message: QueryGetAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.address = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetAccountRequest {
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address)
-    } else {
-      message.address = ''
-    }
-    return message
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryGetAccountRequest): unknown {
-    const obj: any = {}
-    message.address !== undefined && (obj.address = message.address)
-    return obj
+    const obj: any = {};
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetAccountRequest>): QueryGetAccountRequest {
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address
-    } else {
-      message.address = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetAccountRequest>, I>>(base?: I): QueryGetAccountRequest {
+    return QueryGetAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetAccountRequest>, I>>(object: I): QueryGetAccountRequest {
+    const message = createBaseQueryGetAccountRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetAccountResponse(): QueryGetAccountResponse {
+  return { account: undefined };
 }
 
-const baseQueryGetAccountResponse: object = {}
-
 export const QueryGetAccountResponse = {
-  encode(message: QueryGetAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== undefined) {
-      Account.encode(message.account, writer.uint32(10).fork()).ldelim()
+      Account.encode(message.account, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.account = Account.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.account = Account.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetAccountResponse {
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
-    if (object.account !== undefined && object.account !== null) {
-      message.account = Account.fromJSON(object.account)
-    } else {
-      message.account = undefined
-    }
-    return message
+    return { account: isSet(object.account) ? Account.fromJSON(object.account) : undefined };
   },
 
   toJSON(message: QueryGetAccountResponse): unknown {
-    const obj: any = {}
-    message.account !== undefined && (obj.account = message.account ? Account.toJSON(message.account) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.account !== undefined) {
+      obj.account = Account.toJSON(message.account);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetAccountResponse>): QueryGetAccountResponse {
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
-    if (object.account !== undefined && object.account !== null) {
-      message.account = Account.fromPartial(object.account)
-    } else {
-      message.account = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetAccountResponse>, I>>(base?: I): QueryGetAccountResponse {
+    return QueryGetAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetAccountResponse>, I>>(object: I): QueryGetAccountResponse {
+    const message = createBaseQueryGetAccountResponse();
+    message.account = (object.account !== undefined && object.account !== null)
+      ? Account.fromPartial(object.account)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllAccountRequest(): QueryAllAccountRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllAccountRequest: object = {}
-
 export const QueryAllAccountRequest = {
-  encode(message: QueryAllAccountRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllAccountRequest } as QueryAllAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllAccountRequest {
-    const message = { ...baseQueryAllAccountRequest } as QueryAllAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllAccountRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllAccountRequest>): QueryAllAccountRequest {
-    const message = { ...baseQueryAllAccountRequest } as QueryAllAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllAccountRequest>, I>>(base?: I): QueryAllAccountRequest {
+    return QueryAllAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllAccountRequest>, I>>(object: I): QueryAllAccountRequest {
+    const message = createBaseQueryAllAccountRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllAccountResponse(): QueryAllAccountResponse {
+  return { account: [], pagination: undefined };
 }
 
-const baseQueryAllAccountResponse: object = {}
-
 export const QueryAllAccountResponse = {
-  encode(message: QueryAllAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.account) {
-      Account.encode(v!, writer.uint32(10).fork()).ldelim()
+      Account.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllAccountResponse } as QueryAllAccountResponse
-    message.account = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.account.push(Account.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.account.push(Account.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllAccountResponse {
-    const message = { ...baseQueryAllAccountResponse } as QueryAllAccountResponse
-    message.account = []
-    if (object.account !== undefined && object.account !== null) {
-      for (const e of object.account) {
-        message.account.push(Account.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      account: Array.isArray(object?.account) ? object.account.map((e: any) => Account.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllAccountResponse): unknown {
-    const obj: any = {}
-    if (message.account) {
-      obj.account = message.account.map((e) => (e ? Account.toJSON(e) : undefined))
-    } else {
-      obj.account = []
+    const obj: any = {};
+    if (message.account?.length) {
+      obj.account = message.account.map((e) => Account.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllAccountResponse>): QueryAllAccountResponse {
-    const message = { ...baseQueryAllAccountResponse } as QueryAllAccountResponse
-    message.account = []
-    if (object.account !== undefined && object.account !== null) {
-      for (const e of object.account) {
-        message.account.push(Account.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllAccountResponse>, I>>(base?: I): QueryAllAccountResponse {
+    return QueryAllAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllAccountResponse>, I>>(object: I): QueryAllAccountResponse {
+    const message = createBaseQueryAllAccountResponse();
+    message.account = object.account?.map((e) => Account.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetPendingAccountRequest(): QueryGetPendingAccountRequest {
+  return { address: "" };
 }
 
-const baseQueryGetPendingAccountRequest: object = { address: '' }
-
 export const QueryGetPendingAccountRequest = {
-  encode(message: QueryGetPendingAccountRequest, writer: Writer = Writer.create()): Writer {
-    if (message.address !== '') {
-      writer.uint32(10).string(message.address)
+  encode(message: QueryGetPendingAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetPendingAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetPendingAccountRequest } as QueryGetPendingAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPendingAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.address = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetPendingAccountRequest {
-    const message = { ...baseQueryGetPendingAccountRequest } as QueryGetPendingAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address)
-    } else {
-      message.address = ''
-    }
-    return message
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryGetPendingAccountRequest): unknown {
-    const obj: any = {}
-    message.address !== undefined && (obj.address = message.address)
-    return obj
+    const obj: any = {};
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetPendingAccountRequest>): QueryGetPendingAccountRequest {
-    const message = { ...baseQueryGetPendingAccountRequest } as QueryGetPendingAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address
-    } else {
-      message.address = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetPendingAccountRequest>, I>>(base?: I): QueryGetPendingAccountRequest {
+    return QueryGetPendingAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetPendingAccountRequest>, I>>(
+    object: I,
+  ): QueryGetPendingAccountRequest {
+    const message = createBaseQueryGetPendingAccountRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetPendingAccountResponse(): QueryGetPendingAccountResponse {
+  return { pendingAccount: undefined };
 }
 
-const baseQueryGetPendingAccountResponse: object = {}
-
 export const QueryGetPendingAccountResponse = {
-  encode(message: QueryGetPendingAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetPendingAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pendingAccount !== undefined) {
-      PendingAccount.encode(message.pendingAccount, writer.uint32(10).fork()).ldelim()
+      PendingAccount.encode(message.pendingAccount, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetPendingAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetPendingAccountResponse } as QueryGetPendingAccountResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPendingAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pendingAccount = PendingAccount.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pendingAccount = PendingAccount.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetPendingAccountResponse {
-    const message = { ...baseQueryGetPendingAccountResponse } as QueryGetPendingAccountResponse
-    if (object.pendingAccount !== undefined && object.pendingAccount !== null) {
-      message.pendingAccount = PendingAccount.fromJSON(object.pendingAccount)
-    } else {
-      message.pendingAccount = undefined
-    }
-    return message
+    return {
+      pendingAccount: isSet(object.pendingAccount) ? PendingAccount.fromJSON(object.pendingAccount) : undefined,
+    };
   },
 
   toJSON(message: QueryGetPendingAccountResponse): unknown {
-    const obj: any = {}
-    message.pendingAccount !== undefined && (obj.pendingAccount = message.pendingAccount ? PendingAccount.toJSON(message.pendingAccount) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pendingAccount !== undefined) {
+      obj.pendingAccount = PendingAccount.toJSON(message.pendingAccount);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetPendingAccountResponse>): QueryGetPendingAccountResponse {
-    const message = { ...baseQueryGetPendingAccountResponse } as QueryGetPendingAccountResponse
-    if (object.pendingAccount !== undefined && object.pendingAccount !== null) {
-      message.pendingAccount = PendingAccount.fromPartial(object.pendingAccount)
-    } else {
-      message.pendingAccount = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetPendingAccountResponse>, I>>(base?: I): QueryGetPendingAccountResponse {
+    return QueryGetPendingAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetPendingAccountResponse>, I>>(
+    object: I,
+  ): QueryGetPendingAccountResponse {
+    const message = createBaseQueryGetPendingAccountResponse();
+    message.pendingAccount = (object.pendingAccount !== undefined && object.pendingAccount !== null)
+      ? PendingAccount.fromPartial(object.pendingAccount)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPendingAccountRequest(): QueryAllPendingAccountRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllPendingAccountRequest: object = {}
-
 export const QueryAllPendingAccountRequest = {
-  encode(message: QueryAllPendingAccountRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllPendingAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllPendingAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllPendingAccountRequest } as QueryAllPendingAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPendingAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllPendingAccountRequest {
-    const message = { ...baseQueryAllPendingAccountRequest } as QueryAllPendingAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllPendingAccountRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllPendingAccountRequest>): QueryAllPendingAccountRequest {
-    const message = { ...baseQueryAllPendingAccountRequest } as QueryAllPendingAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllPendingAccountRequest>, I>>(base?: I): QueryAllPendingAccountRequest {
+    return QueryAllPendingAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllPendingAccountRequest>, I>>(
+    object: I,
+  ): QueryAllPendingAccountRequest {
+    const message = createBaseQueryAllPendingAccountRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPendingAccountResponse(): QueryAllPendingAccountResponse {
+  return { pendingAccount: [], pagination: undefined };
 }
 
-const baseQueryAllPendingAccountResponse: object = {}
-
 export const QueryAllPendingAccountResponse = {
-  encode(message: QueryAllPendingAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllPendingAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pendingAccount) {
-      PendingAccount.encode(v!, writer.uint32(10).fork()).ldelim()
+      PendingAccount.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllPendingAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllPendingAccountResponse } as QueryAllPendingAccountResponse
-    message.pendingAccount = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPendingAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pendingAccount.push(PendingAccount.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pendingAccount.push(PendingAccount.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllPendingAccountResponse {
-    const message = { ...baseQueryAllPendingAccountResponse } as QueryAllPendingAccountResponse
-    message.pendingAccount = []
-    if (object.pendingAccount !== undefined && object.pendingAccount !== null) {
-      for (const e of object.pendingAccount) {
-        message.pendingAccount.push(PendingAccount.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      pendingAccount: Array.isArray(object?.pendingAccount)
+        ? object.pendingAccount.map((e: any) => PendingAccount.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllPendingAccountResponse): unknown {
-    const obj: any = {}
-    if (message.pendingAccount) {
-      obj.pendingAccount = message.pendingAccount.map((e) => (e ? PendingAccount.toJSON(e) : undefined))
-    } else {
-      obj.pendingAccount = []
+    const obj: any = {};
+    if (message.pendingAccount?.length) {
+      obj.pendingAccount = message.pendingAccount.map((e) => PendingAccount.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllPendingAccountResponse>): QueryAllPendingAccountResponse {
-    const message = { ...baseQueryAllPendingAccountResponse } as QueryAllPendingAccountResponse
-    message.pendingAccount = []
-    if (object.pendingAccount !== undefined && object.pendingAccount !== null) {
-      for (const e of object.pendingAccount) {
-        message.pendingAccount.push(PendingAccount.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllPendingAccountResponse>, I>>(base?: I): QueryAllPendingAccountResponse {
+    return QueryAllPendingAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllPendingAccountResponse>, I>>(
+    object: I,
+  ): QueryAllPendingAccountResponse {
+    const message = createBaseQueryAllPendingAccountResponse();
+    message.pendingAccount = object.pendingAccount?.map((e) => PendingAccount.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetPendingAccountRevocationRequest(): QueryGetPendingAccountRevocationRequest {
+  return { address: "" };
 }
 
-const baseQueryGetPendingAccountRevocationRequest: object = { address: '' }
-
 export const QueryGetPendingAccountRevocationRequest = {
-  encode(message: QueryGetPendingAccountRevocationRequest, writer: Writer = Writer.create()): Writer {
-    if (message.address !== '') {
-      writer.uint32(10).string(message.address)
+  encode(message: QueryGetPendingAccountRevocationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetPendingAccountRevocationRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetPendingAccountRevocationRequest } as QueryGetPendingAccountRevocationRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingAccountRevocationRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPendingAccountRevocationRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.address = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetPendingAccountRevocationRequest {
-    const message = { ...baseQueryGetPendingAccountRevocationRequest } as QueryGetPendingAccountRevocationRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address)
-    } else {
-      message.address = ''
-    }
-    return message
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryGetPendingAccountRevocationRequest): unknown {
-    const obj: any = {}
-    message.address !== undefined && (obj.address = message.address)
-    return obj
+    const obj: any = {};
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetPendingAccountRevocationRequest>): QueryGetPendingAccountRevocationRequest {
-    const message = { ...baseQueryGetPendingAccountRevocationRequest } as QueryGetPendingAccountRevocationRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address
-    } else {
-      message.address = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetPendingAccountRevocationRequest>, I>>(
+    base?: I,
+  ): QueryGetPendingAccountRevocationRequest {
+    return QueryGetPendingAccountRevocationRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetPendingAccountRevocationRequest>, I>>(
+    object: I,
+  ): QueryGetPendingAccountRevocationRequest {
+    const message = createBaseQueryGetPendingAccountRevocationRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetPendingAccountRevocationResponse(): QueryGetPendingAccountRevocationResponse {
+  return { pendingAccountRevocation: undefined };
 }
 
-const baseQueryGetPendingAccountRevocationResponse: object = {}
-
 export const QueryGetPendingAccountRevocationResponse = {
-  encode(message: QueryGetPendingAccountRevocationResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetPendingAccountRevocationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pendingAccountRevocation !== undefined) {
-      PendingAccountRevocation.encode(message.pendingAccountRevocation, writer.uint32(10).fork()).ldelim()
+      PendingAccountRevocation.encode(message.pendingAccountRevocation, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetPendingAccountRevocationResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetPendingAccountRevocationResponse } as QueryGetPendingAccountRevocationResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPendingAccountRevocationResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPendingAccountRevocationResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pendingAccountRevocation = PendingAccountRevocation.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pendingAccountRevocation = PendingAccountRevocation.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetPendingAccountRevocationResponse {
-    const message = { ...baseQueryGetPendingAccountRevocationResponse } as QueryGetPendingAccountRevocationResponse
-    if (object.pendingAccountRevocation !== undefined && object.pendingAccountRevocation !== null) {
-      message.pendingAccountRevocation = PendingAccountRevocation.fromJSON(object.pendingAccountRevocation)
-    } else {
-      message.pendingAccountRevocation = undefined
-    }
-    return message
+    return {
+      pendingAccountRevocation: isSet(object.pendingAccountRevocation)
+        ? PendingAccountRevocation.fromJSON(object.pendingAccountRevocation)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryGetPendingAccountRevocationResponse): unknown {
-    const obj: any = {}
-    message.pendingAccountRevocation !== undefined &&
-      (obj.pendingAccountRevocation = message.pendingAccountRevocation ? PendingAccountRevocation.toJSON(message.pendingAccountRevocation) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pendingAccountRevocation !== undefined) {
+      obj.pendingAccountRevocation = PendingAccountRevocation.toJSON(message.pendingAccountRevocation);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetPendingAccountRevocationResponse>): QueryGetPendingAccountRevocationResponse {
-    const message = { ...baseQueryGetPendingAccountRevocationResponse } as QueryGetPendingAccountRevocationResponse
-    if (object.pendingAccountRevocation !== undefined && object.pendingAccountRevocation !== null) {
-      message.pendingAccountRevocation = PendingAccountRevocation.fromPartial(object.pendingAccountRevocation)
-    } else {
-      message.pendingAccountRevocation = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetPendingAccountRevocationResponse>, I>>(
+    base?: I,
+  ): QueryGetPendingAccountRevocationResponse {
+    return QueryGetPendingAccountRevocationResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetPendingAccountRevocationResponse>, I>>(
+    object: I,
+  ): QueryGetPendingAccountRevocationResponse {
+    const message = createBaseQueryGetPendingAccountRevocationResponse();
+    message.pendingAccountRevocation =
+      (object.pendingAccountRevocation !== undefined && object.pendingAccountRevocation !== null)
+        ? PendingAccountRevocation.fromPartial(object.pendingAccountRevocation)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPendingAccountRevocationRequest(): QueryAllPendingAccountRevocationRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllPendingAccountRevocationRequest: object = {}
-
 export const QueryAllPendingAccountRevocationRequest = {
-  encode(message: QueryAllPendingAccountRevocationRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllPendingAccountRevocationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllPendingAccountRevocationRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllPendingAccountRevocationRequest } as QueryAllPendingAccountRevocationRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingAccountRevocationRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPendingAccountRevocationRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllPendingAccountRevocationRequest {
-    const message = { ...baseQueryAllPendingAccountRevocationRequest } as QueryAllPendingAccountRevocationRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllPendingAccountRevocationRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllPendingAccountRevocationRequest>): QueryAllPendingAccountRevocationRequest {
-    const message = { ...baseQueryAllPendingAccountRevocationRequest } as QueryAllPendingAccountRevocationRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllPendingAccountRevocationRequest>, I>>(
+    base?: I,
+  ): QueryAllPendingAccountRevocationRequest {
+    return QueryAllPendingAccountRevocationRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllPendingAccountRevocationRequest>, I>>(
+    object: I,
+  ): QueryAllPendingAccountRevocationRequest {
+    const message = createBaseQueryAllPendingAccountRevocationRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPendingAccountRevocationResponse(): QueryAllPendingAccountRevocationResponse {
+  return { pendingAccountRevocation: [], pagination: undefined };
 }
 
-const baseQueryAllPendingAccountRevocationResponse: object = {}
-
 export const QueryAllPendingAccountRevocationResponse = {
-  encode(message: QueryAllPendingAccountRevocationResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllPendingAccountRevocationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pendingAccountRevocation) {
-      PendingAccountRevocation.encode(v!, writer.uint32(10).fork()).ldelim()
+      PendingAccountRevocation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllPendingAccountRevocationResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllPendingAccountRevocationResponse } as QueryAllPendingAccountRevocationResponse
-    message.pendingAccountRevocation = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPendingAccountRevocationResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPendingAccountRevocationResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pendingAccountRevocation.push(PendingAccountRevocation.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pendingAccountRevocation.push(PendingAccountRevocation.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllPendingAccountRevocationResponse {
-    const message = { ...baseQueryAllPendingAccountRevocationResponse } as QueryAllPendingAccountRevocationResponse
-    message.pendingAccountRevocation = []
-    if (object.pendingAccountRevocation !== undefined && object.pendingAccountRevocation !== null) {
-      for (const e of object.pendingAccountRevocation) {
-        message.pendingAccountRevocation.push(PendingAccountRevocation.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      pendingAccountRevocation: Array.isArray(object?.pendingAccountRevocation)
+        ? object.pendingAccountRevocation.map((e: any) => PendingAccountRevocation.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllPendingAccountRevocationResponse): unknown {
-    const obj: any = {}
-    if (message.pendingAccountRevocation) {
-      obj.pendingAccountRevocation = message.pendingAccountRevocation.map((e) => (e ? PendingAccountRevocation.toJSON(e) : undefined))
-    } else {
-      obj.pendingAccountRevocation = []
+    const obj: any = {};
+    if (message.pendingAccountRevocation?.length) {
+      obj.pendingAccountRevocation = message.pendingAccountRevocation.map((e) => PendingAccountRevocation.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllPendingAccountRevocationResponse>): QueryAllPendingAccountRevocationResponse {
-    const message = { ...baseQueryAllPendingAccountRevocationResponse } as QueryAllPendingAccountRevocationResponse
-    message.pendingAccountRevocation = []
-    if (object.pendingAccountRevocation !== undefined && object.pendingAccountRevocation !== null) {
-      for (const e of object.pendingAccountRevocation) {
-        message.pendingAccountRevocation.push(PendingAccountRevocation.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllPendingAccountRevocationResponse>, I>>(
+    base?: I,
+  ): QueryAllPendingAccountRevocationResponse {
+    return QueryAllPendingAccountRevocationResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllPendingAccountRevocationResponse>, I>>(
+    object: I,
+  ): QueryAllPendingAccountRevocationResponse {
+    const message = createBaseQueryAllPendingAccountRevocationResponse();
+    message.pendingAccountRevocation =
+      object.pendingAccountRevocation?.map((e) => PendingAccountRevocation.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetAccountStatRequest(): QueryGetAccountStatRequest {
+  return {};
 }
 
-const baseQueryGetAccountStatRequest: object = {}
-
 export const QueryGetAccountStatRequest = {
-  encode(_: QueryGetAccountStatRequest, writer: Writer = Writer.create()): Writer {
-    return writer
+  encode(_: QueryGetAccountStatRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountStatRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountStatRequest } as QueryGetAccountStatRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAccountStatRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetAccountStatRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7)
-          break
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(_: any): QueryGetAccountStatRequest {
-    const message = { ...baseQueryGetAccountStatRequest } as QueryGetAccountStatRequest
-    return message
+    return {};
   },
 
   toJSON(_: QueryGetAccountStatRequest): unknown {
-    const obj: any = {}
-    return obj
+    const obj: any = {};
+    return obj;
   },
 
-  fromPartial(_: DeepPartial<QueryGetAccountStatRequest>): QueryGetAccountStatRequest {
-    const message = { ...baseQueryGetAccountStatRequest } as QueryGetAccountStatRequest
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetAccountStatRequest>, I>>(base?: I): QueryGetAccountStatRequest {
+    return QueryGetAccountStatRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetAccountStatRequest>, I>>(_: I): QueryGetAccountStatRequest {
+    const message = createBaseQueryGetAccountStatRequest();
+    return message;
+  },
+};
+
+function createBaseQueryGetAccountStatResponse(): QueryGetAccountStatResponse {
+  return { AccountStat: undefined };
 }
 
-const baseQueryGetAccountStatResponse: object = {}
-
 export const QueryGetAccountStatResponse = {
-  encode(message: QueryGetAccountStatResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetAccountStatResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.AccountStat !== undefined) {
-      AccountStat.encode(message.AccountStat, writer.uint32(10).fork()).ldelim()
+      AccountStat.encode(message.AccountStat, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountStatResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountStatResponse } as QueryGetAccountStatResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetAccountStatResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetAccountStatResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.AccountStat = AccountStat.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.AccountStat = AccountStat.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetAccountStatResponse {
-    const message = { ...baseQueryGetAccountStatResponse } as QueryGetAccountStatResponse
-    if (object.AccountStat !== undefined && object.AccountStat !== null) {
-      message.AccountStat = AccountStat.fromJSON(object.AccountStat)
-    } else {
-      message.AccountStat = undefined
-    }
-    return message
+    return { AccountStat: isSet(object.AccountStat) ? AccountStat.fromJSON(object.AccountStat) : undefined };
   },
 
   toJSON(message: QueryGetAccountStatResponse): unknown {
-    const obj: any = {}
-    message.AccountStat !== undefined && (obj.AccountStat = message.AccountStat ? AccountStat.toJSON(message.AccountStat) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.AccountStat !== undefined) {
+      obj.AccountStat = AccountStat.toJSON(message.AccountStat);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetAccountStatResponse>): QueryGetAccountStatResponse {
-    const message = { ...baseQueryGetAccountStatResponse } as QueryGetAccountStatResponse
-    if (object.AccountStat !== undefined && object.AccountStat !== null) {
-      message.AccountStat = AccountStat.fromPartial(object.AccountStat)
-    } else {
-      message.AccountStat = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetAccountStatResponse>, I>>(base?: I): QueryGetAccountStatResponse {
+    return QueryGetAccountStatResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetAccountStatResponse>, I>>(object: I): QueryGetAccountStatResponse {
+    const message = createBaseQueryGetAccountStatResponse();
+    message.AccountStat = (object.AccountStat !== undefined && object.AccountStat !== null)
+      ? AccountStat.fromPartial(object.AccountStat)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetRevokedAccountRequest(): QueryGetRevokedAccountRequest {
+  return { address: "" };
 }
 
-const baseQueryGetRevokedAccountRequest: object = { address: '' }
-
 export const QueryGetRevokedAccountRequest = {
-  encode(message: QueryGetRevokedAccountRequest, writer: Writer = Writer.create()): Writer {
-    if (message.address !== '') {
-      writer.uint32(10).string(message.address)
+  encode(message: QueryGetRevokedAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRevokedAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRevokedAccountRequest } as QueryGetRevokedAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRevokedAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRevokedAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.address = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRevokedAccountRequest {
-    const message = { ...baseQueryGetRevokedAccountRequest } as QueryGetRevokedAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address)
-    } else {
-      message.address = ''
-    }
-    return message
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryGetRevokedAccountRequest): unknown {
-    const obj: any = {}
-    message.address !== undefined && (obj.address = message.address)
-    return obj
+    const obj: any = {};
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRevokedAccountRequest>): QueryGetRevokedAccountRequest {
-    const message = { ...baseQueryGetRevokedAccountRequest } as QueryGetRevokedAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address
-    } else {
-      message.address = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRevokedAccountRequest>, I>>(base?: I): QueryGetRevokedAccountRequest {
+    return QueryGetRevokedAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRevokedAccountRequest>, I>>(
+    object: I,
+  ): QueryGetRevokedAccountRequest {
+    const message = createBaseQueryGetRevokedAccountRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetRevokedAccountResponse(): QueryGetRevokedAccountResponse {
+  return { revokedAccount: undefined };
 }
 
-const baseQueryGetRevokedAccountResponse: object = {}
-
 export const QueryGetRevokedAccountResponse = {
-  encode(message: QueryGetRevokedAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetRevokedAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.revokedAccount !== undefined) {
-      RevokedAccount.encode(message.revokedAccount, writer.uint32(10).fork()).ldelim()
+      RevokedAccount.encode(message.revokedAccount, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRevokedAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRevokedAccountResponse } as QueryGetRevokedAccountResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRevokedAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRevokedAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.revokedAccount = RevokedAccount.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.revokedAccount = RevokedAccount.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRevokedAccountResponse {
-    const message = { ...baseQueryGetRevokedAccountResponse } as QueryGetRevokedAccountResponse
-    if (object.revokedAccount !== undefined && object.revokedAccount !== null) {
-      message.revokedAccount = RevokedAccount.fromJSON(object.revokedAccount)
-    } else {
-      message.revokedAccount = undefined
-    }
-    return message
+    return {
+      revokedAccount: isSet(object.revokedAccount) ? RevokedAccount.fromJSON(object.revokedAccount) : undefined,
+    };
   },
 
   toJSON(message: QueryGetRevokedAccountResponse): unknown {
-    const obj: any = {}
-    message.revokedAccount !== undefined && (obj.revokedAccount = message.revokedAccount ? RevokedAccount.toJSON(message.revokedAccount) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.revokedAccount !== undefined) {
+      obj.revokedAccount = RevokedAccount.toJSON(message.revokedAccount);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRevokedAccountResponse>): QueryGetRevokedAccountResponse {
-    const message = { ...baseQueryGetRevokedAccountResponse } as QueryGetRevokedAccountResponse
-    if (object.revokedAccount !== undefined && object.revokedAccount !== null) {
-      message.revokedAccount = RevokedAccount.fromPartial(object.revokedAccount)
-    } else {
-      message.revokedAccount = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRevokedAccountResponse>, I>>(base?: I): QueryGetRevokedAccountResponse {
+    return QueryGetRevokedAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRevokedAccountResponse>, I>>(
+    object: I,
+  ): QueryGetRevokedAccountResponse {
+    const message = createBaseQueryGetRevokedAccountResponse();
+    message.revokedAccount = (object.revokedAccount !== undefined && object.revokedAccount !== null)
+      ? RevokedAccount.fromPartial(object.revokedAccount)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRevokedAccountRequest(): QueryAllRevokedAccountRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllRevokedAccountRequest: object = {}
-
 export const QueryAllRevokedAccountRequest = {
-  encode(message: QueryAllRevokedAccountRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRevokedAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRevokedAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRevokedAccountRequest } as QueryAllRevokedAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRevokedAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRevokedAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRevokedAccountRequest {
-    const message = { ...baseQueryAllRevokedAccountRequest } as QueryAllRevokedAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllRevokedAccountRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRevokedAccountRequest>): QueryAllRevokedAccountRequest {
-    const message = { ...baseQueryAllRevokedAccountRequest } as QueryAllRevokedAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllRevokedAccountRequest>, I>>(base?: I): QueryAllRevokedAccountRequest {
+    return QueryAllRevokedAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRevokedAccountRequest>, I>>(
+    object: I,
+  ): QueryAllRevokedAccountRequest {
+    const message = createBaseQueryAllRevokedAccountRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRevokedAccountResponse(): QueryAllRevokedAccountResponse {
+  return { revokedAccount: [], pagination: undefined };
 }
 
-const baseQueryAllRevokedAccountResponse: object = {}
-
 export const QueryAllRevokedAccountResponse = {
-  encode(message: QueryAllRevokedAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRevokedAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.revokedAccount) {
-      RevokedAccount.encode(v!, writer.uint32(10).fork()).ldelim()
+      RevokedAccount.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRevokedAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRevokedAccountResponse } as QueryAllRevokedAccountResponse
-    message.revokedAccount = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRevokedAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRevokedAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.revokedAccount.push(RevokedAccount.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.revokedAccount.push(RevokedAccount.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRevokedAccountResponse {
-    const message = { ...baseQueryAllRevokedAccountResponse } as QueryAllRevokedAccountResponse
-    message.revokedAccount = []
-    if (object.revokedAccount !== undefined && object.revokedAccount !== null) {
-      for (const e of object.revokedAccount) {
-        message.revokedAccount.push(RevokedAccount.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      revokedAccount: Array.isArray(object?.revokedAccount)
+        ? object.revokedAccount.map((e: any) => RevokedAccount.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllRevokedAccountResponse): unknown {
-    const obj: any = {}
-    if (message.revokedAccount) {
-      obj.revokedAccount = message.revokedAccount.map((e) => (e ? RevokedAccount.toJSON(e) : undefined))
-    } else {
-      obj.revokedAccount = []
+    const obj: any = {};
+    if (message.revokedAccount?.length) {
+      obj.revokedAccount = message.revokedAccount.map((e) => RevokedAccount.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRevokedAccountResponse>): QueryAllRevokedAccountResponse {
-    const message = { ...baseQueryAllRevokedAccountResponse } as QueryAllRevokedAccountResponse
-    message.revokedAccount = []
-    if (object.revokedAccount !== undefined && object.revokedAccount !== null) {
-      for (const e of object.revokedAccount) {
-        message.revokedAccount.push(RevokedAccount.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllRevokedAccountResponse>, I>>(base?: I): QueryAllRevokedAccountResponse {
+    return QueryAllRevokedAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRevokedAccountResponse>, I>>(
+    object: I,
+  ): QueryAllRevokedAccountResponse {
+    const message = createBaseQueryAllRevokedAccountResponse();
+    message.revokedAccount = object.revokedAccount?.map((e) => RevokedAccount.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetRejectedAccountRequest(): QueryGetRejectedAccountRequest {
+  return { address: "" };
 }
 
-const baseQueryGetRejectedAccountRequest: object = { address: '' }
-
 export const QueryGetRejectedAccountRequest = {
-  encode(message: QueryGetRejectedAccountRequest, writer: Writer = Writer.create()): Writer {
-    if (message.address !== '') {
-      writer.uint32(10).string(message.address)
+  encode(message: QueryGetRejectedAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRejectedAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRejectedAccountRequest } as QueryGetRejectedAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRejectedAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRejectedAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.address = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRejectedAccountRequest {
-    const message = { ...baseQueryGetRejectedAccountRequest } as QueryGetRejectedAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address)
-    } else {
-      message.address = ''
-    }
-    return message
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryGetRejectedAccountRequest): unknown {
-    const obj: any = {}
-    message.address !== undefined && (obj.address = message.address)
-    return obj
+    const obj: any = {};
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRejectedAccountRequest>): QueryGetRejectedAccountRequest {
-    const message = { ...baseQueryGetRejectedAccountRequest } as QueryGetRejectedAccountRequest
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address
-    } else {
-      message.address = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRejectedAccountRequest>, I>>(base?: I): QueryGetRejectedAccountRequest {
+    return QueryGetRejectedAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRejectedAccountRequest>, I>>(
+    object: I,
+  ): QueryGetRejectedAccountRequest {
+    const message = createBaseQueryGetRejectedAccountRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetRejectedAccountResponse(): QueryGetRejectedAccountResponse {
+  return { rejectedAccount: undefined };
 }
 
-const baseQueryGetRejectedAccountResponse: object = {}
-
 export const QueryGetRejectedAccountResponse = {
-  encode(message: QueryGetRejectedAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetRejectedAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.rejectedAccount !== undefined) {
-      RejectedAccount.encode(message.rejectedAccount, writer.uint32(10).fork()).ldelim()
+      RejectedAccount.encode(message.rejectedAccount, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRejectedAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRejectedAccountResponse } as QueryGetRejectedAccountResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRejectedAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRejectedAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.rejectedAccount = RejectedAccount.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.rejectedAccount = RejectedAccount.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRejectedAccountResponse {
-    const message = { ...baseQueryGetRejectedAccountResponse } as QueryGetRejectedAccountResponse
-    if (object.rejectedAccount !== undefined && object.rejectedAccount !== null) {
-      message.rejectedAccount = RejectedAccount.fromJSON(object.rejectedAccount)
-    } else {
-      message.rejectedAccount = undefined
-    }
-    return message
+    return {
+      rejectedAccount: isSet(object.rejectedAccount) ? RejectedAccount.fromJSON(object.rejectedAccount) : undefined,
+    };
   },
 
   toJSON(message: QueryGetRejectedAccountResponse): unknown {
-    const obj: any = {}
-    message.rejectedAccount !== undefined && (obj.rejectedAccount = message.rejectedAccount ? RejectedAccount.toJSON(message.rejectedAccount) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.rejectedAccount !== undefined) {
+      obj.rejectedAccount = RejectedAccount.toJSON(message.rejectedAccount);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRejectedAccountResponse>): QueryGetRejectedAccountResponse {
-    const message = { ...baseQueryGetRejectedAccountResponse } as QueryGetRejectedAccountResponse
-    if (object.rejectedAccount !== undefined && object.rejectedAccount !== null) {
-      message.rejectedAccount = RejectedAccount.fromPartial(object.rejectedAccount)
-    } else {
-      message.rejectedAccount = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRejectedAccountResponse>, I>>(base?: I): QueryGetRejectedAccountResponse {
+    return QueryGetRejectedAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRejectedAccountResponse>, I>>(
+    object: I,
+  ): QueryGetRejectedAccountResponse {
+    const message = createBaseQueryGetRejectedAccountResponse();
+    message.rejectedAccount = (object.rejectedAccount !== undefined && object.rejectedAccount !== null)
+      ? RejectedAccount.fromPartial(object.rejectedAccount)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRejectedAccountRequest(): QueryAllRejectedAccountRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllRejectedAccountRequest: object = {}
-
 export const QueryAllRejectedAccountRequest = {
-  encode(message: QueryAllRejectedAccountRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRejectedAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRejectedAccountRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRejectedAccountRequest } as QueryAllRejectedAccountRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRejectedAccountRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRejectedAccountRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRejectedAccountRequest {
-    const message = { ...baseQueryAllRejectedAccountRequest } as QueryAllRejectedAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllRejectedAccountRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRejectedAccountRequest>): QueryAllRejectedAccountRequest {
-    const message = { ...baseQueryAllRejectedAccountRequest } as QueryAllRejectedAccountRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllRejectedAccountRequest>, I>>(base?: I): QueryAllRejectedAccountRequest {
+    return QueryAllRejectedAccountRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRejectedAccountRequest>, I>>(
+    object: I,
+  ): QueryAllRejectedAccountRequest {
+    const message = createBaseQueryAllRejectedAccountRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRejectedAccountResponse(): QueryAllRejectedAccountResponse {
+  return { rejectedAccount: [], pagination: undefined };
 }
 
-const baseQueryAllRejectedAccountResponse: object = {}
-
 export const QueryAllRejectedAccountResponse = {
-  encode(message: QueryAllRejectedAccountResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRejectedAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.rejectedAccount) {
-      RejectedAccount.encode(v!, writer.uint32(10).fork()).ldelim()
+      RejectedAccount.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRejectedAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRejectedAccountResponse } as QueryAllRejectedAccountResponse
-    message.rejectedAccount = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRejectedAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRejectedAccountResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.rejectedAccount.push(RejectedAccount.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.rejectedAccount.push(RejectedAccount.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRejectedAccountResponse {
-    const message = { ...baseQueryAllRejectedAccountResponse } as QueryAllRejectedAccountResponse
-    message.rejectedAccount = []
-    if (object.rejectedAccount !== undefined && object.rejectedAccount !== null) {
-      for (const e of object.rejectedAccount) {
-        message.rejectedAccount.push(RejectedAccount.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      rejectedAccount: Array.isArray(object?.rejectedAccount)
+        ? object.rejectedAccount.map((e: any) => RejectedAccount.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllRejectedAccountResponse): unknown {
-    const obj: any = {}
-    if (message.rejectedAccount) {
-      obj.rejectedAccount = message.rejectedAccount.map((e) => (e ? RejectedAccount.toJSON(e) : undefined))
-    } else {
-      obj.rejectedAccount = []
+    const obj: any = {};
+    if (message.rejectedAccount?.length) {
+      obj.rejectedAccount = message.rejectedAccount.map((e) => RejectedAccount.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRejectedAccountResponse>): QueryAllRejectedAccountResponse {
-    const message = { ...baseQueryAllRejectedAccountResponse } as QueryAllRejectedAccountResponse
-    message.rejectedAccount = []
-    if (object.rejectedAccount !== undefined && object.rejectedAccount !== null) {
-      for (const e of object.rejectedAccount) {
-        message.rejectedAccount.push(RejectedAccount.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<QueryAllRejectedAccountResponse>, I>>(base?: I): QueryAllRejectedAccountResponse {
+    return QueryAllRejectedAccountResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRejectedAccountResponse>, I>>(
+    object: I,
+  ): QueryAllRejectedAccountResponse {
+    const message = createBaseQueryAllRejectedAccountResponse();
+    message.rejectedAccount = object.rejectedAccount?.map((e) => RejectedAccount.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
 
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Queries a account by index. */
-  Account(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>
+  Account(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
   /** Queries a list of account items. */
-  AccountAll(request: QueryAllAccountRequest): Promise<QueryAllAccountResponse>
+  AccountAll(request: QueryAllAccountRequest): Promise<QueryAllAccountResponse>;
   /** Queries a pendingAccount by index. */
-  PendingAccount(request: QueryGetPendingAccountRequest): Promise<QueryGetPendingAccountResponse>
+  PendingAccount(request: QueryGetPendingAccountRequest): Promise<QueryGetPendingAccountResponse>;
   /** Queries a list of pendingAccount items. */
-  PendingAccountAll(request: QueryAllPendingAccountRequest): Promise<QueryAllPendingAccountResponse>
+  PendingAccountAll(request: QueryAllPendingAccountRequest): Promise<QueryAllPendingAccountResponse>;
   /** Queries a pendingAccountRevocation by index. */
-  PendingAccountRevocation(request: QueryGetPendingAccountRevocationRequest): Promise<QueryGetPendingAccountRevocationResponse>
+  PendingAccountRevocation(
+    request: QueryGetPendingAccountRevocationRequest,
+  ): Promise<QueryGetPendingAccountRevocationResponse>;
   /** Queries a list of pendingAccountRevocation items. */
-  PendingAccountRevocationAll(request: QueryAllPendingAccountRevocationRequest): Promise<QueryAllPendingAccountRevocationResponse>
+  PendingAccountRevocationAll(
+    request: QueryAllPendingAccountRevocationRequest,
+  ): Promise<QueryAllPendingAccountRevocationResponse>;
   /** Queries a accountStat by index. */
-  AccountStat(request: QueryGetAccountStatRequest): Promise<QueryGetAccountStatResponse>
+  AccountStat(request: QueryGetAccountStatRequest): Promise<QueryGetAccountStatResponse>;
   /** Queries a RevokedAccount by index. */
-  RevokedAccount(request: QueryGetRevokedAccountRequest): Promise<QueryGetRevokedAccountResponse>
+  RevokedAccount(request: QueryGetRevokedAccountRequest): Promise<QueryGetRevokedAccountResponse>;
   /** Queries a list of RevokedAccount items. */
-  RevokedAccountAll(request: QueryAllRevokedAccountRequest): Promise<QueryAllRevokedAccountResponse>
+  RevokedAccountAll(request: QueryAllRevokedAccountRequest): Promise<QueryAllRevokedAccountResponse>;
   /** Queries a RejectedAccount by index. */
-  RejectedAccount(request: QueryGetRejectedAccountRequest): Promise<QueryGetRejectedAccountResponse>
+  RejectedAccount(request: QueryGetRejectedAccountRequest): Promise<QueryGetRejectedAccountResponse>;
   /** Queries a list of RejectedAccount items. */
-  RejectedAccountAll(request: QueryAllRejectedAccountRequest): Promise<QueryAllRejectedAccountResponse>
+  RejectedAccountAll(request: QueryAllRejectedAccountRequest): Promise<QueryAllRejectedAccountResponse>;
 }
 
+export const QueryServiceName = "zigbeealliance.distributedcomplianceledger.dclauth.Query";
 export class QueryClientImpl implements Query {
-  private readonly rpc: Rpc
-  constructor(rpc: Rpc) {
-    this.rpc = rpc
+  private readonly rpc: Rpc;
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || QueryServiceName;
+    this.rpc = rpc;
+    this.Account = this.Account.bind(this);
+    this.AccountAll = this.AccountAll.bind(this);
+    this.PendingAccount = this.PendingAccount.bind(this);
+    this.PendingAccountAll = this.PendingAccountAll.bind(this);
+    this.PendingAccountRevocation = this.PendingAccountRevocation.bind(this);
+    this.PendingAccountRevocationAll = this.PendingAccountRevocationAll.bind(this);
+    this.AccountStat = this.AccountStat.bind(this);
+    this.RevokedAccount = this.RevokedAccount.bind(this);
+    this.RevokedAccountAll = this.RevokedAccountAll.bind(this);
+    this.RejectedAccount = this.RejectedAccount.bind(this);
+    this.RejectedAccountAll = this.RejectedAccountAll.bind(this);
   }
   Account(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse> {
-    const data = QueryGetAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'Account', data)
-    return promise.then((data) => QueryGetAccountResponse.decode(new Reader(data)))
+    const data = QueryGetAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Account", data);
+    return promise.then((data) => QueryGetAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   AccountAll(request: QueryAllAccountRequest): Promise<QueryAllAccountResponse> {
-    const data = QueryAllAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'AccountAll', data)
-    return promise.then((data) => QueryAllAccountResponse.decode(new Reader(data)))
+    const data = QueryAllAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "AccountAll", data);
+    return promise.then((data) => QueryAllAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   PendingAccount(request: QueryGetPendingAccountRequest): Promise<QueryGetPendingAccountResponse> {
-    const data = QueryGetPendingAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'PendingAccount', data)
-    return promise.then((data) => QueryGetPendingAccountResponse.decode(new Reader(data)))
+    const data = QueryGetPendingAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "PendingAccount", data);
+    return promise.then((data) => QueryGetPendingAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   PendingAccountAll(request: QueryAllPendingAccountRequest): Promise<QueryAllPendingAccountResponse> {
-    const data = QueryAllPendingAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'PendingAccountAll', data)
-    return promise.then((data) => QueryAllPendingAccountResponse.decode(new Reader(data)))
+    const data = QueryAllPendingAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "PendingAccountAll", data);
+    return promise.then((data) => QueryAllPendingAccountResponse.decode(_m0.Reader.create(data)));
   }
 
-  PendingAccountRevocation(request: QueryGetPendingAccountRevocationRequest): Promise<QueryGetPendingAccountRevocationResponse> {
-    const data = QueryGetPendingAccountRevocationRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'PendingAccountRevocation', data)
-    return promise.then((data) => QueryGetPendingAccountRevocationResponse.decode(new Reader(data)))
+  PendingAccountRevocation(
+    request: QueryGetPendingAccountRevocationRequest,
+  ): Promise<QueryGetPendingAccountRevocationResponse> {
+    const data = QueryGetPendingAccountRevocationRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "PendingAccountRevocation", data);
+    return promise.then((data) => QueryGetPendingAccountRevocationResponse.decode(_m0.Reader.create(data)));
   }
 
-  PendingAccountRevocationAll(request: QueryAllPendingAccountRevocationRequest): Promise<QueryAllPendingAccountRevocationResponse> {
-    const data = QueryAllPendingAccountRevocationRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'PendingAccountRevocationAll', data)
-    return promise.then((data) => QueryAllPendingAccountRevocationResponse.decode(new Reader(data)))
+  PendingAccountRevocationAll(
+    request: QueryAllPendingAccountRevocationRequest,
+  ): Promise<QueryAllPendingAccountRevocationResponse> {
+    const data = QueryAllPendingAccountRevocationRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "PendingAccountRevocationAll", data);
+    return promise.then((data) => QueryAllPendingAccountRevocationResponse.decode(_m0.Reader.create(data)));
   }
 
   AccountStat(request: QueryGetAccountStatRequest): Promise<QueryGetAccountStatResponse> {
-    const data = QueryGetAccountStatRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'AccountStat', data)
-    return promise.then((data) => QueryGetAccountStatResponse.decode(new Reader(data)))
+    const data = QueryGetAccountStatRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "AccountStat", data);
+    return promise.then((data) => QueryGetAccountStatResponse.decode(_m0.Reader.create(data)));
   }
 
   RevokedAccount(request: QueryGetRevokedAccountRequest): Promise<QueryGetRevokedAccountResponse> {
-    const data = QueryGetRevokedAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'RevokedAccount', data)
-    return promise.then((data) => QueryGetRevokedAccountResponse.decode(new Reader(data)))
+    const data = QueryGetRevokedAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RevokedAccount", data);
+    return promise.then((data) => QueryGetRevokedAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   RevokedAccountAll(request: QueryAllRevokedAccountRequest): Promise<QueryAllRevokedAccountResponse> {
-    const data = QueryAllRevokedAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'RevokedAccountAll', data)
-    return promise.then((data) => QueryAllRevokedAccountResponse.decode(new Reader(data)))
+    const data = QueryAllRevokedAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RevokedAccountAll", data);
+    return promise.then((data) => QueryAllRevokedAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   RejectedAccount(request: QueryGetRejectedAccountRequest): Promise<QueryGetRejectedAccountResponse> {
-    const data = QueryGetRejectedAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'RejectedAccount', data)
-    return promise.then((data) => QueryGetRejectedAccountResponse.decode(new Reader(data)))
+    const data = QueryGetRejectedAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RejectedAccount", data);
+    return promise.then((data) => QueryGetRejectedAccountResponse.decode(_m0.Reader.create(data)));
   }
 
   RejectedAccountAll(request: QueryAllRejectedAccountRequest): Promise<QueryAllRejectedAccountResponse> {
-    const data = QueryAllRejectedAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.dclauth.Query', 'RejectedAccountAll', data)
-    return promise.then((data) => QueryAllRejectedAccountResponse.decode(new Reader(data)))
+    const data = QueryAllRejectedAccountRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RejectedAccountAll", data);
+    return promise.then((data) => QueryAllRejectedAccountResponse.decode(_m0.Reader.create(data)));
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

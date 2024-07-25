@@ -123,6 +123,7 @@ export const MsgVerifyInvariantResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

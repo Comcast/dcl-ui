@@ -1036,6 +1036,7 @@ export const QueryCommunityPoolResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

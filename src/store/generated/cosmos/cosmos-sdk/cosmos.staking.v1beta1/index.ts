@@ -30,7 +30,7 @@ import { Pool } from "./module/types/cosmos/staking/v1beta1/staking"
 export { StakeAuthorization, StakeAuthorization_Validators, LastValidatorPower, HistoricalInfo, CommissionRates, Commission, Description, Validator, ValAddresses, DVPair, DVPairs, DVVTriplet, DVVTriplets, Delegation, UnbondingDelegation, UnbondingDelegationEntry, RedelegationEntry, Redelegation, Params, DelegationResponse, RedelegationEntryResponse, RedelegationResponse, Pool };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

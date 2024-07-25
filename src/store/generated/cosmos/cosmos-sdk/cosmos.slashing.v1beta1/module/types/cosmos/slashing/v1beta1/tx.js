@@ -85,6 +85,7 @@ export const MsgUnjailResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

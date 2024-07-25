@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
-
 export const protobufPackage = 'cosmos.base.query.v1beta1'
 
 /**
@@ -306,7 +305,7 @@ function longToNumber(long: Long): number {
   return long.toNumber()
 }
 
-if (util.Long !== Long) {
+if ((util.Long as any) !== Long) {
   util.Long = Long as any
   configure()
 }

@@ -245,6 +245,7 @@ export const MsgMultiSendResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

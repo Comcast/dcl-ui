@@ -56,88 +56,22 @@ export var ContentType;
     ContentType["UrlEncoded"] = "application/x-www-form-urlencoded";
 })(ContentType || (ContentType = {}));
 export class HttpClient {
+    baseUrl = "";
+    securityData = null;
+    securityWorker = null;
+    abortControllers = new Map();
+    baseApiParams = {
+        credentials: "same-origin",
+        headers: {},
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+    };
     constructor(apiConfig = {}) {
-        this.baseUrl = "";
-        this.securityData = null;
-        this.securityWorker = null;
-        this.abortControllers = new Map();
-        this.baseApiParams = {
-            credentials: "same-origin",
-            headers: {},
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-        };
-        this.setSecurityData = (data) => {
-            this.securityData = data;
-        };
-        this.contentFormatters = {
-            [ContentType.Json]: (input) => input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
-            [ContentType.FormData]: (input) => Object.keys(input || {}).reduce((data, key) => {
-                data.append(key, input[key]);
-                return data;
-            }, new FormData()),
-            [ContentType.UrlEncoded]: (input) => this.toQueryString(input),
-        };
-        this.createAbortSignal = (cancelToken) => {
-            if (this.abortControllers.has(cancelToken)) {
-                const abortController = this.abortControllers.get(cancelToken);
-                if (abortController) {
-                    return abortController.signal;
-                }
-                return void 0;
-            }
-            const abortController = new AbortController();
-            this.abortControllers.set(cancelToken, abortController);
-            return abortController.signal;
-        };
-        this.abortRequest = (cancelToken) => {
-            const abortController = this.abortControllers.get(cancelToken);
-            if (abortController) {
-                abortController.abort();
-                this.abortControllers.delete(cancelToken);
-            }
-        };
-        this.request = ({ body, secure, path, type, query, format = "json", baseUrl, cancelToken, ...params }) => {
-            const secureParams = (secure && this.securityWorker && this.securityWorker(this.securityData)) || {};
-            const requestParams = this.mergeRequestParams(params, secureParams);
-            const queryString = query && this.toQueryString(query);
-            const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-            return fetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
-                ...requestParams,
-                headers: {
-                    ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-                    ...(requestParams.headers || {}),
-                },
-                signal: cancelToken ? this.createAbortSignal(cancelToken) : void 0,
-                body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
-            }).then(async (response) => {
-                const r = response;
-                r.data = null;
-                r.error = null;
-                const data = await response[format]()
-                    .then((data) => {
-                    if (r.ok) {
-                        r.data = data;
-                    }
-                    else {
-                        r.error = data;
-                    }
-                    return r;
-                })
-                    .catch((e) => {
-                    r.error = e;
-                    return r;
-                });
-                if (cancelToken) {
-                    this.abortControllers.delete(cancelToken);
-                }
-                if (!response.ok)
-                    throw data;
-                return data;
-            });
-        };
         Object.assign(this, apiConfig);
     }
+    setSecurityData = (data) => {
+        this.securityData = data;
+    };
     addQueryParam(query, key) {
         const value = query[key];
         return (encodeURIComponent(key) +
@@ -157,6 +91,14 @@ export class HttpClient {
         const queryString = this.toQueryString(rawQuery);
         return queryString ? `?${queryString}` : "";
     }
+    contentFormatters = {
+        [ContentType.Json]: (input) => input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
+        [ContentType.FormData]: (input) => Object.keys(input || {}).reduce((data, key) => {
+            data.append(key, input[key]);
+            return data;
+        }, new FormData()),
+        [ContentType.UrlEncoded]: (input) => this.toQueryString(input),
+    };
     mergeRequestParams(params1, params2) {
         return {
             ...this.baseApiParams,
@@ -169,128 +111,183 @@ export class HttpClient {
             },
         };
     }
+    createAbortSignal = (cancelToken) => {
+        if (this.abortControllers.has(cancelToken)) {
+            const abortController = this.abortControllers.get(cancelToken);
+            if (abortController) {
+                return abortController.signal;
+            }
+            return void 0;
+        }
+        const abortController = new AbortController();
+        this.abortControllers.set(cancelToken, abortController);
+        return abortController.signal;
+    };
+    abortRequest = (cancelToken) => {
+        const abortController = this.abortControllers.get(cancelToken);
+        if (abortController) {
+            abortController.abort();
+            this.abortControllers.delete(cancelToken);
+        }
+    };
+    request = ({ body, secure, path, type, query, format = "json", baseUrl, cancelToken, ...params }) => {
+        const secureParams = (secure && this.securityWorker && this.securityWorker(this.securityData)) || {};
+        const requestParams = this.mergeRequestParams(params, secureParams);
+        const queryString = query && this.toQueryString(query);
+        const payloadFormatter = this.contentFormatters[type || ContentType.Json];
+        return fetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
+            ...requestParams,
+            headers: {
+                ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+                ...(requestParams.headers || {}),
+            },
+            signal: cancelToken ? this.createAbortSignal(cancelToken) : void 0,
+            body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+        }).then(async (response) => {
+            const r = response;
+            r.data = null;
+            r.error = null;
+            const data = await response[format]()
+                .then((data) => {
+                if (r.ok) {
+                    r.data = data;
+                }
+                else {
+                    r.error = data;
+                }
+                return r;
+            })
+                .catch((e) => {
+                r.error = e;
+                return r;
+            });
+            if (cancelToken) {
+                this.abortControllers.delete(cancelToken);
+            }
+            if (!response.ok)
+                throw data;
+            return data;
+        });
+    };
 }
 /**
  * @title cosmos/gov/v1beta1/genesis.proto
  * @version version not set
  */
 export class Api extends HttpClient {
-    constructor() {
-        super(...arguments);
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryParams
-         * @summary Params queries all parameters of the gov module.
-         * @request GET:/cosmos/gov/v1beta1/params/{paramsType}
-         */
-        this.queryParams = (paramsType, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/params/${paramsType}`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryProposals
-         * @summary Proposals queries all proposals based on given status.
-         * @request GET:/cosmos/gov/v1beta1/proposals
-         */
-        this.queryProposals = (query, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals`,
-            method: "GET",
-            query: query,
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryProposal
-         * @summary Proposal queries proposal details based on ProposalID.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}
-         */
-        this.queryProposal = (proposalId, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryDeposits
-         * @summary Deposits queries all deposits of a single proposal.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/deposits
-         */
-        this.queryDeposits = (proposalId, query, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}/deposits`,
-            method: "GET",
-            query: query,
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryDeposit
-         * @summary Deposit queries single deposit information based proposalID, depositAddr.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/deposits/{depositor}
-         */
-        this.queryDeposit = (proposalId, depositor, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}/deposits/${depositor}`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryTallyResult
-         * @summary TallyResult queries the tally of a proposal vote.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/tally
-         */
-        this.queryTallyResult = (proposalId, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}/tally`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryVotes
-         * @summary Votes queries votes of a given proposal.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/votes
-         */
-        this.queryVotes = (proposalId, query, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}/votes`,
-            method: "GET",
-            query: query,
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryVote
-         * @summary Vote queries voted information based on proposalID, voterAddr.
-         * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/votes/{voter}
-         */
-        this.queryVote = (proposalId, voter, params = {}) => this.request({
-            path: `/cosmos/gov/v1beta1/proposals/${proposalId}/votes/${voter}`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-    }
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryParams
+     * @summary Params queries all parameters of the gov module.
+     * @request GET:/cosmos/gov/v1beta1/params/{paramsType}
+     */
+    queryParams = (paramsType, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/params/${paramsType}`,
+        method: "GET",
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryProposals
+     * @summary Proposals queries all proposals based on given status.
+     * @request GET:/cosmos/gov/v1beta1/proposals
+     */
+    queryProposals = (query, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryProposal
+     * @summary Proposal queries proposal details based on ProposalID.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}
+     */
+    queryProposal = (proposalId, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryDeposits
+     * @summary Deposits queries all deposits of a single proposal.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/deposits
+     */
+    queryDeposits = (proposalId, query, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}/deposits`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryDeposit
+     * @summary Deposit queries single deposit information based proposalID, depositAddr.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/deposits/{depositor}
+     */
+    queryDeposit = (proposalId, depositor, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}/deposits/${depositor}`,
+        method: "GET",
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryTallyResult
+     * @summary TallyResult queries the tally of a proposal vote.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/tally
+     */
+    queryTallyResult = (proposalId, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}/tally`,
+        method: "GET",
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryVotes
+     * @summary Votes queries votes of a given proposal.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/votes
+     */
+    queryVotes = (proposalId, query, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}/votes`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+    });
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryVote
+     * @summary Vote queries voted information based on proposalID, voterAddr.
+     * @request GET:/cosmos/gov/v1beta1/proposals/{proposalId}/votes/{voter}
+     */
+    queryVote = (proposalId, voter, params = {}) => this.request({
+        path: `/cosmos/gov/v1beta1/proposals/${proposalId}/votes/${voter}`,
+        method: "GET",
+        format: "json",
+        ...params,
+    });
 }

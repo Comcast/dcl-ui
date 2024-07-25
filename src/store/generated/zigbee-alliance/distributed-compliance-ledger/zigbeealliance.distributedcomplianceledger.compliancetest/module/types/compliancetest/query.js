@@ -271,6 +271,7 @@ export const QueryAllTestingResultsResponse = {
     }
 };
 export class QueryClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }

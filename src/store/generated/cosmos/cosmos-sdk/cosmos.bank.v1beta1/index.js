@@ -12,7 +12,7 @@ import { Metadata } from "./module/types/cosmos/bank/v1beta1/bank";
 import { Balance } from "./module/types/cosmos/bank/v1beta1/genesis";
 export { SendAuthorization, Params, SendEnabled, Input, Output, Supply, DenomUnit, Metadata, Balance };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

@@ -26,7 +26,7 @@ import { ValidatorSlashEventRecord } from "./module/types/cosmos/distribution/v1
 export { Params, ValidatorHistoricalRewards, ValidatorCurrentRewards, ValidatorAccumulatedCommission, ValidatorOutstandingRewards, ValidatorSlashEvent, ValidatorSlashEvents, FeePool, CommunityPoolSpendProposal, DelegatorStartingInfo, DelegationDelegatorReward, CommunityPoolSpendProposalWithDeposit, DelegatorWithdrawInfo, ValidatorOutstandingRewardsRecord, ValidatorAccumulatedCommissionRecord, ValidatorHistoricalRewardsRecord, ValidatorCurrentRewardsRecord, DelegatorStartingInfoRecord, ValidatorSlashEventRecord };
 
 async function initTxClient(vuexGetters) {
-	return await txClient(vuexGetters['common/wallet/signer'], {
+	return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
 		addr: vuexGetters['common/env/apiTendermint']
 	})
 }

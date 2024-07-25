@@ -3,7 +3,7 @@
 DCL-UI is [Vue.js](https://vuejs.org/) - based web application for managing the CSA Distributed Compliance Ledger. This app provides a web interface to view and manage the data in the Ledger.
 
 ## Prerequisites
-You will need [Node.js](https://nodejs.org) version 12.0 or greater installed on your system.
+You will need [Node.js](https://nodejs.org) version 20.x installed on your system.
 
 ## Project Setup
 
@@ -41,6 +41,7 @@ VUE_APP_DCL_API_NODE=http://localhost:8080/api
 VUE_APP_DCL_RPC_NODE=http://localhost:8080/rpc
 VUE_APP_DCL_WEBSOCKET_NODE=ws://localhost:8080/websocket
 VUE_APP_DCL_CHAIN_ID=testnet-2.0
+VUE_APP_DCL_CHAIN_NAME=DCL-Chain-Testnet
 VUE_APP_DCL_ADDR_PREFIX=cosmos
 VUE_APP_DCL_SDK_VERSION=Stargate
 VUE_APP_DCL_TX_API=/rpc/tx?hash=0x

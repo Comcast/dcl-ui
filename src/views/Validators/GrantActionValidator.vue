@@ -25,7 +25,7 @@ export default {
 
   computed: {
     isSignedIn() {
-      const loggedIn = this.$store.getters['common/wallet/loggedIn']
+      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
       return loggedIn
     }
   },
@@ -40,9 +40,14 @@ export default {
         this.$toast.add({ severity: 'warn', summary: 'Please sign in', detail: 'Please sign in to at least one account', life: 3000 })
         return
       }
-      const wallet = this.$store.getters['common/wallet/wallet']
-      const accounts = wallet.accounts
-      const account = wallet.accounts[0]
+      let account;
+
+      if(this.$store.state.selectedKeplrAccount) {
+          account = this.$store.state.selectedKeplrAccount;
+      } else {
+          const wallet = this.$store.getters['common/wallet/wallet'];
+          account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
+      }
       const creatorAddress = account.address
 
       this.$store
