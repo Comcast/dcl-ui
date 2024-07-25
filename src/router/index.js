@@ -7,7 +7,7 @@ import Compliance from '@/views/Compliance/Compliance.vue'
 import PKI from '@/views/PKI/PKI.vue'
 import Validators from '@/views/Validators/Validators.vue'
 import Upgrades from '@/views/Upgrades/Upgrades.vue'
-import LegacyWallet from '@views/Tools/LegacyWallet'
+import LegacyWallet from '@/views/Tools/LegacyWallet'
 const routerHistory = createWebHistory()
 const routes = [
 	{
