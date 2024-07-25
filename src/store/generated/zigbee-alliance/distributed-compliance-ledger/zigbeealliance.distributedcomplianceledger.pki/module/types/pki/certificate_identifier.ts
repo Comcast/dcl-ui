@@ -1,92 +1,98 @@
 /* eslint-disable */
-import { Writer, Reader } from 'protobufjs/minimal'
+import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.pki";
 
 export interface CertificateIdentifier {
-  subject: string
-  subjectKeyId: string
+  subject: string;
+  subjectKeyId: string;
 }
 
-const baseCertificateIdentifier: object = { subject: '', subjectKeyId: '' }
+function createBaseCertificateIdentifier(): CertificateIdentifier {
+  return { subject: "", subjectKeyId: "" };
+}
 
 export const CertificateIdentifier = {
-  encode(message: CertificateIdentifier, writer: Writer = Writer.create()): Writer {
-    if (message.subject !== '') {
-      writer.uint32(10).string(message.subject)
+  encode(message: CertificateIdentifier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.subject !== "") {
+      writer.uint32(10).string(message.subject);
     }
-    if (message.subjectKeyId !== '') {
-      writer.uint32(18).string(message.subjectKeyId)
+    if (message.subjectKeyId !== "") {
+      writer.uint32(18).string(message.subjectKeyId);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CertificateIdentifier {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseCertificateIdentifier } as CertificateIdentifier
+  decode(input: _m0.Reader | Uint8Array, length?: number): CertificateIdentifier {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCertificateIdentifier();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subject = reader.string()
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.subject = reader.string();
+          continue;
         case 2:
-          message.subjectKeyId = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.subjectKeyId = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): CertificateIdentifier {
-    const message = { ...baseCertificateIdentifier } as CertificateIdentifier
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = String(object.subject)
-    } else {
-      message.subject = ''
-    }
-    if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
-      message.subjectKeyId = String(object.subjectKeyId)
-    } else {
-      message.subjectKeyId = ''
-    }
-    return message
+    return {
+      subject: isSet(object.subject) ? String(object.subject) : "",
+      subjectKeyId: isSet(object.subjectKeyId) ? String(object.subjectKeyId) : "",
+    };
   },
 
   toJSON(message: CertificateIdentifier): unknown {
-    const obj: any = {}
-    message.subject !== undefined && (obj.subject = message.subject)
-    message.subjectKeyId !== undefined && (obj.subjectKeyId = message.subjectKeyId)
-    return obj
+    const obj: any = {};
+    if (message.subject !== "") {
+      obj.subject = message.subject;
+    }
+    if (message.subjectKeyId !== "") {
+      obj.subjectKeyId = message.subjectKeyId;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<CertificateIdentifier>): CertificateIdentifier {
-    const message = { ...baseCertificateIdentifier } as CertificateIdentifier
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = object.subject
-    } else {
-      message.subject = ''
-    }
-    if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
-      message.subjectKeyId = object.subjectKeyId
-    } else {
-      message.subjectKeyId = ''
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<CertificateIdentifier>, I>>(base?: I): CertificateIdentifier {
+    return CertificateIdentifier.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CertificateIdentifier>, I>>(object: I): CertificateIdentifier {
+    const message = createBaseCertificateIdentifier();
+    message.subject = object.subject ?? "";
+    message.subjectKeyId = object.subjectKeyId ?? "";
+    return message;
+  },
+};
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

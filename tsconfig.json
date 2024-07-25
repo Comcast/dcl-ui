@@ -1,25 +1,38 @@
 {
   "compilerOptions": {
-    "target": "esnext", // or your desired ECMAScript target
+    "target": "esnext",
     "module": "esnext",
-    "outDir": "src",
-    "rootDir": "src",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "node_modules/*",
-        "src/*"
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/views/*": [
+        "./src/views/*"
       ]
-    }
+    },
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "src/**/*.d.ts"
   ],
   "exclude": [
-    "dist",
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

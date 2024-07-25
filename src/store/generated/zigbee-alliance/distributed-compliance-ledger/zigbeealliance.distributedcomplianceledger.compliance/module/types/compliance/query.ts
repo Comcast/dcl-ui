@@ -1,1637 +1,1746 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal'
-import { ComplianceInfo } from '../compliance/compliance_info'
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
-import { CertifiedModel } from '../compliance/certified_model'
-import { RevokedModel } from '../compliance/revoked_model'
-import { ProvisionalModel } from '../compliance/provisional_model'
-import { DeviceSoftwareCompliance } from '../compliance/device_software_compliance'
+import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
+import { CertifiedModel } from "./certified_model";
+import { ComplianceInfo } from "./compliance_info";
+import { DeviceSoftwareCompliance } from "./device_software_compliance";
+import { ProvisionalModel } from "./provisional_model";
+import { RevokedModel } from "./revoked_model";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.compliance'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.compliance";
 
 export interface QueryGetComplianceInfoRequest {
-  vid: number
-  pid: number
-  softwareVersion: number
-  certificationType: string
+  vid: number;
+  pid: number;
+  softwareVersion: number;
+  certificationType: string;
 }
 
 export interface QueryGetComplianceInfoResponse {
-  complianceInfo: ComplianceInfo | undefined
+  complianceInfo: ComplianceInfo | undefined;
 }
 
 export interface QueryAllComplianceInfoRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllComplianceInfoResponse {
-  complianceInfo: ComplianceInfo[]
-  pagination: PageResponse | undefined
+  complianceInfo: ComplianceInfo[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetCertifiedModelRequest {
-  vid: number
-  pid: number
-  softwareVersion: number
-  certificationType: string
+  vid: number;
+  pid: number;
+  softwareVersion: number;
+  certificationType: string;
 }
 
 export interface QueryGetCertifiedModelResponse {
-  certifiedModel: CertifiedModel | undefined
+  certifiedModel: CertifiedModel | undefined;
 }
 
 export interface QueryAllCertifiedModelRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllCertifiedModelResponse {
-  certifiedModel: CertifiedModel[]
-  pagination: PageResponse | undefined
+  certifiedModel: CertifiedModel[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetRevokedModelRequest {
-  vid: number
-  pid: number
-  softwareVersion: number
-  certificationType: string
+  vid: number;
+  pid: number;
+  softwareVersion: number;
+  certificationType: string;
 }
 
 export interface QueryGetRevokedModelResponse {
-  revokedModel: RevokedModel | undefined
+  revokedModel: RevokedModel | undefined;
 }
 
 export interface QueryAllRevokedModelRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllRevokedModelResponse {
-  revokedModel: RevokedModel[]
-  pagination: PageResponse | undefined
+  revokedModel: RevokedModel[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetProvisionalModelRequest {
-  vid: number
-  pid: number
-  softwareVersion: number
-  certificationType: string
+  vid: number;
+  pid: number;
+  softwareVersion: number;
+  certificationType: string;
 }
 
 export interface QueryGetProvisionalModelResponse {
-  provisionalModel: ProvisionalModel | undefined
+  provisionalModel: ProvisionalModel | undefined;
 }
 
 export interface QueryAllProvisionalModelRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllProvisionalModelResponse {
-  provisionalModel: ProvisionalModel[]
-  pagination: PageResponse | undefined
+  provisionalModel: ProvisionalModel[];
+  pagination: PageResponse | undefined;
 }
 
 export interface QueryGetDeviceSoftwareComplianceRequest {
-  cDCertificateId: string
+  cDCertificateId: string;
 }
 
 export interface QueryGetDeviceSoftwareComplianceResponse {
-  deviceSoftwareCompliance: DeviceSoftwareCompliance | undefined
+  deviceSoftwareCompliance: DeviceSoftwareCompliance | undefined;
 }
 
 export interface QueryAllDeviceSoftwareComplianceRequest {
-  pagination: PageRequest | undefined
+  pagination: PageRequest | undefined;
 }
 
 export interface QueryAllDeviceSoftwareComplianceResponse {
-  deviceSoftwareCompliance: DeviceSoftwareCompliance[]
-  pagination: PageResponse | undefined
+  deviceSoftwareCompliance: DeviceSoftwareCompliance[];
+  pagination: PageResponse | undefined;
 }
 
-const baseQueryGetComplianceInfoRequest: object = { vid: 0, pid: 0, softwareVersion: 0, certificationType: '' }
+function createBaseQueryGetComplianceInfoRequest(): QueryGetComplianceInfoRequest {
+  return { vid: 0, pid: 0, softwareVersion: 0, certificationType: "" };
+}
 
 export const QueryGetComplianceInfoRequest = {
-  encode(message: QueryGetComplianceInfoRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetComplianceInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
     if (message.pid !== 0) {
-      writer.uint32(16).int32(message.pid)
+      writer.uint32(16).int32(message.pid);
     }
     if (message.softwareVersion !== 0) {
-      writer.uint32(24).uint32(message.softwareVersion)
+      writer.uint32(24).uint32(message.softwareVersion);
     }
-    if (message.certificationType !== '') {
-      writer.uint32(34).string(message.certificationType)
+    if (message.certificationType !== "") {
+      writer.uint32(34).string(message.certificationType);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetComplianceInfoRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetComplianceInfoRequest } as QueryGetComplianceInfoRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetComplianceInfoRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetComplianceInfoRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.pid = reader.int32()
-          break
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 3:
-          message.softwareVersion = reader.uint32()
-          break
+          if (tag !== 24) {
+            break;
+          }
+
+          message.softwareVersion = reader.uint32();
+          continue;
         case 4:
-          message.certificationType = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.certificationType = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetComplianceInfoRequest {
-    const message = { ...baseQueryGetComplianceInfoRequest } as QueryGetComplianceInfoRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = Number(object.softwareVersion)
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = String(object.certificationType)
-    } else {
-      message.certificationType = ''
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      softwareVersion: isSet(object.softwareVersion) ? Number(object.softwareVersion) : 0,
+      certificationType: isSet(object.certificationType) ? String(object.certificationType) : "",
+    };
   },
 
   toJSON(message: QueryGetComplianceInfoRequest): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.softwareVersion !== undefined && (obj.softwareVersion = message.softwareVersion)
-    message.certificationType !== undefined && (obj.certificationType = message.certificationType)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.softwareVersion !== 0) {
+      obj.softwareVersion = Math.round(message.softwareVersion);
+    }
+    if (message.certificationType !== "") {
+      obj.certificationType = message.certificationType;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetComplianceInfoRequest>): QueryGetComplianceInfoRequest {
-    const message = { ...baseQueryGetComplianceInfoRequest } as QueryGetComplianceInfoRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = object.softwareVersion
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = object.certificationType
-    } else {
-      message.certificationType = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetComplianceInfoRequest>, I>>(base?: I): QueryGetComplianceInfoRequest {
+    return QueryGetComplianceInfoRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetComplianceInfoRequest>, I>>(
+    object: I,
+  ): QueryGetComplianceInfoRequest {
+    const message = createBaseQueryGetComplianceInfoRequest();
+    message.vid = object.vid ?? 0;
+    message.pid = object.pid ?? 0;
+    message.softwareVersion = object.softwareVersion ?? 0;
+    message.certificationType = object.certificationType ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetComplianceInfoResponse(): QueryGetComplianceInfoResponse {
+  return { complianceInfo: undefined };
 }
 
-const baseQueryGetComplianceInfoResponse: object = {}
-
 export const QueryGetComplianceInfoResponse = {
-  encode(message: QueryGetComplianceInfoResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetComplianceInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.complianceInfo !== undefined) {
-      ComplianceInfo.encode(message.complianceInfo, writer.uint32(10).fork()).ldelim()
+      ComplianceInfo.encode(message.complianceInfo, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetComplianceInfoResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetComplianceInfoResponse } as QueryGetComplianceInfoResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetComplianceInfoResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetComplianceInfoResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.complianceInfo = ComplianceInfo.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.complianceInfo = ComplianceInfo.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetComplianceInfoResponse {
-    const message = { ...baseQueryGetComplianceInfoResponse } as QueryGetComplianceInfoResponse
-    if (object.complianceInfo !== undefined && object.complianceInfo !== null) {
-      message.complianceInfo = ComplianceInfo.fromJSON(object.complianceInfo)
-    } else {
-      message.complianceInfo = undefined
-    }
-    return message
+    return {
+      complianceInfo: isSet(object.complianceInfo) ? ComplianceInfo.fromJSON(object.complianceInfo) : undefined,
+    };
   },
 
   toJSON(message: QueryGetComplianceInfoResponse): unknown {
-    const obj: any = {}
-    message.complianceInfo !== undefined && (obj.complianceInfo = message.complianceInfo ? ComplianceInfo.toJSON(message.complianceInfo) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.complianceInfo !== undefined) {
+      obj.complianceInfo = ComplianceInfo.toJSON(message.complianceInfo);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetComplianceInfoResponse>): QueryGetComplianceInfoResponse {
-    const message = { ...baseQueryGetComplianceInfoResponse } as QueryGetComplianceInfoResponse
-    if (object.complianceInfo !== undefined && object.complianceInfo !== null) {
-      message.complianceInfo = ComplianceInfo.fromPartial(object.complianceInfo)
-    } else {
-      message.complianceInfo = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetComplianceInfoResponse>, I>>(base?: I): QueryGetComplianceInfoResponse {
+    return QueryGetComplianceInfoResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetComplianceInfoResponse>, I>>(
+    object: I,
+  ): QueryGetComplianceInfoResponse {
+    const message = createBaseQueryGetComplianceInfoResponse();
+    message.complianceInfo = (object.complianceInfo !== undefined && object.complianceInfo !== null)
+      ? ComplianceInfo.fromPartial(object.complianceInfo)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllComplianceInfoRequest(): QueryAllComplianceInfoRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllComplianceInfoRequest: object = {}
-
 export const QueryAllComplianceInfoRequest = {
-  encode(message: QueryAllComplianceInfoRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllComplianceInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllComplianceInfoRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllComplianceInfoRequest } as QueryAllComplianceInfoRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllComplianceInfoRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllComplianceInfoRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllComplianceInfoRequest {
-    const message = { ...baseQueryAllComplianceInfoRequest } as QueryAllComplianceInfoRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllComplianceInfoRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllComplianceInfoRequest>): QueryAllComplianceInfoRequest {
-    const message = { ...baseQueryAllComplianceInfoRequest } as QueryAllComplianceInfoRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllComplianceInfoRequest>, I>>(base?: I): QueryAllComplianceInfoRequest {
+    return QueryAllComplianceInfoRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllComplianceInfoRequest>, I>>(
+    object: I,
+  ): QueryAllComplianceInfoRequest {
+    const message = createBaseQueryAllComplianceInfoRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllComplianceInfoResponse(): QueryAllComplianceInfoResponse {
+  return { complianceInfo: [], pagination: undefined };
 }
 
-const baseQueryAllComplianceInfoResponse: object = {}
-
 export const QueryAllComplianceInfoResponse = {
-  encode(message: QueryAllComplianceInfoResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllComplianceInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.complianceInfo) {
-      ComplianceInfo.encode(v!, writer.uint32(10).fork()).ldelim()
+      ComplianceInfo.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllComplianceInfoResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllComplianceInfoResponse } as QueryAllComplianceInfoResponse
-    message.complianceInfo = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllComplianceInfoResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllComplianceInfoResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.complianceInfo.push(ComplianceInfo.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.complianceInfo.push(ComplianceInfo.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllComplianceInfoResponse {
-    const message = { ...baseQueryAllComplianceInfoResponse } as QueryAllComplianceInfoResponse
-    message.complianceInfo = []
-    if (object.complianceInfo !== undefined && object.complianceInfo !== null) {
-      for (const e of object.complianceInfo) {
-        message.complianceInfo.push(ComplianceInfo.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      complianceInfo: Array.isArray(object?.complianceInfo)
+        ? object.complianceInfo.map((e: any) => ComplianceInfo.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllComplianceInfoResponse): unknown {
-    const obj: any = {}
-    if (message.complianceInfo) {
-      obj.complianceInfo = message.complianceInfo.map((e) => (e ? ComplianceInfo.toJSON(e) : undefined))
-    } else {
-      obj.complianceInfo = []
+    const obj: any = {};
+    if (message.complianceInfo?.length) {
+      obj.complianceInfo = message.complianceInfo.map((e) => ComplianceInfo.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllComplianceInfoResponse>): QueryAllComplianceInfoResponse {
-    const message = { ...baseQueryAllComplianceInfoResponse } as QueryAllComplianceInfoResponse
-    message.complianceInfo = []
-    if (object.complianceInfo !== undefined && object.complianceInfo !== null) {
-      for (const e of object.complianceInfo) {
-        message.complianceInfo.push(ComplianceInfo.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllComplianceInfoResponse>, I>>(base?: I): QueryAllComplianceInfoResponse {
+    return QueryAllComplianceInfoResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllComplianceInfoResponse>, I>>(
+    object: I,
+  ): QueryAllComplianceInfoResponse {
+    const message = createBaseQueryAllComplianceInfoResponse();
+    message.complianceInfo = object.complianceInfo?.map((e) => ComplianceInfo.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetCertifiedModelRequest(): QueryGetCertifiedModelRequest {
+  return { vid: 0, pid: 0, softwareVersion: 0, certificationType: "" };
 }
 
-const baseQueryGetCertifiedModelRequest: object = { vid: 0, pid: 0, softwareVersion: 0, certificationType: '' }
-
 export const QueryGetCertifiedModelRequest = {
-  encode(message: QueryGetCertifiedModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetCertifiedModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
     if (message.pid !== 0) {
-      writer.uint32(16).int32(message.pid)
+      writer.uint32(16).int32(message.pid);
     }
     if (message.softwareVersion !== 0) {
-      writer.uint32(24).uint32(message.softwareVersion)
+      writer.uint32(24).uint32(message.softwareVersion);
     }
-    if (message.certificationType !== '') {
-      writer.uint32(34).string(message.certificationType)
+    if (message.certificationType !== "") {
+      writer.uint32(34).string(message.certificationType);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetCertifiedModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetCertifiedModelRequest } as QueryGetCertifiedModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetCertifiedModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetCertifiedModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.pid = reader.int32()
-          break
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 3:
-          message.softwareVersion = reader.uint32()
-          break
+          if (tag !== 24) {
+            break;
+          }
+
+          message.softwareVersion = reader.uint32();
+          continue;
         case 4:
-          message.certificationType = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.certificationType = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetCertifiedModelRequest {
-    const message = { ...baseQueryGetCertifiedModelRequest } as QueryGetCertifiedModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = Number(object.softwareVersion)
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = String(object.certificationType)
-    } else {
-      message.certificationType = ''
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      softwareVersion: isSet(object.softwareVersion) ? Number(object.softwareVersion) : 0,
+      certificationType: isSet(object.certificationType) ? String(object.certificationType) : "",
+    };
   },
 
   toJSON(message: QueryGetCertifiedModelRequest): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.softwareVersion !== undefined && (obj.softwareVersion = message.softwareVersion)
-    message.certificationType !== undefined && (obj.certificationType = message.certificationType)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.softwareVersion !== 0) {
+      obj.softwareVersion = Math.round(message.softwareVersion);
+    }
+    if (message.certificationType !== "") {
+      obj.certificationType = message.certificationType;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetCertifiedModelRequest>): QueryGetCertifiedModelRequest {
-    const message = { ...baseQueryGetCertifiedModelRequest } as QueryGetCertifiedModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = object.softwareVersion
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = object.certificationType
-    } else {
-      message.certificationType = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetCertifiedModelRequest>, I>>(base?: I): QueryGetCertifiedModelRequest {
+    return QueryGetCertifiedModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetCertifiedModelRequest>, I>>(
+    object: I,
+  ): QueryGetCertifiedModelRequest {
+    const message = createBaseQueryGetCertifiedModelRequest();
+    message.vid = object.vid ?? 0;
+    message.pid = object.pid ?? 0;
+    message.softwareVersion = object.softwareVersion ?? 0;
+    message.certificationType = object.certificationType ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetCertifiedModelResponse(): QueryGetCertifiedModelResponse {
+  return { certifiedModel: undefined };
 }
 
-const baseQueryGetCertifiedModelResponse: object = {}
-
 export const QueryGetCertifiedModelResponse = {
-  encode(message: QueryGetCertifiedModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetCertifiedModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.certifiedModel !== undefined) {
-      CertifiedModel.encode(message.certifiedModel, writer.uint32(10).fork()).ldelim()
+      CertifiedModel.encode(message.certifiedModel, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetCertifiedModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetCertifiedModelResponse } as QueryGetCertifiedModelResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetCertifiedModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetCertifiedModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.certifiedModel = CertifiedModel.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.certifiedModel = CertifiedModel.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetCertifiedModelResponse {
-    const message = { ...baseQueryGetCertifiedModelResponse } as QueryGetCertifiedModelResponse
-    if (object.certifiedModel !== undefined && object.certifiedModel !== null) {
-      message.certifiedModel = CertifiedModel.fromJSON(object.certifiedModel)
-    } else {
-      message.certifiedModel = undefined
-    }
-    return message
+    return {
+      certifiedModel: isSet(object.certifiedModel) ? CertifiedModel.fromJSON(object.certifiedModel) : undefined,
+    };
   },
 
   toJSON(message: QueryGetCertifiedModelResponse): unknown {
-    const obj: any = {}
-    message.certifiedModel !== undefined && (obj.certifiedModel = message.certifiedModel ? CertifiedModel.toJSON(message.certifiedModel) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.certifiedModel !== undefined) {
+      obj.certifiedModel = CertifiedModel.toJSON(message.certifiedModel);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetCertifiedModelResponse>): QueryGetCertifiedModelResponse {
-    const message = { ...baseQueryGetCertifiedModelResponse } as QueryGetCertifiedModelResponse
-    if (object.certifiedModel !== undefined && object.certifiedModel !== null) {
-      message.certifiedModel = CertifiedModel.fromPartial(object.certifiedModel)
-    } else {
-      message.certifiedModel = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetCertifiedModelResponse>, I>>(base?: I): QueryGetCertifiedModelResponse {
+    return QueryGetCertifiedModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetCertifiedModelResponse>, I>>(
+    object: I,
+  ): QueryGetCertifiedModelResponse {
+    const message = createBaseQueryGetCertifiedModelResponse();
+    message.certifiedModel = (object.certifiedModel !== undefined && object.certifiedModel !== null)
+      ? CertifiedModel.fromPartial(object.certifiedModel)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllCertifiedModelRequest(): QueryAllCertifiedModelRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllCertifiedModelRequest: object = {}
-
 export const QueryAllCertifiedModelRequest = {
-  encode(message: QueryAllCertifiedModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllCertifiedModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllCertifiedModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllCertifiedModelRequest } as QueryAllCertifiedModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllCertifiedModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllCertifiedModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllCertifiedModelRequest {
-    const message = { ...baseQueryAllCertifiedModelRequest } as QueryAllCertifiedModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllCertifiedModelRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllCertifiedModelRequest>): QueryAllCertifiedModelRequest {
-    const message = { ...baseQueryAllCertifiedModelRequest } as QueryAllCertifiedModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllCertifiedModelRequest>, I>>(base?: I): QueryAllCertifiedModelRequest {
+    return QueryAllCertifiedModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllCertifiedModelRequest>, I>>(
+    object: I,
+  ): QueryAllCertifiedModelRequest {
+    const message = createBaseQueryAllCertifiedModelRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllCertifiedModelResponse(): QueryAllCertifiedModelResponse {
+  return { certifiedModel: [], pagination: undefined };
 }
 
-const baseQueryAllCertifiedModelResponse: object = {}
-
 export const QueryAllCertifiedModelResponse = {
-  encode(message: QueryAllCertifiedModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllCertifiedModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.certifiedModel) {
-      CertifiedModel.encode(v!, writer.uint32(10).fork()).ldelim()
+      CertifiedModel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllCertifiedModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllCertifiedModelResponse } as QueryAllCertifiedModelResponse
-    message.certifiedModel = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllCertifiedModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllCertifiedModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.certifiedModel.push(CertifiedModel.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.certifiedModel.push(CertifiedModel.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllCertifiedModelResponse {
-    const message = { ...baseQueryAllCertifiedModelResponse } as QueryAllCertifiedModelResponse
-    message.certifiedModel = []
-    if (object.certifiedModel !== undefined && object.certifiedModel !== null) {
-      for (const e of object.certifiedModel) {
-        message.certifiedModel.push(CertifiedModel.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      certifiedModel: Array.isArray(object?.certifiedModel)
+        ? object.certifiedModel.map((e: any) => CertifiedModel.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllCertifiedModelResponse): unknown {
-    const obj: any = {}
-    if (message.certifiedModel) {
-      obj.certifiedModel = message.certifiedModel.map((e) => (e ? CertifiedModel.toJSON(e) : undefined))
-    } else {
-      obj.certifiedModel = []
+    const obj: any = {};
+    if (message.certifiedModel?.length) {
+      obj.certifiedModel = message.certifiedModel.map((e) => CertifiedModel.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllCertifiedModelResponse>): QueryAllCertifiedModelResponse {
-    const message = { ...baseQueryAllCertifiedModelResponse } as QueryAllCertifiedModelResponse
-    message.certifiedModel = []
-    if (object.certifiedModel !== undefined && object.certifiedModel !== null) {
-      for (const e of object.certifiedModel) {
-        message.certifiedModel.push(CertifiedModel.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllCertifiedModelResponse>, I>>(base?: I): QueryAllCertifiedModelResponse {
+    return QueryAllCertifiedModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllCertifiedModelResponse>, I>>(
+    object: I,
+  ): QueryAllCertifiedModelResponse {
+    const message = createBaseQueryAllCertifiedModelResponse();
+    message.certifiedModel = object.certifiedModel?.map((e) => CertifiedModel.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetRevokedModelRequest(): QueryGetRevokedModelRequest {
+  return { vid: 0, pid: 0, softwareVersion: 0, certificationType: "" };
 }
 
-const baseQueryGetRevokedModelRequest: object = { vid: 0, pid: 0, softwareVersion: 0, certificationType: '' }
-
 export const QueryGetRevokedModelRequest = {
-  encode(message: QueryGetRevokedModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetRevokedModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
     if (message.pid !== 0) {
-      writer.uint32(16).int32(message.pid)
+      writer.uint32(16).int32(message.pid);
     }
     if (message.softwareVersion !== 0) {
-      writer.uint32(24).uint32(message.softwareVersion)
+      writer.uint32(24).uint32(message.softwareVersion);
     }
-    if (message.certificationType !== '') {
-      writer.uint32(34).string(message.certificationType)
+    if (message.certificationType !== "") {
+      writer.uint32(34).string(message.certificationType);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRevokedModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRevokedModelRequest } as QueryGetRevokedModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRevokedModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRevokedModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.pid = reader.int32()
-          break
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 3:
-          message.softwareVersion = reader.uint32()
-          break
+          if (tag !== 24) {
+            break;
+          }
+
+          message.softwareVersion = reader.uint32();
+          continue;
         case 4:
-          message.certificationType = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.certificationType = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRevokedModelRequest {
-    const message = { ...baseQueryGetRevokedModelRequest } as QueryGetRevokedModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = Number(object.softwareVersion)
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = String(object.certificationType)
-    } else {
-      message.certificationType = ''
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      softwareVersion: isSet(object.softwareVersion) ? Number(object.softwareVersion) : 0,
+      certificationType: isSet(object.certificationType) ? String(object.certificationType) : "",
+    };
   },
 
   toJSON(message: QueryGetRevokedModelRequest): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.softwareVersion !== undefined && (obj.softwareVersion = message.softwareVersion)
-    message.certificationType !== undefined && (obj.certificationType = message.certificationType)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.softwareVersion !== 0) {
+      obj.softwareVersion = Math.round(message.softwareVersion);
+    }
+    if (message.certificationType !== "") {
+      obj.certificationType = message.certificationType;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRevokedModelRequest>): QueryGetRevokedModelRequest {
-    const message = { ...baseQueryGetRevokedModelRequest } as QueryGetRevokedModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = object.softwareVersion
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = object.certificationType
-    } else {
-      message.certificationType = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRevokedModelRequest>, I>>(base?: I): QueryGetRevokedModelRequest {
+    return QueryGetRevokedModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRevokedModelRequest>, I>>(object: I): QueryGetRevokedModelRequest {
+    const message = createBaseQueryGetRevokedModelRequest();
+    message.vid = object.vid ?? 0;
+    message.pid = object.pid ?? 0;
+    message.softwareVersion = object.softwareVersion ?? 0;
+    message.certificationType = object.certificationType ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetRevokedModelResponse(): QueryGetRevokedModelResponse {
+  return { revokedModel: undefined };
 }
 
-const baseQueryGetRevokedModelResponse: object = {}
-
 export const QueryGetRevokedModelResponse = {
-  encode(message: QueryGetRevokedModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetRevokedModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.revokedModel !== undefined) {
-      RevokedModel.encode(message.revokedModel, writer.uint32(10).fork()).ldelim()
+      RevokedModel.encode(message.revokedModel, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetRevokedModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetRevokedModelResponse } as QueryGetRevokedModelResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetRevokedModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetRevokedModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.revokedModel = RevokedModel.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.revokedModel = RevokedModel.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetRevokedModelResponse {
-    const message = { ...baseQueryGetRevokedModelResponse } as QueryGetRevokedModelResponse
-    if (object.revokedModel !== undefined && object.revokedModel !== null) {
-      message.revokedModel = RevokedModel.fromJSON(object.revokedModel)
-    } else {
-      message.revokedModel = undefined
-    }
-    return message
+    return { revokedModel: isSet(object.revokedModel) ? RevokedModel.fromJSON(object.revokedModel) : undefined };
   },
 
   toJSON(message: QueryGetRevokedModelResponse): unknown {
-    const obj: any = {}
-    message.revokedModel !== undefined && (obj.revokedModel = message.revokedModel ? RevokedModel.toJSON(message.revokedModel) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.revokedModel !== undefined) {
+      obj.revokedModel = RevokedModel.toJSON(message.revokedModel);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetRevokedModelResponse>): QueryGetRevokedModelResponse {
-    const message = { ...baseQueryGetRevokedModelResponse } as QueryGetRevokedModelResponse
-    if (object.revokedModel !== undefined && object.revokedModel !== null) {
-      message.revokedModel = RevokedModel.fromPartial(object.revokedModel)
-    } else {
-      message.revokedModel = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetRevokedModelResponse>, I>>(base?: I): QueryGetRevokedModelResponse {
+    return QueryGetRevokedModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetRevokedModelResponse>, I>>(object: I): QueryGetRevokedModelResponse {
+    const message = createBaseQueryGetRevokedModelResponse();
+    message.revokedModel = (object.revokedModel !== undefined && object.revokedModel !== null)
+      ? RevokedModel.fromPartial(object.revokedModel)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRevokedModelRequest(): QueryAllRevokedModelRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllRevokedModelRequest: object = {}
-
 export const QueryAllRevokedModelRequest = {
-  encode(message: QueryAllRevokedModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRevokedModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRevokedModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRevokedModelRequest } as QueryAllRevokedModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRevokedModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRevokedModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRevokedModelRequest {
-    const message = { ...baseQueryAllRevokedModelRequest } as QueryAllRevokedModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllRevokedModelRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRevokedModelRequest>): QueryAllRevokedModelRequest {
-    const message = { ...baseQueryAllRevokedModelRequest } as QueryAllRevokedModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllRevokedModelRequest>, I>>(base?: I): QueryAllRevokedModelRequest {
+    return QueryAllRevokedModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRevokedModelRequest>, I>>(object: I): QueryAllRevokedModelRequest {
+    const message = createBaseQueryAllRevokedModelRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllRevokedModelResponse(): QueryAllRevokedModelResponse {
+  return { revokedModel: [], pagination: undefined };
 }
 
-const baseQueryAllRevokedModelResponse: object = {}
-
 export const QueryAllRevokedModelResponse = {
-  encode(message: QueryAllRevokedModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllRevokedModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.revokedModel) {
-      RevokedModel.encode(v!, writer.uint32(10).fork()).ldelim()
+      RevokedModel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllRevokedModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllRevokedModelResponse } as QueryAllRevokedModelResponse
-    message.revokedModel = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRevokedModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllRevokedModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.revokedModel.push(RevokedModel.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.revokedModel.push(RevokedModel.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllRevokedModelResponse {
-    const message = { ...baseQueryAllRevokedModelResponse } as QueryAllRevokedModelResponse
-    message.revokedModel = []
-    if (object.revokedModel !== undefined && object.revokedModel !== null) {
-      for (const e of object.revokedModel) {
-        message.revokedModel.push(RevokedModel.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      revokedModel: Array.isArray(object?.revokedModel)
+        ? object.revokedModel.map((e: any) => RevokedModel.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllRevokedModelResponse): unknown {
-    const obj: any = {}
-    if (message.revokedModel) {
-      obj.revokedModel = message.revokedModel.map((e) => (e ? RevokedModel.toJSON(e) : undefined))
-    } else {
-      obj.revokedModel = []
+    const obj: any = {};
+    if (message.revokedModel?.length) {
+      obj.revokedModel = message.revokedModel.map((e) => RevokedModel.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllRevokedModelResponse>): QueryAllRevokedModelResponse {
-    const message = { ...baseQueryAllRevokedModelResponse } as QueryAllRevokedModelResponse
-    message.revokedModel = []
-    if (object.revokedModel !== undefined && object.revokedModel !== null) {
-      for (const e of object.revokedModel) {
-        message.revokedModel.push(RevokedModel.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllRevokedModelResponse>, I>>(base?: I): QueryAllRevokedModelResponse {
+    return QueryAllRevokedModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllRevokedModelResponse>, I>>(object: I): QueryAllRevokedModelResponse {
+    const message = createBaseQueryAllRevokedModelResponse();
+    message.revokedModel = object.revokedModel?.map((e) => RevokedModel.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetProvisionalModelRequest(): QueryGetProvisionalModelRequest {
+  return { vid: 0, pid: 0, softwareVersion: 0, certificationType: "" };
 }
 
-const baseQueryGetProvisionalModelRequest: object = { vid: 0, pid: 0, softwareVersion: 0, certificationType: '' }
-
 export const QueryGetProvisionalModelRequest = {
-  encode(message: QueryGetProvisionalModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetProvisionalModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
     if (message.pid !== 0) {
-      writer.uint32(16).int32(message.pid)
+      writer.uint32(16).int32(message.pid);
     }
     if (message.softwareVersion !== 0) {
-      writer.uint32(24).uint32(message.softwareVersion)
+      writer.uint32(24).uint32(message.softwareVersion);
     }
-    if (message.certificationType !== '') {
-      writer.uint32(34).string(message.certificationType)
+    if (message.certificationType !== "") {
+      writer.uint32(34).string(message.certificationType);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetProvisionalModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetProvisionalModelRequest } as QueryGetProvisionalModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetProvisionalModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetProvisionalModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.pid = reader.int32()
-          break
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 3:
-          message.softwareVersion = reader.uint32()
-          break
+          if (tag !== 24) {
+            break;
+          }
+
+          message.softwareVersion = reader.uint32();
+          continue;
         case 4:
-          message.certificationType = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.certificationType = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetProvisionalModelRequest {
-    const message = { ...baseQueryGetProvisionalModelRequest } as QueryGetProvisionalModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = Number(object.softwareVersion)
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = String(object.certificationType)
-    } else {
-      message.certificationType = ''
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      softwareVersion: isSet(object.softwareVersion) ? Number(object.softwareVersion) : 0,
+      certificationType: isSet(object.certificationType) ? String(object.certificationType) : "",
+    };
   },
 
   toJSON(message: QueryGetProvisionalModelRequest): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.softwareVersion !== undefined && (obj.softwareVersion = message.softwareVersion)
-    message.certificationType !== undefined && (obj.certificationType = message.certificationType)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.softwareVersion !== 0) {
+      obj.softwareVersion = Math.round(message.softwareVersion);
+    }
+    if (message.certificationType !== "") {
+      obj.certificationType = message.certificationType;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetProvisionalModelRequest>): QueryGetProvisionalModelRequest {
-    const message = { ...baseQueryGetProvisionalModelRequest } as QueryGetProvisionalModelRequest
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = object.softwareVersion
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = object.certificationType
-    } else {
-      message.certificationType = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetProvisionalModelRequest>, I>>(base?: I): QueryGetProvisionalModelRequest {
+    return QueryGetProvisionalModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetProvisionalModelRequest>, I>>(
+    object: I,
+  ): QueryGetProvisionalModelRequest {
+    const message = createBaseQueryGetProvisionalModelRequest();
+    message.vid = object.vid ?? 0;
+    message.pid = object.pid ?? 0;
+    message.softwareVersion = object.softwareVersion ?? 0;
+    message.certificationType = object.certificationType ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetProvisionalModelResponse(): QueryGetProvisionalModelResponse {
+  return { provisionalModel: undefined };
 }
 
-const baseQueryGetProvisionalModelResponse: object = {}
-
 export const QueryGetProvisionalModelResponse = {
-  encode(message: QueryGetProvisionalModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetProvisionalModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.provisionalModel !== undefined) {
-      ProvisionalModel.encode(message.provisionalModel, writer.uint32(10).fork()).ldelim()
+      ProvisionalModel.encode(message.provisionalModel, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetProvisionalModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetProvisionalModelResponse } as QueryGetProvisionalModelResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetProvisionalModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetProvisionalModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.provisionalModel = ProvisionalModel.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.provisionalModel = ProvisionalModel.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetProvisionalModelResponse {
-    const message = { ...baseQueryGetProvisionalModelResponse } as QueryGetProvisionalModelResponse
-    if (object.provisionalModel !== undefined && object.provisionalModel !== null) {
-      message.provisionalModel = ProvisionalModel.fromJSON(object.provisionalModel)
-    } else {
-      message.provisionalModel = undefined
-    }
-    return message
+    return {
+      provisionalModel: isSet(object.provisionalModel) ? ProvisionalModel.fromJSON(object.provisionalModel) : undefined,
+    };
   },
 
   toJSON(message: QueryGetProvisionalModelResponse): unknown {
-    const obj: any = {}
-    message.provisionalModel !== undefined && (obj.provisionalModel = message.provisionalModel ? ProvisionalModel.toJSON(message.provisionalModel) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.provisionalModel !== undefined) {
+      obj.provisionalModel = ProvisionalModel.toJSON(message.provisionalModel);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetProvisionalModelResponse>): QueryGetProvisionalModelResponse {
-    const message = { ...baseQueryGetProvisionalModelResponse } as QueryGetProvisionalModelResponse
-    if (object.provisionalModel !== undefined && object.provisionalModel !== null) {
-      message.provisionalModel = ProvisionalModel.fromPartial(object.provisionalModel)
-    } else {
-      message.provisionalModel = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetProvisionalModelResponse>, I>>(
+    base?: I,
+  ): QueryGetProvisionalModelResponse {
+    return QueryGetProvisionalModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetProvisionalModelResponse>, I>>(
+    object: I,
+  ): QueryGetProvisionalModelResponse {
+    const message = createBaseQueryGetProvisionalModelResponse();
+    message.provisionalModel = (object.provisionalModel !== undefined && object.provisionalModel !== null)
+      ? ProvisionalModel.fromPartial(object.provisionalModel)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllProvisionalModelRequest(): QueryAllProvisionalModelRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllProvisionalModelRequest: object = {}
-
 export const QueryAllProvisionalModelRequest = {
-  encode(message: QueryAllProvisionalModelRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllProvisionalModelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllProvisionalModelRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllProvisionalModelRequest } as QueryAllProvisionalModelRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllProvisionalModelRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllProvisionalModelRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllProvisionalModelRequest {
-    const message = { ...baseQueryAllProvisionalModelRequest } as QueryAllProvisionalModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllProvisionalModelRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllProvisionalModelRequest>): QueryAllProvisionalModelRequest {
-    const message = { ...baseQueryAllProvisionalModelRequest } as QueryAllProvisionalModelRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllProvisionalModelRequest>, I>>(base?: I): QueryAllProvisionalModelRequest {
+    return QueryAllProvisionalModelRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllProvisionalModelRequest>, I>>(
+    object: I,
+  ): QueryAllProvisionalModelRequest {
+    const message = createBaseQueryAllProvisionalModelRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllProvisionalModelResponse(): QueryAllProvisionalModelResponse {
+  return { provisionalModel: [], pagination: undefined };
 }
 
-const baseQueryAllProvisionalModelResponse: object = {}
-
 export const QueryAllProvisionalModelResponse = {
-  encode(message: QueryAllProvisionalModelResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllProvisionalModelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.provisionalModel) {
-      ProvisionalModel.encode(v!, writer.uint32(10).fork()).ldelim()
+      ProvisionalModel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllProvisionalModelResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllProvisionalModelResponse } as QueryAllProvisionalModelResponse
-    message.provisionalModel = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllProvisionalModelResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllProvisionalModelResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.provisionalModel.push(ProvisionalModel.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.provisionalModel.push(ProvisionalModel.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllProvisionalModelResponse {
-    const message = { ...baseQueryAllProvisionalModelResponse } as QueryAllProvisionalModelResponse
-    message.provisionalModel = []
-    if (object.provisionalModel !== undefined && object.provisionalModel !== null) {
-      for (const e of object.provisionalModel) {
-        message.provisionalModel.push(ProvisionalModel.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      provisionalModel: Array.isArray(object?.provisionalModel)
+        ? object.provisionalModel.map((e: any) => ProvisionalModel.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllProvisionalModelResponse): unknown {
-    const obj: any = {}
-    if (message.provisionalModel) {
-      obj.provisionalModel = message.provisionalModel.map((e) => (e ? ProvisionalModel.toJSON(e) : undefined))
-    } else {
-      obj.provisionalModel = []
+    const obj: any = {};
+    if (message.provisionalModel?.length) {
+      obj.provisionalModel = message.provisionalModel.map((e) => ProvisionalModel.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllProvisionalModelResponse>): QueryAllProvisionalModelResponse {
-    const message = { ...baseQueryAllProvisionalModelResponse } as QueryAllProvisionalModelResponse
-    message.provisionalModel = []
-    if (object.provisionalModel !== undefined && object.provisionalModel !== null) {
-      for (const e of object.provisionalModel) {
-        message.provisionalModel.push(ProvisionalModel.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllProvisionalModelResponse>, I>>(
+    base?: I,
+  ): QueryAllProvisionalModelResponse {
+    return QueryAllProvisionalModelResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllProvisionalModelResponse>, I>>(
+    object: I,
+  ): QueryAllProvisionalModelResponse {
+    const message = createBaseQueryAllProvisionalModelResponse();
+    message.provisionalModel = object.provisionalModel?.map((e) => ProvisionalModel.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetDeviceSoftwareComplianceRequest(): QueryGetDeviceSoftwareComplianceRequest {
+  return { cDCertificateId: "" };
 }
 
-const baseQueryGetDeviceSoftwareComplianceRequest: object = { cDCertificateId: '' }
-
 export const QueryGetDeviceSoftwareComplianceRequest = {
-  encode(message: QueryGetDeviceSoftwareComplianceRequest, writer: Writer = Writer.create()): Writer {
-    if (message.cDCertificateId !== '') {
-      writer.uint32(10).string(message.cDCertificateId)
+  encode(message: QueryGetDeviceSoftwareComplianceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.cDCertificateId !== "") {
+      writer.uint32(10).string(message.cDCertificateId);
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetDeviceSoftwareComplianceRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetDeviceSoftwareComplianceRequest } as QueryGetDeviceSoftwareComplianceRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetDeviceSoftwareComplianceRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetDeviceSoftwareComplianceRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cDCertificateId = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.cDCertificateId = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetDeviceSoftwareComplianceRequest {
-    const message = { ...baseQueryGetDeviceSoftwareComplianceRequest } as QueryGetDeviceSoftwareComplianceRequest
-    if (object.cDCertificateId !== undefined && object.cDCertificateId !== null) {
-      message.cDCertificateId = String(object.cDCertificateId)
-    } else {
-      message.cDCertificateId = ''
-    }
-    return message
+    return { cDCertificateId: isSet(object.cDCertificateId) ? String(object.cDCertificateId) : "" };
   },
 
   toJSON(message: QueryGetDeviceSoftwareComplianceRequest): unknown {
-    const obj: any = {}
-    message.cDCertificateId !== undefined && (obj.cDCertificateId = message.cDCertificateId)
-    return obj
+    const obj: any = {};
+    if (message.cDCertificateId !== "") {
+      obj.cDCertificateId = message.cDCertificateId;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetDeviceSoftwareComplianceRequest>): QueryGetDeviceSoftwareComplianceRequest {
-    const message = { ...baseQueryGetDeviceSoftwareComplianceRequest } as QueryGetDeviceSoftwareComplianceRequest
-    if (object.cDCertificateId !== undefined && object.cDCertificateId !== null) {
-      message.cDCertificateId = object.cDCertificateId
-    } else {
-      message.cDCertificateId = ''
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetDeviceSoftwareComplianceRequest>, I>>(
+    base?: I,
+  ): QueryGetDeviceSoftwareComplianceRequest {
+    return QueryGetDeviceSoftwareComplianceRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetDeviceSoftwareComplianceRequest>, I>>(
+    object: I,
+  ): QueryGetDeviceSoftwareComplianceRequest {
+    const message = createBaseQueryGetDeviceSoftwareComplianceRequest();
+    message.cDCertificateId = object.cDCertificateId ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetDeviceSoftwareComplianceResponse(): QueryGetDeviceSoftwareComplianceResponse {
+  return { deviceSoftwareCompliance: undefined };
 }
 
-const baseQueryGetDeviceSoftwareComplianceResponse: object = {}
-
 export const QueryGetDeviceSoftwareComplianceResponse = {
-  encode(message: QueryGetDeviceSoftwareComplianceResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryGetDeviceSoftwareComplianceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deviceSoftwareCompliance !== undefined) {
-      DeviceSoftwareCompliance.encode(message.deviceSoftwareCompliance, writer.uint32(10).fork()).ldelim()
+      DeviceSoftwareCompliance.encode(message.deviceSoftwareCompliance, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetDeviceSoftwareComplianceResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetDeviceSoftwareComplianceResponse } as QueryGetDeviceSoftwareComplianceResponse
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetDeviceSoftwareComplianceResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetDeviceSoftwareComplianceResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.deviceSoftwareCompliance = DeviceSoftwareCompliance.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceSoftwareCompliance = DeviceSoftwareCompliance.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryGetDeviceSoftwareComplianceResponse {
-    const message = { ...baseQueryGetDeviceSoftwareComplianceResponse } as QueryGetDeviceSoftwareComplianceResponse
-    if (object.deviceSoftwareCompliance !== undefined && object.deviceSoftwareCompliance !== null) {
-      message.deviceSoftwareCompliance = DeviceSoftwareCompliance.fromJSON(object.deviceSoftwareCompliance)
-    } else {
-      message.deviceSoftwareCompliance = undefined
-    }
-    return message
+    return {
+      deviceSoftwareCompliance: isSet(object.deviceSoftwareCompliance)
+        ? DeviceSoftwareCompliance.fromJSON(object.deviceSoftwareCompliance)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryGetDeviceSoftwareComplianceResponse): unknown {
-    const obj: any = {}
-    message.deviceSoftwareCompliance !== undefined &&
-      (obj.deviceSoftwareCompliance = message.deviceSoftwareCompliance ? DeviceSoftwareCompliance.toJSON(message.deviceSoftwareCompliance) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.deviceSoftwareCompliance !== undefined) {
+      obj.deviceSoftwareCompliance = DeviceSoftwareCompliance.toJSON(message.deviceSoftwareCompliance);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetDeviceSoftwareComplianceResponse>): QueryGetDeviceSoftwareComplianceResponse {
-    const message = { ...baseQueryGetDeviceSoftwareComplianceResponse } as QueryGetDeviceSoftwareComplianceResponse
-    if (object.deviceSoftwareCompliance !== undefined && object.deviceSoftwareCompliance !== null) {
-      message.deviceSoftwareCompliance = DeviceSoftwareCompliance.fromPartial(object.deviceSoftwareCompliance)
-    } else {
-      message.deviceSoftwareCompliance = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryGetDeviceSoftwareComplianceResponse>, I>>(
+    base?: I,
+  ): QueryGetDeviceSoftwareComplianceResponse {
+    return QueryGetDeviceSoftwareComplianceResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetDeviceSoftwareComplianceResponse>, I>>(
+    object: I,
+  ): QueryGetDeviceSoftwareComplianceResponse {
+    const message = createBaseQueryGetDeviceSoftwareComplianceResponse();
+    message.deviceSoftwareCompliance =
+      (object.deviceSoftwareCompliance !== undefined && object.deviceSoftwareCompliance !== null)
+        ? DeviceSoftwareCompliance.fromPartial(object.deviceSoftwareCompliance)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllDeviceSoftwareComplianceRequest(): QueryAllDeviceSoftwareComplianceRequest {
+  return { pagination: undefined };
 }
 
-const baseQueryAllDeviceSoftwareComplianceRequest: object = {}
-
 export const QueryAllDeviceSoftwareComplianceRequest = {
-  encode(message: QueryAllDeviceSoftwareComplianceRequest, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllDeviceSoftwareComplianceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllDeviceSoftwareComplianceRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllDeviceSoftwareComplianceRequest } as QueryAllDeviceSoftwareComplianceRequest
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllDeviceSoftwareComplianceRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllDeviceSoftwareComplianceRequest();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllDeviceSoftwareComplianceRequest {
-    const message = { ...baseQueryAllDeviceSoftwareComplianceRequest } as QueryAllDeviceSoftwareComplianceRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryAllDeviceSoftwareComplianceRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllDeviceSoftwareComplianceRequest>): QueryAllDeviceSoftwareComplianceRequest {
-    const message = { ...baseQueryAllDeviceSoftwareComplianceRequest } as QueryAllDeviceSoftwareComplianceRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
+  create<I extends Exact<DeepPartial<QueryAllDeviceSoftwareComplianceRequest>, I>>(
+    base?: I,
+  ): QueryAllDeviceSoftwareComplianceRequest {
+    return QueryAllDeviceSoftwareComplianceRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllDeviceSoftwareComplianceRequest>, I>>(
+    object: I,
+  ): QueryAllDeviceSoftwareComplianceRequest {
+    const message = createBaseQueryAllDeviceSoftwareComplianceRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllDeviceSoftwareComplianceResponse(): QueryAllDeviceSoftwareComplianceResponse {
+  return { deviceSoftwareCompliance: [], pagination: undefined };
 }
 
-const baseQueryAllDeviceSoftwareComplianceResponse: object = {}
-
 export const QueryAllDeviceSoftwareComplianceResponse = {
-  encode(message: QueryAllDeviceSoftwareComplianceResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: QueryAllDeviceSoftwareComplianceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.deviceSoftwareCompliance) {
-      DeviceSoftwareCompliance.encode(v!, writer.uint32(10).fork()).ldelim()
+      DeviceSoftwareCompliance.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryAllDeviceSoftwareComplianceResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllDeviceSoftwareComplianceResponse } as QueryAllDeviceSoftwareComplianceResponse
-    message.deviceSoftwareCompliance = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllDeviceSoftwareComplianceResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllDeviceSoftwareComplianceResponse();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.deviceSoftwareCompliance.push(DeviceSoftwareCompliance.decode(reader, reader.uint32()))
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceSoftwareCompliance.push(DeviceSoftwareCompliance.decode(reader, reader.uint32()));
+          continue;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): QueryAllDeviceSoftwareComplianceResponse {
-    const message = { ...baseQueryAllDeviceSoftwareComplianceResponse } as QueryAllDeviceSoftwareComplianceResponse
-    message.deviceSoftwareCompliance = []
-    if (object.deviceSoftwareCompliance !== undefined && object.deviceSoftwareCompliance !== null) {
-      for (const e of object.deviceSoftwareCompliance) {
-        message.deviceSoftwareCompliance.push(DeviceSoftwareCompliance.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
+    return {
+      deviceSoftwareCompliance: Array.isArray(object?.deviceSoftwareCompliance)
+        ? object.deviceSoftwareCompliance.map((e: any) => DeviceSoftwareCompliance.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
   },
 
   toJSON(message: QueryAllDeviceSoftwareComplianceResponse): unknown {
-    const obj: any = {}
-    if (message.deviceSoftwareCompliance) {
-      obj.deviceSoftwareCompliance = message.deviceSoftwareCompliance.map((e) => (e ? DeviceSoftwareCompliance.toJSON(e) : undefined))
-    } else {
-      obj.deviceSoftwareCompliance = []
+    const obj: any = {};
+    if (message.deviceSoftwareCompliance?.length) {
+      obj.deviceSoftwareCompliance = message.deviceSoftwareCompliance.map((e) => DeviceSoftwareCompliance.toJSON(e));
     }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllDeviceSoftwareComplianceResponse>): QueryAllDeviceSoftwareComplianceResponse {
-    const message = { ...baseQueryAllDeviceSoftwareComplianceResponse } as QueryAllDeviceSoftwareComplianceResponse
-    message.deviceSoftwareCompliance = []
-    if (object.deviceSoftwareCompliance !== undefined && object.deviceSoftwareCompliance !== null) {
-      for (const e of object.deviceSoftwareCompliance) {
-        message.deviceSoftwareCompliance.push(DeviceSoftwareCompliance.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<QueryAllDeviceSoftwareComplianceResponse>, I>>(
+    base?: I,
+  ): QueryAllDeviceSoftwareComplianceResponse {
+    return QueryAllDeviceSoftwareComplianceResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryAllDeviceSoftwareComplianceResponse>, I>>(
+    object: I,
+  ): QueryAllDeviceSoftwareComplianceResponse {
+    const message = createBaseQueryAllDeviceSoftwareComplianceResponse();
+    message.deviceSoftwareCompliance =
+      object.deviceSoftwareCompliance?.map((e) => DeviceSoftwareCompliance.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
 
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Queries a ComplianceInfo by index. */
-  ComplianceInfo(request: QueryGetComplianceInfoRequest): Promise<QueryGetComplianceInfoResponse>
+  ComplianceInfo(request: QueryGetComplianceInfoRequest): Promise<QueryGetComplianceInfoResponse>;
   /** Queries a list of ComplianceInfo items. */
-  ComplianceInfoAll(request: QueryAllComplianceInfoRequest): Promise<QueryAllComplianceInfoResponse>
+  ComplianceInfoAll(request: QueryAllComplianceInfoRequest): Promise<QueryAllComplianceInfoResponse>;
   /** Queries a CertifiedModel by index. */
-  CertifiedModel(request: QueryGetCertifiedModelRequest): Promise<QueryGetCertifiedModelResponse>
+  CertifiedModel(request: QueryGetCertifiedModelRequest): Promise<QueryGetCertifiedModelResponse>;
   /** Queries a list of CertifiedModel items. */
-  CertifiedModelAll(request: QueryAllCertifiedModelRequest): Promise<QueryAllCertifiedModelResponse>
+  CertifiedModelAll(request: QueryAllCertifiedModelRequest): Promise<QueryAllCertifiedModelResponse>;
   /** Queries a RevokedModel by index. */
-  RevokedModel(request: QueryGetRevokedModelRequest): Promise<QueryGetRevokedModelResponse>
+  RevokedModel(request: QueryGetRevokedModelRequest): Promise<QueryGetRevokedModelResponse>;
   /** Queries a list of RevokedModel items. */
-  RevokedModelAll(request: QueryAllRevokedModelRequest): Promise<QueryAllRevokedModelResponse>
+  RevokedModelAll(request: QueryAllRevokedModelRequest): Promise<QueryAllRevokedModelResponse>;
   /** Queries a ProvisionalModel by index. */
-  ProvisionalModel(request: QueryGetProvisionalModelRequest): Promise<QueryGetProvisionalModelResponse>
+  ProvisionalModel(request: QueryGetProvisionalModelRequest): Promise<QueryGetProvisionalModelResponse>;
   /** Queries a list of ProvisionalModel items. */
-  ProvisionalModelAll(request: QueryAllProvisionalModelRequest): Promise<QueryAllProvisionalModelResponse>
+  ProvisionalModelAll(request: QueryAllProvisionalModelRequest): Promise<QueryAllProvisionalModelResponse>;
   /** Queries a DeviceSoftwareCompliance by index. */
-  DeviceSoftwareCompliance(request: QueryGetDeviceSoftwareComplianceRequest): Promise<QueryGetDeviceSoftwareComplianceResponse>
+  DeviceSoftwareCompliance(
+    request: QueryGetDeviceSoftwareComplianceRequest,
+  ): Promise<QueryGetDeviceSoftwareComplianceResponse>;
   /** Queries a list of DeviceSoftwareCompliance items. */
-  DeviceSoftwareComplianceAll(request: QueryAllDeviceSoftwareComplianceRequest): Promise<QueryAllDeviceSoftwareComplianceResponse>
+  DeviceSoftwareComplianceAll(
+    request: QueryAllDeviceSoftwareComplianceRequest,
+  ): Promise<QueryAllDeviceSoftwareComplianceResponse>;
 }
 
+export const QueryServiceName = "zigbeealliance.distributedcomplianceledger.compliance.Query";
 export class QueryClientImpl implements Query {
-  private readonly rpc: Rpc
-  constructor(rpc: Rpc) {
-    this.rpc = rpc
+  private readonly rpc: Rpc;
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || QueryServiceName;
+    this.rpc = rpc;
+    this.ComplianceInfo = this.ComplianceInfo.bind(this);
+    this.ComplianceInfoAll = this.ComplianceInfoAll.bind(this);
+    this.CertifiedModel = this.CertifiedModel.bind(this);
+    this.CertifiedModelAll = this.CertifiedModelAll.bind(this);
+    this.RevokedModel = this.RevokedModel.bind(this);
+    this.RevokedModelAll = this.RevokedModelAll.bind(this);
+    this.ProvisionalModel = this.ProvisionalModel.bind(this);
+    this.ProvisionalModelAll = this.ProvisionalModelAll.bind(this);
+    this.DeviceSoftwareCompliance = this.DeviceSoftwareCompliance.bind(this);
+    this.DeviceSoftwareComplianceAll = this.DeviceSoftwareComplianceAll.bind(this);
   }
   ComplianceInfo(request: QueryGetComplianceInfoRequest): Promise<QueryGetComplianceInfoResponse> {
-    const data = QueryGetComplianceInfoRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'ComplianceInfo', data)
-    return promise.then((data) => QueryGetComplianceInfoResponse.decode(new Reader(data)))
+    const data = QueryGetComplianceInfoRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "ComplianceInfo", data);
+    return promise.then((data) => QueryGetComplianceInfoResponse.decode(_m0.Reader.create(data)));
   }
 
   ComplianceInfoAll(request: QueryAllComplianceInfoRequest): Promise<QueryAllComplianceInfoResponse> {
-    const data = QueryAllComplianceInfoRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'ComplianceInfoAll', data)
-    return promise.then((data) => QueryAllComplianceInfoResponse.decode(new Reader(data)))
+    const data = QueryAllComplianceInfoRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "ComplianceInfoAll", data);
+    return promise.then((data) => QueryAllComplianceInfoResponse.decode(_m0.Reader.create(data)));
   }
 
   CertifiedModel(request: QueryGetCertifiedModelRequest): Promise<QueryGetCertifiedModelResponse> {
-    const data = QueryGetCertifiedModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'CertifiedModel', data)
-    return promise.then((data) => QueryGetCertifiedModelResponse.decode(new Reader(data)))
+    const data = QueryGetCertifiedModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "CertifiedModel", data);
+    return promise.then((data) => QueryGetCertifiedModelResponse.decode(_m0.Reader.create(data)));
   }
 
   CertifiedModelAll(request: QueryAllCertifiedModelRequest): Promise<QueryAllCertifiedModelResponse> {
-    const data = QueryAllCertifiedModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'CertifiedModelAll', data)
-    return promise.then((data) => QueryAllCertifiedModelResponse.decode(new Reader(data)))
+    const data = QueryAllCertifiedModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "CertifiedModelAll", data);
+    return promise.then((data) => QueryAllCertifiedModelResponse.decode(_m0.Reader.create(data)));
   }
 
   RevokedModel(request: QueryGetRevokedModelRequest): Promise<QueryGetRevokedModelResponse> {
-    const data = QueryGetRevokedModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'RevokedModel', data)
-    return promise.then((data) => QueryGetRevokedModelResponse.decode(new Reader(data)))
+    const data = QueryGetRevokedModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RevokedModel", data);
+    return promise.then((data) => QueryGetRevokedModelResponse.decode(_m0.Reader.create(data)));
   }
 
   RevokedModelAll(request: QueryAllRevokedModelRequest): Promise<QueryAllRevokedModelResponse> {
-    const data = QueryAllRevokedModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'RevokedModelAll', data)
-    return promise.then((data) => QueryAllRevokedModelResponse.decode(new Reader(data)))
+    const data = QueryAllRevokedModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RevokedModelAll", data);
+    return promise.then((data) => QueryAllRevokedModelResponse.decode(_m0.Reader.create(data)));
   }
 
   ProvisionalModel(request: QueryGetProvisionalModelRequest): Promise<QueryGetProvisionalModelResponse> {
-    const data = QueryGetProvisionalModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'ProvisionalModel', data)
-    return promise.then((data) => QueryGetProvisionalModelResponse.decode(new Reader(data)))
+    const data = QueryGetProvisionalModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "ProvisionalModel", data);
+    return promise.then((data) => QueryGetProvisionalModelResponse.decode(_m0.Reader.create(data)));
   }
 
   ProvisionalModelAll(request: QueryAllProvisionalModelRequest): Promise<QueryAllProvisionalModelResponse> {
-    const data = QueryAllProvisionalModelRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'ProvisionalModelAll', data)
-    return promise.then((data) => QueryAllProvisionalModelResponse.decode(new Reader(data)))
+    const data = QueryAllProvisionalModelRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "ProvisionalModelAll", data);
+    return promise.then((data) => QueryAllProvisionalModelResponse.decode(_m0.Reader.create(data)));
   }
 
-  DeviceSoftwareCompliance(request: QueryGetDeviceSoftwareComplianceRequest): Promise<QueryGetDeviceSoftwareComplianceResponse> {
-    const data = QueryGetDeviceSoftwareComplianceRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'DeviceSoftwareCompliance', data)
-    return promise.then((data) => QueryGetDeviceSoftwareComplianceResponse.decode(new Reader(data)))
+  DeviceSoftwareCompliance(
+    request: QueryGetDeviceSoftwareComplianceRequest,
+  ): Promise<QueryGetDeviceSoftwareComplianceResponse> {
+    const data = QueryGetDeviceSoftwareComplianceRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "DeviceSoftwareCompliance", data);
+    return promise.then((data) => QueryGetDeviceSoftwareComplianceResponse.decode(_m0.Reader.create(data)));
   }
 
-  DeviceSoftwareComplianceAll(request: QueryAllDeviceSoftwareComplianceRequest): Promise<QueryAllDeviceSoftwareComplianceResponse> {
-    const data = QueryAllDeviceSoftwareComplianceRequest.encode(request).finish()
-    const promise = this.rpc.request('zigbeealliance.distributedcomplianceledger.compliance.Query', 'DeviceSoftwareComplianceAll', data)
-    return promise.then((data) => QueryAllDeviceSoftwareComplianceResponse.decode(new Reader(data)))
+  DeviceSoftwareComplianceAll(
+    request: QueryAllDeviceSoftwareComplianceRequest,
+  ): Promise<QueryAllDeviceSoftwareComplianceResponse> {
+    const data = QueryAllDeviceSoftwareComplianceRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "DeviceSoftwareComplianceAll", data);
+    return promise.then((data) => QueryAllDeviceSoftwareComplianceResponse.decode(_m0.Reader.create(data)));
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

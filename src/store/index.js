@@ -1,11 +1,10 @@
-import { createStore } from "vuex";
-import init from "./config";
-
+import { createStore } from 'vuex'
+import init from './config'
 
 const store = createStore({
 	state() {
-    return {
-			packageVersion: process.env.PACKAGE_VERSION || "0",
+		return {
+			packageVersion: import.meta.env.PACKAGE_VERSION || "0",
 			keplrSigner: null,
 			selectedKeplrAccount: null,
 			selectedKeplrAccountName: null,
@@ -26,7 +25,7 @@ const store = createStore({
 			if (!keplr) {
 				throw new Error("Please install the Keplr wallet extension");
 			}
-			const chainId = process.env.VUE_APP_DCL_CHAIN_ID; // Replace with your chain ID
+			const chainId = import.meta.env.VITE_APP_DCL_CHAIN_ID; // Replace with your chain ID
 			await keplr.enable(chainId);
 			const signer = keplr.getOfflineSigner(chainId);
 			signer.key = await signer.keplr.getKey(signer.chainId);

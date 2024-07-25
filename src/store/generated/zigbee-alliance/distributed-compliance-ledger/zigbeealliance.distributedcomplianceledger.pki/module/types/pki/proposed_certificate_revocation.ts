@@ -1,136 +1,189 @@
 /* eslint-disable */
-import { Grant } from '../pki/grant'
-import { Writer, Reader } from 'protobufjs/minimal'
+import _m0 from "protobufjs/minimal";
+import { Grant } from "./grant";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.pki";
 
 export interface ProposedCertificateRevocation {
-  subject: string
-  subjectKeyId: string
-  approvals: Grant[]
-  subjectAsText: string
+  subject: string;
+  subjectKeyId: string;
+  approvals: Grant[];
+  subjectAsText: string;
+  serialNumber: string;
+  revokeChild: boolean;
+  schemaVersion: number;
 }
 
-const baseProposedCertificateRevocation: object = { subject: '', subjectKeyId: '', subjectAsText: '' }
+function createBaseProposedCertificateRevocation(): ProposedCertificateRevocation {
+  return {
+    subject: "",
+    subjectKeyId: "",
+    approvals: [],
+    subjectAsText: "",
+    serialNumber: "",
+    revokeChild: false,
+    schemaVersion: 0,
+  };
+}
 
 export const ProposedCertificateRevocation = {
-  encode(message: ProposedCertificateRevocation, writer: Writer = Writer.create()): Writer {
-    if (message.subject !== '') {
-      writer.uint32(10).string(message.subject)
+  encode(message: ProposedCertificateRevocation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.subject !== "") {
+      writer.uint32(10).string(message.subject);
     }
-    if (message.subjectKeyId !== '') {
-      writer.uint32(18).string(message.subjectKeyId)
+    if (message.subjectKeyId !== "") {
+      writer.uint32(18).string(message.subjectKeyId);
     }
     for (const v of message.approvals) {
-      Grant.encode(v!, writer.uint32(26).fork()).ldelim()
+      Grant.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.subjectAsText !== '') {
-      writer.uint32(34).string(message.subjectAsText)
+    if (message.subjectAsText !== "") {
+      writer.uint32(34).string(message.subjectAsText);
     }
-    return writer
+    if (message.serialNumber !== "") {
+      writer.uint32(42).string(message.serialNumber);
+    }
+    if (message.revokeChild === true) {
+      writer.uint32(48).bool(message.revokeChild);
+    }
+    if (message.schemaVersion !== 0) {
+      writer.uint32(56).uint32(message.schemaVersion);
+    }
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProposedCertificateRevocation {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseProposedCertificateRevocation } as ProposedCertificateRevocation
-    message.approvals = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProposedCertificateRevocation {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseProposedCertificateRevocation();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subject = reader.string()
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.subject = reader.string();
+          continue;
         case 2:
-          message.subjectKeyId = reader.string()
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.subjectKeyId = reader.string();
+          continue;
         case 3:
-          message.approvals.push(Grant.decode(reader, reader.uint32()))
-          break
+          if (tag !== 26) {
+            break;
+          }
+
+          message.approvals.push(Grant.decode(reader, reader.uint32()));
+          continue;
         case 4:
-          message.subjectAsText = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.subjectAsText = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.serialNumber = reader.string();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.revokeChild = reader.bool();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.schemaVersion = reader.uint32();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): ProposedCertificateRevocation {
-    const message = { ...baseProposedCertificateRevocation } as ProposedCertificateRevocation
-    message.approvals = []
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = String(object.subject)
-    } else {
-      message.subject = ''
-    }
-    if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
-      message.subjectKeyId = String(object.subjectKeyId)
-    } else {
-      message.subjectKeyId = ''
-    }
-    if (object.approvals !== undefined && object.approvals !== null) {
-      for (const e of object.approvals) {
-        message.approvals.push(Grant.fromJSON(e))
-      }
-    }
-    if (object.subjectAsText !== undefined && object.subjectAsText !== null) {
-      message.subjectAsText = String(object.subjectAsText)
-    } else {
-      message.subjectAsText = ''
-    }
-    return message
+    return {
+      subject: isSet(object.subject) ? String(object.subject) : "",
+      subjectKeyId: isSet(object.subjectKeyId) ? String(object.subjectKeyId) : "",
+      approvals: Array.isArray(object?.approvals) ? object.approvals.map((e: any) => Grant.fromJSON(e)) : [],
+      subjectAsText: isSet(object.subjectAsText) ? String(object.subjectAsText) : "",
+      serialNumber: isSet(object.serialNumber) ? String(object.serialNumber) : "",
+      revokeChild: isSet(object.revokeChild) ? Boolean(object.revokeChild) : false,
+      schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
+    };
   },
 
   toJSON(message: ProposedCertificateRevocation): unknown {
-    const obj: any = {}
-    message.subject !== undefined && (obj.subject = message.subject)
-    message.subjectKeyId !== undefined && (obj.subjectKeyId = message.subjectKeyId)
-    if (message.approvals) {
-      obj.approvals = message.approvals.map((e) => (e ? Grant.toJSON(e) : undefined))
-    } else {
-      obj.approvals = []
+    const obj: any = {};
+    if (message.subject !== "") {
+      obj.subject = message.subject;
     }
-    message.subjectAsText !== undefined && (obj.subjectAsText = message.subjectAsText)
-    return obj
+    if (message.subjectKeyId !== "") {
+      obj.subjectKeyId = message.subjectKeyId;
+    }
+    if (message.approvals?.length) {
+      obj.approvals = message.approvals.map((e) => Grant.toJSON(e));
+    }
+    if (message.subjectAsText !== "") {
+      obj.subjectAsText = message.subjectAsText;
+    }
+    if (message.serialNumber !== "") {
+      obj.serialNumber = message.serialNumber;
+    }
+    if (message.revokeChild === true) {
+      obj.revokeChild = message.revokeChild;
+    }
+    if (message.schemaVersion !== 0) {
+      obj.schemaVersion = Math.round(message.schemaVersion);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<ProposedCertificateRevocation>): ProposedCertificateRevocation {
-    const message = { ...baseProposedCertificateRevocation } as ProposedCertificateRevocation
-    message.approvals = []
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = object.subject
-    } else {
-      message.subject = ''
-    }
-    if (object.subjectKeyId !== undefined && object.subjectKeyId !== null) {
-      message.subjectKeyId = object.subjectKeyId
-    } else {
-      message.subjectKeyId = ''
-    }
-    if (object.approvals !== undefined && object.approvals !== null) {
-      for (const e of object.approvals) {
-        message.approvals.push(Grant.fromPartial(e))
-      }
-    }
-    if (object.subjectAsText !== undefined && object.subjectAsText !== null) {
-      message.subjectAsText = object.subjectAsText
-    } else {
-      message.subjectAsText = ''
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<ProposedCertificateRevocation>, I>>(base?: I): ProposedCertificateRevocation {
+    return ProposedCertificateRevocation.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ProposedCertificateRevocation>, I>>(
+    object: I,
+  ): ProposedCertificateRevocation {
+    const message = createBaseProposedCertificateRevocation();
+    message.subject = object.subject ?? "";
+    message.subjectKeyId = object.subjectKeyId ?? "";
+    message.approvals = object.approvals?.map((e) => Grant.fromPartial(e)) || [];
+    message.subjectAsText = object.subjectAsText ?? "";
+    message.serialNumber = object.serialNumber ?? "";
+    message.revokeChild = object.revokeChild ?? false;
+    message.schemaVersion = object.schemaVersion ?? 0;
+    return message;
+  },
+};
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

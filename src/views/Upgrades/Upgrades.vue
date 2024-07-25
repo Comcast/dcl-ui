@@ -1,438 +1,296 @@
 <script>
-import { onMounted } from "vue";
-import { ref } from "vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import TabView from "primevue/tabview";
-import TabPanel from "primevue/tabpanel";
-import Button from "primevue/button";
-import Dialog from "primevue/dialog";
-import { email, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
-import { FilterMatchMode } from "primevue/api";
-import GrantActionUpgrade from "./GrantActionUpgrade.vue";
-import ProposeUpgrade from "./ProposeUpgrade.vue";
-
+import { onMounted } from 'vue';
+import { ref } from 'vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import { email, required } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
+import { FilterMatchMode } from 'primevue/api';
+import GrantActionUpgrade from './GrantActionUpgrade.vue';
+import ProposeUpgrade from './ProposeUpgrade.vue';
 
 export default {
-  name: "Upgrades",
+    name: 'Upgrades',
 
-  data() {
-    return {
-      showProposeUpgrade: false,
-      showGrantActionUpgrade: false,
-      selectedAccount: null,
-      grantAction: null,
-      filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-    };
-  },
-
-  methods: {
-    showProposeUpgradeDialog() {
-      this.showProposeUpgrade = true;
-    },
-    dismissProposeUpgradeDialog() {
-      this.showProposeUpgrade = false;
-    },
-    showGrantActionUpgradeDialog(upgradePlanName, action) {
-      this.showGrantActionUpgrade = true;
-      this.upgradePlanName = upgradePlanName;
-      this.grantAction = action;
-    },
-    dismissGrantActionUpgradeDialog() {
-      this.showGrantActionUpgrade = false;
-    },
-		trimAddress(address) {
-			// Return first 6 and last 4 characters
-			if(address && address.length > 16) {
-				return address.substring(0, 10) + "..." + address.substring(address.length - 4);
-			} else {
-				return address;
-			}
-		},
-		copyToClipboard(value) {
-			const el = document.createElement('textarea');
-			el.value = value;
-			document.body.appendChild(el);
-			el.select();
-			document.execCommand('copy');
-			document.body.removeChild(el);
-		},
-  },
-  components: {
-    DataTable,
-    Column,
-    TabView,
-    TabPanel,
-    Button,
-    Dialog,
-    GrantActionUpgrade,
-    ProposeUpgrade,
-  },
-
-  computed: {
-    allProposedUpgrades() {
-      const proposedUpgradeArray =
-        this.$store.getters[
-          "zigbeealliance.distributedcomplianceledger.dclupgrade/getProposedUpgradeAll"
-        ]();
-      return proposedUpgradeArray?.proposedUpgrade;
+    data() {
+        return {
+            showProposeUpgrade: false,
+            showGrantActionUpgrade: false,
+            selectedAccount: null,
+            grantAction: null,
+            filters: {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+            }
+        };
     },
 
-    allRejectedUpgrades() {
-      const rejectedUpgradeArray =
-        this.$store.getters[
-          "zigbeealliance.distributedcomplianceledger.dclupgrade/getRejectedUpgradeAll"
-        ]();
-      return rejectedUpgradeArray?.rejectedUpgrade;
-    },
-
-    allApprovedUpgrades() {
-      const approvedUpgradesArray =
-        this.$store.getters[
-          "zigbeealliance.distributedcomplianceledger.dclupgrade/getApprovedUpgradeAll"
-        ]();
-      return approvedUpgradesArray?.approvedUpgrade;
-    },
-
-    isSignedIn() {
-      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
-      return loggedIn;
-    },
-
-    grantActionHeader() {
-      switch (this.grantAction) {
-        case "ApproveUpgrade":
-          return "Approve Upgrade";
-        case "RejectUpgrade":
-          return "Reject Upgrade";
-        default:
-          return "Grant Action Failed";
-      }
-    },
-  },
-
-  created: function () {
-    // Get all the accounts
-    this.$store.dispatch(
-      "zigbeealliance.distributedcomplianceledger.dclupgrade/QueryApprovedUpgradeAll",
-      {
-        options: {
-          subscribe: true,
-          all: true,
+    methods: {
+        showProposeUpgradeDialog() {
+            this.showProposeUpgrade = true;
         },
-      }
-    );
-    // Get all the pending accounts
-    this.$store.dispatch(
-      "zigbeealliance.distributedcomplianceledger.dclupgrade/QueryProposedUpgradeAll",
-      {
-        options: {
-          subscribe: true,
-          all: true,
+        dismissProposeUpgradeDialog() {
+            this.showProposeUpgrade = false;
         },
-      }
-    );
-    // Get all the revoked accounts
-    this.$store.dispatch(
-      "zigbeealliance.distributedcomplianceledger.dclupgrade/QueryRejectedUpgradeAll",
-      {
-        options: {
-          subscribe: true,
-          all: true,
+        showGrantActionUpgradeDialog(upgradePlanName, action) {
+            this.showGrantActionUpgrade = true;
+            this.upgradePlanName = upgradePlanName;
+            this.grantAction = action;
         },
-      }
-    );
-  },
+        dismissGrantActionUpgradeDialog() {
+            this.showGrantActionUpgrade = false;
+        },
+        trimAddress(address) {
+            // Return first 6 and last 4 characters
+            if (address && address.length > 16) {
+                return address.substring(0, 10) + '...' + address.substring(address.length - 4);
+            } else {
+                return address;
+            }
+        },
+        copyToClipboard(value) {
+            const el = document.createElement('textarea');
+            el.value = value;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+    },
+    components: {
+        DataTable,
+        Column,
+        TabView,
+        TabPanel,
+        Button,
+        Dialog,
+        GrantActionUpgrade,
+        ProposeUpgrade
+    },
+
+    computed: {
+        allProposedUpgrades() {
+            const proposedUpgradeArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclupgrade/getProposedUpgradeAll']();
+            return proposedUpgradeArray?.proposedUpgrade;
+        },
+
+        allRejectedUpgrades() {
+            const rejectedUpgradeArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclupgrade/getRejectedUpgradeAll']();
+            return rejectedUpgradeArray?.rejectedUpgrade;
+        },
+
+        allApprovedUpgrades() {
+            const approvedUpgradesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclupgrade/getApprovedUpgradeAll']();
+            return approvedUpgradesArray?.approvedUpgrade;
+        },
+
+        isSignedIn() {
+            const loggedIn = this.$store.getters['loggedIn'] || this.$store.getters['common/wallet/loggedIn'];
+            return loggedIn;
+        },
+
+        grantActionHeader() {
+            switch (this.grantAction) {
+                case 'ApproveUpgrade':
+                    return 'Approve Upgrade';
+                case 'RejectUpgrade':
+                    return 'Reject Upgrade';
+                default:
+                    return 'Grant Action Failed';
+            }
+        }
+    },
+
+    created: function () {
+        // Get all the accounts
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryApprovedUpgradeAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
+        // Get all the pending accounts
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryProposedUpgradeAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
+        // Get all the revoked accounts
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryRejectedUpgradeAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
+    }
 };
 </script>
 
 <template>
-  <div class="prime-vue-container">
-    <TabView>
-      <TabPanel header="All Approved Upgrades">
+    <div class="prime-vue-container">
+        <TabView>
+            <TabPanel header="All Approved Upgrades">
+                <Button @click="showProposeUpgradeDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Upgrade">Propose Upgrade</Button>
 
-        <Button
-          @click="showProposeUpgradeDialog"
-          icon="pi pi-check"
-          v-bind:class="{ 'p-disabled': !isSignedIn }"
-          label="Propose-Upgrade"
-          >Propose Upgrade</Button
-        >
+                <div class="mb-4"></div>
+                <DataTable :value="allApprovedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <IconField>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Search" />
+                            </IconField>
+                        </div>
+                    </template>
 
-        <div class="mb-4"></div>
-        <DataTable
-          :value="allApprovedUpgrades"
-          :auto-layout="true"
-          :paginator="true"
-          :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row"
-          showGridlines
-          stripedRows
-        >
-          <template #header>
-            <div class="flex justify-content-end">
-              <span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search"
-                />
-              </span>
-            </div>
-          </template>
+                    <Column field="creator" header="Creator Address"></Column>
+                    <Column field="plan" header="Plan">
+                        <template #body="{ data }">
+                            Name : {{ data.plan.name }} <br />
+                            <!-- Time : {{ data.plan.time}}	<br /> -->
+                            Height : {{ data.plan.height }} <br />
+                            <!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
+                        </template>
+                    </Column>
+                    <Column field="approvals" header="Approvals">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
+                                    Address : {{ trimAddress(approval.address) }} <br />
+                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
+                                    Info : {{ approval.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                    <Column field="rejects" header="Rejects">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(rejects, index) in row.data.rejects" :key="index">
+                                    Address : {{ trimAddress(rejects.address) }} <br />
+                                    Time : {{ new Date(rejects.time * 1000).toString() }} <br />
+                                    Info : {{ rejects.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                </DataTable>
+            </TabPanel>
 
-          <Column
-            field="creator"
-            header="Creator Address"
-          ></Column>
-          <Column field="plan" header="Plan">
+            <TabPanel header="All Proposed Upgrades">
+                <DataTable :value="allProposedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <IconField>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Search" />
+                            </IconField>
+                        </div>
+                    </template>
 
-					<template #body="{ data }">
-						Name : {{ data.plan.name }} <br />
-						<!-- Time : {{ data.plan.time}}	<br /> -->
-						Height : {{ data.plan.height}}	<br />
-						<!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
-          </template>
-					</Column>
-          <Column field="approvals" header="Approvals">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(approval, index) in row.data.approvals"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(approval.address) }} <br />
-                  Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                  Info : {{ approval.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-          <Column field="rejects" header="Rejects">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(rejects, index) in row.data.rejects"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(rejects.address) }} <br />
-                  Time : {{ new Date(rejects.time * 1000).toString() }} <br />
-                  Info : {{ rejects.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-        </DataTable>
-      </TabPanel>
+                    <Column field="creator" header="Creator Address"></Column>
+                    <Column field="plan" header="Plan">
+                        <template #body="{ data }">
+                            Name : {{ data.plan.name }} <br />
+                            <!-- Time : {{ data.plan.time}}	<br /> -->
+                            Height : {{ data.plan.height }} <br />
+                            <!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
+                        </template>
+                    </Column>
+                    <Column field="approvals" header="Approvals">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
+                                    Address : {{ trimAddress(approval.address) }} <br />
+                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
+                                    Info : {{ approval.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                    <Column field="rejects" header="Rejects">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(rejects, index) in row.data.rejects" :key="index">
+                                    Address : {{ trimAddress(rejects.address) }} <br />
+                                    Time : {{ new Date(rejects.time * 1000).toString() }} <br />
+                                    Info : {{ rejects.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                    <Column field="account" headerStyle="width: 4rem; text-align: left" bodyStyle="text-align: left; overflow: visible">
+                        <template #body="{ data }">
+                            <Button label="Approve" @click="showGrantActionUpgradeDialog(data.plan.name, 'ApproveUpgrade')" iconPos="left" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" />
+                            <Button label="Reject" @click="showGrantActionUpgradeDialog(data.plan.name, 'RejectUpgrade')" iconPos="left" icon="pi pi-ban" class="mt-3 p-button-danger" v-bind:class="{ 'p-disabled': !isSignedIn }" />
+                        </template>
+                    </Column>
+                </DataTable>
+            </TabPanel>
+            <TabPanel header="All Rejected Upgrades">
+                <DataTable :value="allRejectedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <IconField>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Search" />
+                            </IconField>
+                        </div>
+                    </template>
 
-      <TabPanel header="All Proposed Upgrades">
-        <DataTable
-          :value="allProposedUpgrades"
-          :auto-layout="true"
-          :paginator="true"
-          :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row"
-          showGridlines
-          stripedRows
-        >
-          <template #header>
-            <div class="flex justify-content-end">
-              <span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search"
-                />
-              </span>
-            </div>
-          </template>
+                    <Column field="creator" header="Creator Address"></Column>
+                    <Column field="plan" header="Plan">
+                        <template #body="{ data }">
+                            Name : {{ data.plan.name }} <br />
+                            <!-- Time : {{ data.plan.time}}	<br /> -->
+                            Height : {{ data.plan.height }} <br />
+                            <!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
+                        </template>
+                    </Column>
+                    <Column field="approvals" header="Approvals">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
+                                    Address : {{ trimAddress(approval.address) }} <br />
+                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
+                                    Info : {{ approval.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                    <Column field="rejects" header="Rejects">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(rejects, index) in row.data.rejects" :key="index">
+                                    Address : {{ trimAddress(rejects.address) }} <br />
+                                    Time : {{ new Date(rejects.time * 1000).toString() }} <br />
+                                    Info : {{ rejects.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                </DataTable>
+            </TabPanel>
+        </TabView>
 
-          <Column
-            field="creator"
-            header="Creator Address"
-          ></Column>
-          <Column field="plan" header="Plan">
+        <Dialog :header="grantActionHeader" @update:visible="dismissGrantActionUpgradeDialog" :visible="showGrantActionUpgrade" :style="{ width: '50vw' }" :modal="true">
+            <GrantActionUpgrade :upgradePlanName="upgradePlanName" :action="grantAction" @close-dialog="dismissGrantActionUpgradeDialog"></GrantActionUpgrade>
+        </Dialog>
 
-					<template #body="{ data }">
-						Name : {{ data.plan.name }} <br />
-						<!-- Time : {{ data.plan.time}}	<br /> -->
-						Height : {{ data.plan.height}}	<br />
-						<!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
-          </template>
-					</Column>
-          <Column field="approvals" header="Approvals">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(approval, index) in row.data.approvals"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(approval.address) }} <br />
-                  Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                  Info : {{ approval.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-          <Column field="rejects" header="Rejects">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(rejects, index) in row.data.rejects"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(rejects.address) }} <br />
-                  Time : {{ new Date(rejects.time * 1000).toString() }} <br />
-                  Info : {{ rejects.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-          <Column
-            field="account"
-            headerStyle="width: 4rem; text-align: left"
-            bodyStyle="text-align: left; overflow: visible"
-          >
-            <template #body="{ data }">
-              <Button
-                label="Approve"
-                @click="
-                  showGrantActionUpgradeDialog(
-                    data.plan.name,
-                    'ApproveUpgrade'
-                  )
-                "
-                iconPos="left"
-                icon="pi pi-check"
-                v-bind:class="{ 'p-disabled': !isSignedIn }"
-              />
-              <Button
-                label="Reject"
-                @click="
-                  showGrantActionUpgradeDialog(
-                    data.plan.name,
-                    'RejectUpgrade'
-                  )
-                "
-                iconPos="left"
-                icon="pi pi-ban"
-                class="mt-3 p-button-danger"
-                v-bind:class="{ 'p-disabled': !isSignedIn }"
-              />
-            </template>
-          </Column>
-
-        </DataTable>
-      </TabPanel>
-      <TabPanel header="All Rejected Upgrades">
-        <DataTable
-          :value="allRejectedUpgrades"
-          :auto-layout="true"
-          :paginator="true"
-          :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row"
-          showGridlines
-          stripedRows
-        >
-          <template #header>
-            <div class="flex justify-content-end">
-              <span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search"
-                />
-              </span>
-            </div>
-          </template>
-
-          <Column
-            field="creator"
-            header="Creator Address"
-          ></Column>
-          <Column field="plan" header="Plan">
-
-					<template #body="{ data }">
-						Name : {{ data.plan.name }} <br />
-						<!-- Time : {{ data.plan.time}}	<br /> -->
-						Height : {{ data.plan.height}}	<br />
-						<!-- checksum: <pre id="json">{{JSON.parse(data.plan.info)}}</pre> 	<br /> -->
-          </template>
-					</Column>
-          <Column field="approvals" header="Approvals">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(approval, index) in row.data.approvals"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(approval.address) }} <br />
-                  Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                  Info : {{ approval.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-          <Column field="rejects" header="Rejects">
-            <template #body="row">
-              <ol>
-                <li
-                  class="mb-2"
-                  v-for="(rejects, index) in row.data.rejects"
-                  :key="index"
-                >
-                  Address : {{ trimAddress(rejects.address) }} <br />
-                  Time : {{ new Date(rejects.time * 1000).toString() }} <br />
-                  Info : {{ rejects.info }}
-                </li>
-              </ol>
-            </template>
-          </Column>
-
-        </DataTable>
-      </TabPanel>
-    </TabView>
-
-    <Dialog
-      :header="grantActionHeader"
-      @update:visible="dismissGrantActionUpgradeDialog"
-      :visible="showGrantActionUpgrade"
-      :style="{ width: '50vw' }"
-      :modal="true"
-    >
-      <GrantActionUpgrade
-        :upgradePlanName="upgradePlanName"
-        :action="grantAction"
-        @close-dialog="dismissGrantActionUpgradeDialog"
-      ></GrantActionUpgrade>
-    </Dialog>
-
-
-    <Dialog
-      header="Propose Upgrade"
-      @update:visible="dismissProposeUpgradeDialog"
-      :visible="showProposeUpgrade"
-      :style="{ width: '50vw' }"
-      class="p-fluid"
-      :modal="true"
-    >
-      <ProposeUpgrade
-        @close-dialog="dismissProposeUpgradeDialog"
-      ></ProposeUpgrade>
-    </Dialog>
-
-  </div>
+        <Dialog header="Propose Upgrade" @update:visible="dismissProposeUpgradeDialog" :visible="showProposeUpgrade" :style="{ width: '50vw' }" class="p-fluid" :modal="true">
+            <ProposeUpgrade @close-dialog="dismissProposeUpgradeDialog"></ProposeUpgrade>
+        </Dialog>
+    </div>
 </template>
 
 
