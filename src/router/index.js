@@ -21,7 +21,8 @@ const routes = [
 	{ path: '/pki', component: PKI },
 	{ path: '/validators', component: Validators},
 	{ path: '/upgrades', component: Upgrades},
-	{ path: "/legacy-wallet", component: LegacyWallet }]
+	{ path: "/legacy-wallet", component: LegacyWallet }
+]
 
 const router = createRouter({
 	history: routerHistory,
