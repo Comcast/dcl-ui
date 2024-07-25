@@ -6,7 +6,6 @@
       <ul class="list-disc pl-5 mt-2">
         <li>Store your mnemonic securely in an offline location. This menmonic can also be used to create/restore this account in Keplr Wallet.</li>
         <li>Delete the wallet from local storage immediately.</li>
-        <li>Consider using a hardware wallet for enhanced security.</li>
       </ul>
     </div>
 
