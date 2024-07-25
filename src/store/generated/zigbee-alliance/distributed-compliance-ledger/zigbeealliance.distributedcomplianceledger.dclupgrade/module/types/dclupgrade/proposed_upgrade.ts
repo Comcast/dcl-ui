@@ -1,144 +1,148 @@
 /* eslint-disable */
-import { Plan } from '../cosmos/upgrade/v1beta1/upgrade'
-import { Grant } from '../dclupgrade/grant'
-import { Writer, Reader } from 'protobufjs/minimal'
+import _m0 from "protobufjs/minimal";
+import { Plan } from "../cosmos/upgrade/v1beta1/upgrade";
+import { Grant } from "./grant";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.dclupgrade'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.dclupgrade";
 
 export interface ProposedUpgrade {
-  plan: Plan | undefined
-  creator: string
-  approvals: Grant[]
-  rejects: Grant[]
+  plan: Plan | undefined;
+  creator: string;
+  approvals: Grant[];
+  rejects: Grant[];
+  schemaVersion: number;
 }
 
-const baseProposedUpgrade: object = { creator: '' }
+function createBaseProposedUpgrade(): ProposedUpgrade {
+  return { plan: undefined, creator: "", approvals: [], rejects: [], schemaVersion: 0 };
+}
 
 export const ProposedUpgrade = {
-  encode(message: ProposedUpgrade, writer: Writer = Writer.create()): Writer {
+  encode(message: ProposedUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.plan !== undefined) {
-      Plan.encode(message.plan, writer.uint32(10).fork()).ldelim()
+      Plan.encode(message.plan, writer.uint32(10).fork()).ldelim();
     }
-    if (message.creator !== '') {
-      writer.uint32(18).string(message.creator)
+    if (message.creator !== "") {
+      writer.uint32(18).string(message.creator);
     }
     for (const v of message.approvals) {
-      Grant.encode(v!, writer.uint32(26).fork()).ldelim()
+      Grant.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.rejects) {
-      Grant.encode(v!, writer.uint32(34).fork()).ldelim()
+      Grant.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    return writer
+    if (message.schemaVersion !== 0) {
+      writer.uint32(40).uint32(message.schemaVersion);
+    }
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProposedUpgrade {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseProposedUpgrade } as ProposedUpgrade
-    message.approvals = []
-    message.rejects = []
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProposedUpgrade {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseProposedUpgrade();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.plan = Plan.decode(reader, reader.uint32())
-          break
+          if (tag !== 10) {
+            break;
+          }
+
+          message.plan = Plan.decode(reader, reader.uint32());
+          continue;
         case 2:
-          message.creator = reader.string()
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
         case 3:
-          message.approvals.push(Grant.decode(reader, reader.uint32()))
-          break
+          if (tag !== 26) {
+            break;
+          }
+
+          message.approvals.push(Grant.decode(reader, reader.uint32()));
+          continue;
         case 4:
-          message.rejects.push(Grant.decode(reader, reader.uint32()))
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.rejects.push(Grant.decode(reader, reader.uint32()));
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.schemaVersion = reader.uint32();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): ProposedUpgrade {
-    const message = { ...baseProposedUpgrade } as ProposedUpgrade
-    message.approvals = []
-    message.rejects = []
-    if (object.plan !== undefined && object.plan !== null) {
-      message.plan = Plan.fromJSON(object.plan)
-    } else {
-      message.plan = undefined
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
-    } else {
-      message.creator = ''
-    }
-    if (object.approvals !== undefined && object.approvals !== null) {
-      for (const e of object.approvals) {
-        message.approvals.push(Grant.fromJSON(e))
-      }
-    }
-    if (object.rejects !== undefined && object.rejects !== null) {
-      for (const e of object.rejects) {
-        message.rejects.push(Grant.fromJSON(e))
-      }
-    }
-    return message
+    return {
+      plan: isSet(object.plan) ? Plan.fromJSON(object.plan) : undefined,
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      approvals: Array.isArray(object?.approvals) ? object.approvals.map((e: any) => Grant.fromJSON(e)) : [],
+      rejects: Array.isArray(object?.rejects) ? object.rejects.map((e: any) => Grant.fromJSON(e)) : [],
+      schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
+    };
   },
 
   toJSON(message: ProposedUpgrade): unknown {
-    const obj: any = {}
-    message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined)
-    message.creator !== undefined && (obj.creator = message.creator)
-    if (message.approvals) {
-      obj.approvals = message.approvals.map((e) => (e ? Grant.toJSON(e) : undefined))
-    } else {
-      obj.approvals = []
+    const obj: any = {};
+    if (message.plan !== undefined) {
+      obj.plan = Plan.toJSON(message.plan);
     }
-    if (message.rejects) {
-      obj.rejects = message.rejects.map((e) => (e ? Grant.toJSON(e) : undefined))
-    } else {
-      obj.rejects = []
+    if (message.creator !== "") {
+      obj.creator = message.creator;
     }
-    return obj
+    if (message.approvals?.length) {
+      obj.approvals = message.approvals.map((e) => Grant.toJSON(e));
+    }
+    if (message.rejects?.length) {
+      obj.rejects = message.rejects.map((e) => Grant.toJSON(e));
+    }
+    if (message.schemaVersion !== 0) {
+      obj.schemaVersion = Math.round(message.schemaVersion);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<ProposedUpgrade>): ProposedUpgrade {
-    const message = { ...baseProposedUpgrade } as ProposedUpgrade
-    message.approvals = []
-    message.rejects = []
-    if (object.plan !== undefined && object.plan !== null) {
-      message.plan = Plan.fromPartial(object.plan)
-    } else {
-      message.plan = undefined
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
-    } else {
-      message.creator = ''
-    }
-    if (object.approvals !== undefined && object.approvals !== null) {
-      for (const e of object.approvals) {
-        message.approvals.push(Grant.fromPartial(e))
-      }
-    }
-    if (object.rejects !== undefined && object.rejects !== null) {
-      for (const e of object.rejects) {
-        message.rejects.push(Grant.fromPartial(e))
-      }
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<ProposedUpgrade>, I>>(base?: I): ProposedUpgrade {
+    return ProposedUpgrade.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ProposedUpgrade>, I>>(object: I): ProposedUpgrade {
+    const message = createBaseProposedUpgrade();
+    message.plan = (object.plan !== undefined && object.plan !== null) ? Plan.fromPartial(object.plan) : undefined;
+    message.creator = object.creator ?? "";
+    message.approvals = object.approvals?.map((e) => Grant.fromPartial(e)) || [];
+    message.rejects = object.rejects?.map((e) => Grant.fromPartial(e)) || [];
+    message.schemaVersion = object.schemaVersion ?? 0;
+    return message;
+  },
+};
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

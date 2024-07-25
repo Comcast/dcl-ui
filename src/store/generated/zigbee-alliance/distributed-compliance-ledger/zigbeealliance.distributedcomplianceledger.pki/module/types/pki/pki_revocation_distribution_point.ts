@@ -1,289 +1,322 @@
 /* eslint-disable */
-import * as Long from 'long'
-import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.pki'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.pki";
 
 export interface PkiRevocationDistributionPoint {
-  vid: number
-  label: string
-  issuerSubjectKeyID: string
-  pid: number
-  isPAA: boolean
-  crlSignerCertificate: string
-  dataURL: string
-  dataFileSize: number
-  dataDigest: string
-  dataDigestType: number
-  revocationType: number
+  vid: number;
+  label: string;
+  issuerSubjectKeyID: string;
+  pid: number;
+  isPAA: boolean;
+  crlSignerCertificate: string;
+  dataURL: string;
+  dataFileSize: number;
+  dataDigest: string;
+  dataDigestType: number;
+  revocationType: number;
+  schemaVersion: number;
+  crlSignerDelegator: string;
 }
 
-const basePkiRevocationDistributionPoint: object = {
-  vid: 0,
-  label: '',
-  issuerSubjectKeyID: '',
-  pid: 0,
-  isPAA: false,
-  crlSignerCertificate: '',
-  dataURL: '',
-  dataFileSize: 0,
-  dataDigest: '',
-  dataDigestType: 0,
-  revocationType: 0
+function createBasePkiRevocationDistributionPoint(): PkiRevocationDistributionPoint {
+  return {
+    vid: 0,
+    label: "",
+    issuerSubjectKeyID: "",
+    pid: 0,
+    isPAA: false,
+    crlSignerCertificate: "",
+    dataURL: "",
+    dataFileSize: 0,
+    dataDigest: "",
+    dataDigestType: 0,
+    revocationType: 0,
+    schemaVersion: 0,
+    crlSignerDelegator: "",
+  };
 }
 
 export const PkiRevocationDistributionPoint = {
-  encode(message: PkiRevocationDistributionPoint, writer: Writer = Writer.create()): Writer {
+  encode(message: PkiRevocationDistributionPoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
-    if (message.label !== '') {
-      writer.uint32(18).string(message.label)
+    if (message.label !== "") {
+      writer.uint32(18).string(message.label);
     }
-    if (message.issuerSubjectKeyID !== '') {
-      writer.uint32(26).string(message.issuerSubjectKeyID)
+    if (message.issuerSubjectKeyID !== "") {
+      writer.uint32(26).string(message.issuerSubjectKeyID);
     }
     if (message.pid !== 0) {
-      writer.uint32(32).int32(message.pid)
+      writer.uint32(32).int32(message.pid);
     }
     if (message.isPAA === true) {
-      writer.uint32(40).bool(message.isPAA)
+      writer.uint32(40).bool(message.isPAA);
     }
-    if (message.crlSignerCertificate !== '') {
-      writer.uint32(50).string(message.crlSignerCertificate)
+    if (message.crlSignerCertificate !== "") {
+      writer.uint32(50).string(message.crlSignerCertificate);
     }
-    if (message.dataURL !== '') {
-      writer.uint32(58).string(message.dataURL)
+    if (message.dataURL !== "") {
+      writer.uint32(58).string(message.dataURL);
     }
     if (message.dataFileSize !== 0) {
-      writer.uint32(64).uint64(message.dataFileSize)
+      writer.uint32(64).uint64(message.dataFileSize);
     }
-    if (message.dataDigest !== '') {
-      writer.uint32(74).string(message.dataDigest)
+    if (message.dataDigest !== "") {
+      writer.uint32(74).string(message.dataDigest);
     }
     if (message.dataDigestType !== 0) {
-      writer.uint32(80).uint32(message.dataDigestType)
+      writer.uint32(80).uint32(message.dataDigestType);
     }
     if (message.revocationType !== 0) {
-      writer.uint32(88).uint32(message.revocationType)
+      writer.uint32(88).uint32(message.revocationType);
     }
-    return writer
+    if (message.schemaVersion !== 0) {
+      writer.uint32(96).uint32(message.schemaVersion);
+    }
+    if (message.crlSignerDelegator !== "") {
+      writer.uint32(106).string(message.crlSignerDelegator);
+    }
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PkiRevocationDistributionPoint {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...basePkiRevocationDistributionPoint } as PkiRevocationDistributionPoint
+  decode(input: _m0.Reader | Uint8Array, length?: number): PkiRevocationDistributionPoint {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePkiRevocationDistributionPoint();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.label = reader.string()
-          break
+          if (tag !== 18) {
+            break;
+          }
+
+          message.label = reader.string();
+          continue;
         case 3:
-          message.issuerSubjectKeyID = reader.string()
-          break
+          if (tag !== 26) {
+            break;
+          }
+
+          message.issuerSubjectKeyID = reader.string();
+          continue;
         case 4:
-          message.pid = reader.int32()
-          break
+          if (tag !== 32) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 5:
-          message.isPAA = reader.bool()
-          break
+          if (tag !== 40) {
+            break;
+          }
+
+          message.isPAA = reader.bool();
+          continue;
         case 6:
-          message.crlSignerCertificate = reader.string()
-          break
+          if (tag !== 50) {
+            break;
+          }
+
+          message.crlSignerCertificate = reader.string();
+          continue;
         case 7:
-          message.dataURL = reader.string()
-          break
+          if (tag !== 58) {
+            break;
+          }
+
+          message.dataURL = reader.string();
+          continue;
         case 8:
-          message.dataFileSize = longToNumber(reader.uint64() as Long)
-          break
+          if (tag !== 64) {
+            break;
+          }
+
+          message.dataFileSize = longToNumber(reader.uint64() as Long);
+          continue;
         case 9:
-          message.dataDigest = reader.string()
-          break
+          if (tag !== 74) {
+            break;
+          }
+
+          message.dataDigest = reader.string();
+          continue;
         case 10:
-          message.dataDigestType = reader.uint32()
-          break
+          if (tag !== 80) {
+            break;
+          }
+
+          message.dataDigestType = reader.uint32();
+          continue;
         case 11:
-          message.revocationType = reader.uint32()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 88) {
+            break;
+          }
+
+          message.revocationType = reader.uint32();
+          continue;
+        case 12:
+          if (tag !== 96) {
+            break;
+          }
+
+          message.schemaVersion = reader.uint32();
+          continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.crlSignerDelegator = reader.string();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): PkiRevocationDistributionPoint {
-    const message = { ...basePkiRevocationDistributionPoint } as PkiRevocationDistributionPoint
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.label !== undefined && object.label !== null) {
-      message.label = String(object.label)
-    } else {
-      message.label = ''
-    }
-    if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
-      message.issuerSubjectKeyID = String(object.issuerSubjectKeyID)
-    } else {
-      message.issuerSubjectKeyID = ''
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.isPAA !== undefined && object.isPAA !== null) {
-      message.isPAA = Boolean(object.isPAA)
-    } else {
-      message.isPAA = false
-    }
-    if (object.crlSignerCertificate !== undefined && object.crlSignerCertificate !== null) {
-      message.crlSignerCertificate = String(object.crlSignerCertificate)
-    } else {
-      message.crlSignerCertificate = ''
-    }
-    if (object.dataURL !== undefined && object.dataURL !== null) {
-      message.dataURL = String(object.dataURL)
-    } else {
-      message.dataURL = ''
-    }
-    if (object.dataFileSize !== undefined && object.dataFileSize !== null) {
-      message.dataFileSize = Number(object.dataFileSize)
-    } else {
-      message.dataFileSize = 0
-    }
-    if (object.dataDigest !== undefined && object.dataDigest !== null) {
-      message.dataDigest = String(object.dataDigest)
-    } else {
-      message.dataDigest = ''
-    }
-    if (object.dataDigestType !== undefined && object.dataDigestType !== null) {
-      message.dataDigestType = Number(object.dataDigestType)
-    } else {
-      message.dataDigestType = 0
-    }
-    if (object.revocationType !== undefined && object.revocationType !== null) {
-      message.revocationType = Number(object.revocationType)
-    } else {
-      message.revocationType = 0
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      label: isSet(object.label) ? String(object.label) : "",
+      issuerSubjectKeyID: isSet(object.issuerSubjectKeyID) ? String(object.issuerSubjectKeyID) : "",
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      isPAA: isSet(object.isPAA) ? Boolean(object.isPAA) : false,
+      crlSignerCertificate: isSet(object.crlSignerCertificate) ? String(object.crlSignerCertificate) : "",
+      dataURL: isSet(object.dataURL) ? String(object.dataURL) : "",
+      dataFileSize: isSet(object.dataFileSize) ? Number(object.dataFileSize) : 0,
+      dataDigest: isSet(object.dataDigest) ? String(object.dataDigest) : "",
+      dataDigestType: isSet(object.dataDigestType) ? Number(object.dataDigestType) : 0,
+      revocationType: isSet(object.revocationType) ? Number(object.revocationType) : 0,
+      schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
+      crlSignerDelegator: isSet(object.crlSignerDelegator) ? String(object.crlSignerDelegator) : "",
+    };
   },
 
   toJSON(message: PkiRevocationDistributionPoint): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.label !== undefined && (obj.label = message.label)
-    message.issuerSubjectKeyID !== undefined && (obj.issuerSubjectKeyID = message.issuerSubjectKeyID)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.isPAA !== undefined && (obj.isPAA = message.isPAA)
-    message.crlSignerCertificate !== undefined && (obj.crlSignerCertificate = message.crlSignerCertificate)
-    message.dataURL !== undefined && (obj.dataURL = message.dataURL)
-    message.dataFileSize !== undefined && (obj.dataFileSize = message.dataFileSize)
-    message.dataDigest !== undefined && (obj.dataDigest = message.dataDigest)
-    message.dataDigestType !== undefined && (obj.dataDigestType = message.dataDigestType)
-    message.revocationType !== undefined && (obj.revocationType = message.revocationType)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.label !== "") {
+      obj.label = message.label;
+    }
+    if (message.issuerSubjectKeyID !== "") {
+      obj.issuerSubjectKeyID = message.issuerSubjectKeyID;
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.isPAA === true) {
+      obj.isPAA = message.isPAA;
+    }
+    if (message.crlSignerCertificate !== "") {
+      obj.crlSignerCertificate = message.crlSignerCertificate;
+    }
+    if (message.dataURL !== "") {
+      obj.dataURL = message.dataURL;
+    }
+    if (message.dataFileSize !== 0) {
+      obj.dataFileSize = Math.round(message.dataFileSize);
+    }
+    if (message.dataDigest !== "") {
+      obj.dataDigest = message.dataDigest;
+    }
+    if (message.dataDigestType !== 0) {
+      obj.dataDigestType = Math.round(message.dataDigestType);
+    }
+    if (message.revocationType !== 0) {
+      obj.revocationType = Math.round(message.revocationType);
+    }
+    if (message.schemaVersion !== 0) {
+      obj.schemaVersion = Math.round(message.schemaVersion);
+    }
+    if (message.crlSignerDelegator !== "") {
+      obj.crlSignerDelegator = message.crlSignerDelegator;
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<PkiRevocationDistributionPoint>): PkiRevocationDistributionPoint {
-    const message = { ...basePkiRevocationDistributionPoint } as PkiRevocationDistributionPoint
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.label !== undefined && object.label !== null) {
-      message.label = object.label
-    } else {
-      message.label = ''
-    }
-    if (object.issuerSubjectKeyID !== undefined && object.issuerSubjectKeyID !== null) {
-      message.issuerSubjectKeyID = object.issuerSubjectKeyID
-    } else {
-      message.issuerSubjectKeyID = ''
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.isPAA !== undefined && object.isPAA !== null) {
-      message.isPAA = object.isPAA
-    } else {
-      message.isPAA = false
-    }
-    if (object.crlSignerCertificate !== undefined && object.crlSignerCertificate !== null) {
-      message.crlSignerCertificate = object.crlSignerCertificate
-    } else {
-      message.crlSignerCertificate = ''
-    }
-    if (object.dataURL !== undefined && object.dataURL !== null) {
-      message.dataURL = object.dataURL
-    } else {
-      message.dataURL = ''
-    }
-    if (object.dataFileSize !== undefined && object.dataFileSize !== null) {
-      message.dataFileSize = object.dataFileSize
-    } else {
-      message.dataFileSize = 0
-    }
-    if (object.dataDigest !== undefined && object.dataDigest !== null) {
-      message.dataDigest = object.dataDigest
-    } else {
-      message.dataDigest = ''
-    }
-    if (object.dataDigestType !== undefined && object.dataDigestType !== null) {
-      message.dataDigestType = object.dataDigestType
-    } else {
-      message.dataDigestType = 0
-    }
-    if (object.revocationType !== undefined && object.revocationType !== null) {
-      message.revocationType = object.revocationType
-    } else {
-      message.revocationType = 0
-    }
-    return message
+  create<I extends Exact<DeepPartial<PkiRevocationDistributionPoint>, I>>(base?: I): PkiRevocationDistributionPoint {
+    return PkiRevocationDistributionPoint.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PkiRevocationDistributionPoint>, I>>(
+    object: I,
+  ): PkiRevocationDistributionPoint {
+    const message = createBasePkiRevocationDistributionPoint();
+    message.vid = object.vid ?? 0;
+    message.label = object.label ?? "";
+    message.issuerSubjectKeyID = object.issuerSubjectKeyID ?? "";
+    message.pid = object.pid ?? 0;
+    message.isPAA = object.isPAA ?? false;
+    message.crlSignerCertificate = object.crlSignerCertificate ?? "";
+    message.dataURL = object.dataURL ?? "";
+    message.dataFileSize = object.dataFileSize ?? 0;
+    message.dataDigest = object.dataDigest ?? "";
+    message.dataDigestType = object.dataDigestType ?? 0;
+    message.revocationType = object.revocationType ?? 0;
+    message.schemaVersion = object.schemaVersion ?? 0;
+    message.crlSignerDelegator = object.crlSignerDelegator ?? "";
+    return message;
+  },
+};
+
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
   }
-}
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
-declare var self: any | undefined
-declare var window: any | undefined
-var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
-  return long.toNumber()
+  return long.toNumber();
 }
 
-if ((util.Long as any) !== Long) {
-  util.Long = Long as any
-  configure()
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

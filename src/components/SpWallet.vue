@@ -1,11 +1,8 @@
 <template>
-	<SpWallet ref="wallet" v-on:dropdown-opened="$refs.menu.closeDropdown()" />
+    <SpWallet ref="wallet" v-on:dropdown-opened="$refs.menu.closeDropdown()" />
 </template>
 
 <script>
-export default {
-
-}
-
+export default {};
 </script>
 

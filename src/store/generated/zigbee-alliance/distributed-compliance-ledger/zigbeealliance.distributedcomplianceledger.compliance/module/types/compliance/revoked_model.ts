@@ -1,146 +1,162 @@
 /* eslint-disable */
-import { Writer, Reader } from 'protobufjs/minimal'
+import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = 'zigbeealliance.distributedcomplianceledger.compliance'
+export const protobufPackage = "zigbeealliance.distributedcomplianceledger.compliance";
 
 export interface RevokedModel {
-  vid: number
-  pid: number
-  softwareVersion: number
-  certificationType: string
-  value: boolean
+  vid: number;
+  pid: number;
+  softwareVersion: number;
+  certificationType: string;
+  value: boolean;
+  schemaVersion: number;
 }
 
-const baseRevokedModel: object = { vid: 0, pid: 0, softwareVersion: 0, certificationType: '', value: false }
+function createBaseRevokedModel(): RevokedModel {
+  return { vid: 0, pid: 0, softwareVersion: 0, certificationType: "", value: false, schemaVersion: 0 };
+}
 
 export const RevokedModel = {
-  encode(message: RevokedModel, writer: Writer = Writer.create()): Writer {
+  encode(message: RevokedModel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vid !== 0) {
-      writer.uint32(8).int32(message.vid)
+      writer.uint32(8).int32(message.vid);
     }
     if (message.pid !== 0) {
-      writer.uint32(16).int32(message.pid)
+      writer.uint32(16).int32(message.pid);
     }
     if (message.softwareVersion !== 0) {
-      writer.uint32(24).uint32(message.softwareVersion)
+      writer.uint32(24).uint32(message.softwareVersion);
     }
-    if (message.certificationType !== '') {
-      writer.uint32(34).string(message.certificationType)
+    if (message.certificationType !== "") {
+      writer.uint32(34).string(message.certificationType);
     }
     if (message.value === true) {
-      writer.uint32(40).bool(message.value)
+      writer.uint32(40).bool(message.value);
     }
-    return writer
+    if (message.schemaVersion !== 0) {
+      writer.uint32(48).uint32(message.schemaVersion);
+    }
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RevokedModel {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseRevokedModel } as RevokedModel
+  decode(input: _m0.Reader | Uint8Array, length?: number): RevokedModel {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRevokedModel();
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vid = reader.int32()
-          break
+          if (tag !== 8) {
+            break;
+          }
+
+          message.vid = reader.int32();
+          continue;
         case 2:
-          message.pid = reader.int32()
-          break
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = reader.int32();
+          continue;
         case 3:
-          message.softwareVersion = reader.uint32()
-          break
+          if (tag !== 24) {
+            break;
+          }
+
+          message.softwareVersion = reader.uint32();
+          continue;
         case 4:
-          message.certificationType = reader.string()
-          break
+          if (tag !== 34) {
+            break;
+          }
+
+          message.certificationType = reader.string();
+          continue;
         case 5:
-          message.value = reader.bool()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
+          if (tag !== 40) {
+            break;
+          }
+
+          message.value = reader.bool();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.schemaVersion = reader.uint32();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): RevokedModel {
-    const message = { ...baseRevokedModel } as RevokedModel
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = Number(object.vid)
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = Number(object.pid)
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = Number(object.softwareVersion)
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = String(object.certificationType)
-    } else {
-      message.certificationType = ''
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Boolean(object.value)
-    } else {
-      message.value = false
-    }
-    return message
+    return {
+      vid: isSet(object.vid) ? Number(object.vid) : 0,
+      pid: isSet(object.pid) ? Number(object.pid) : 0,
+      softwareVersion: isSet(object.softwareVersion) ? Number(object.softwareVersion) : 0,
+      certificationType: isSet(object.certificationType) ? String(object.certificationType) : "",
+      value: isSet(object.value) ? Boolean(object.value) : false,
+      schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
+    };
   },
 
   toJSON(message: RevokedModel): unknown {
-    const obj: any = {}
-    message.vid !== undefined && (obj.vid = message.vid)
-    message.pid !== undefined && (obj.pid = message.pid)
-    message.softwareVersion !== undefined && (obj.softwareVersion = message.softwareVersion)
-    message.certificationType !== undefined && (obj.certificationType = message.certificationType)
-    message.value !== undefined && (obj.value = message.value)
-    return obj
+    const obj: any = {};
+    if (message.vid !== 0) {
+      obj.vid = Math.round(message.vid);
+    }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.softwareVersion !== 0) {
+      obj.softwareVersion = Math.round(message.softwareVersion);
+    }
+    if (message.certificationType !== "") {
+      obj.certificationType = message.certificationType;
+    }
+    if (message.value === true) {
+      obj.value = message.value;
+    }
+    if (message.schemaVersion !== 0) {
+      obj.schemaVersion = Math.round(message.schemaVersion);
+    }
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<RevokedModel>): RevokedModel {
-    const message = { ...baseRevokedModel } as RevokedModel
-    if (object.vid !== undefined && object.vid !== null) {
-      message.vid = object.vid
-    } else {
-      message.vid = 0
-    }
-    if (object.pid !== undefined && object.pid !== null) {
-      message.pid = object.pid
-    } else {
-      message.pid = 0
-    }
-    if (object.softwareVersion !== undefined && object.softwareVersion !== null) {
-      message.softwareVersion = object.softwareVersion
-    } else {
-      message.softwareVersion = 0
-    }
-    if (object.certificationType !== undefined && object.certificationType !== null) {
-      message.certificationType = object.certificationType
-    } else {
-      message.certificationType = ''
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value
-    } else {
-      message.value = false
-    }
-    return message
-  }
-}
+  create<I extends Exact<DeepPartial<RevokedModel>, I>>(base?: I): RevokedModel {
+    return RevokedModel.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RevokedModel>, I>>(object: I): RevokedModel {
+    const message = createBaseRevokedModel();
+    message.vid = object.vid ?? 0;
+    message.pid = object.pid ?? 0;
+    message.softwareVersion = object.softwareVersion ?? 0;
+    message.certificationType = object.certificationType ?? "";
+    message.value = object.value ?? false;
+    message.schemaVersion = object.schemaVersion ?? 0;
+    return message;
+  },
+};
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}
