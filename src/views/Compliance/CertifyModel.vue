@@ -243,13 +243,13 @@ export default {
 				<!-- Field for vid -->
         <div class="field">
           <label for="vid">Vendor ID <span class="required">*</span></label>
-					<InputText id="vid" type="text" v-model="v$.msgCertifyModel.vid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.vid.$invalid && submitted }" :readonly="model.vid" />
+					<InputText id="vid" type="text" v-model="v$.msgCertifyModel.vid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.vid.$invalid && submitted }" :readonly="model?.vid" />
         </div>
 
         <!-- Field for pid -->
         <div class="field">
           <label for="pid">Product ID <span class="required">*</span></label>
-          <InputText id="pid" type="text" v-model="v$.msgCertifyModel.pid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.pid.$invalid && submitted }" :readonly="model.pid"/>
+          <InputText id="pid" type="text" v-model="v$.msgCertifyModel.pid.$model" :class="{ 'p-invalid': v$.msgCertifyModel.pid.$invalid && submitted }" :readonly="model?.pid"/>
         </div>
 
         <!-- Field for softwareVersion -->
@@ -259,7 +259,7 @@ export default {
             id="softwareVersion"
             type="text"
             v-model="v$.msgCertifyModel.softwareVersion.$model"
-            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersion.$invalid && submitted }" :readonly="model.softwareVersion"
+            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersion.$invalid && submitted }" :readonly="model?.softwareVersion"
           />
         </div>
 
@@ -270,7 +270,7 @@ export default {
             id="softwareVersionString"
             type="text"
             v-model="v$.msgCertifyModel.softwareVersionString.$model"
-            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersionString.$invalid && submitted }" :readonly="model.softwareVersionString"
+            :class="{ 'p-invalid': v$.msgCertifyModel.softwareVersionString.$invalid && submitted }" :readonly="model?.softwareVersionString"
           />
         </div>
 
