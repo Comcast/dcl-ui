@@ -1,12 +1,7 @@
-
 <template>
   <div>
     <div v-if="!selectedKeplrAccount">
-      <Button
-        @click="connect"
-        class="wallet-button"
-        label="Connect Keplr"
-      ></Button>
+      <Button @click="connect" class="wallet-button" label="Connect Keplr"></Button>
     </div>
     <div v-else>
       <SplitButton
@@ -23,18 +18,14 @@
       :closable="true"
       :width="400"
     >
-      <p>
-        To use this application, you need to have the Keplr wallet extension
-        installed in your browser.
-      </p>
+      <p>To use this application, you need to have the Keplr wallet extension installed in your browser.</p>
       <p>
         If you're using Google Chrome, you can install it from the
         <a
           href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
           target="_blank"
           rel="noopener noreferrer"
-          >Chrome Web Store</a
-        >.
+        >Chrome Web Store</a>.
       </p>
       <p>
         If you're using Mozilla Firefox, you can install it from the
@@ -42,15 +33,10 @@
           href="https://addons.mozilla.org/en-US/firefox/addon/keplr/"
           target="_blank"
           rel="noopener noreferrer"
-          >Firefox Add-ons Store</a
-        >.
+        >Firefox Add-ons Store</a>.
       </p>
 
-      <Button
-        label="Close"
-        class="p-mt-2"
-        @click="dialogVisible = false"
-      ></Button>
+      <Button label="Close" class="p-mt-2" @click="closeDialog"></Button>
     </Dialog>
   </div>
 </template>
@@ -62,6 +48,7 @@ import SplitButton from "primevue/splitbutton";
 import { mapState } from "vuex";
 
 export default {
+  name: 'KeplrConnector',
   components: {
     Button,
     Dialog,
@@ -86,30 +73,109 @@ export default {
   },
   methods: {
     trimAddress(address) {
-      // Return first 6 and last 4 characters
       if (address && address.length > 16) {
-        return (
-          address.substring(0, 10) +
-          "..." +
-          address.substring(address.length - 4)
-        );
-      } else {
-        return address;
+        return `${address.substring(0, 10)}...${address.substring(address.length - 4)}`;
       }
+      return address;
     },
 
     async connect() {
-      const keplr = window.keplr;
-      if (!keplr) {
-        this.dialogVisible = true;
-        return;
+  if (!window.keplr) {
+    this.dialogVisible = true;
+    return;
+  }
+
+  try {
+    const { offlineSigner, accounts } = await this.setupKeplrConnection(
+      process.env.VUE_APP_DCL_CHAIN_ID,
+      this.getChainInfo()
+    );
+
+    await this.$store.dispatch("setKeplrSigner", offlineSigner);
+    const key = await window.keplr.getKey(process.env.VUE_APP_DCL_CHAIN_ID);
+    this.accountName = key.name;
+
+    this.$toast.add({
+      severity: "success",
+      summary: "Connected to Keplr wallet",
+      life: 5000,
+    });
+  } catch (error) {
+    console.error("Error connecting to Keplr:", error);
+    this.$toast.add({
+      severity: "error",
+      summary: "Error Connecting to Keplr Wallet",
+      detail: error.message,
+      life: 7000,
+    });
+
+    if (error.message.includes("Please approve the chain in Keplr")) {
+      this.$toast.add({
+        severity: "info",
+        summary: "Action Required",
+        detail: "Please check your Keplr wallet and approve the chain addition.",
+        life: 10000,
+      });
+    }
+  }
+},
+
+    async setupKeplrConnection(chainId, chainInfo) {
+      if (!window.keplr) {
+        throw new Error("Keplr extension not found");
       }
-      const chainId = process.env.VUE_APP_DCL_CHAIN_ID
-      const chainName = process.env.VUE_APP_DCL_CHAIN_NAME || "DCL Chain";
-      const chainInfo = {
-        // Update this with actual values
-        chainId,
-        chainName: chainName,
+
+      let chainWasEnabled = false;
+
+      try {
+        await window.keplr.enable(chainId);
+        console.log("Chain was already enabled");
+        chainWasEnabled = true;
+      } catch (error) {
+        console.log("Chain not yet enabled, attempting to suggest...");
+      }
+
+      if (!chainWasEnabled) {
+        try {
+          await window.keplr.experimentalSuggestChain(chainInfo);
+          console.log("Suggested chain successfully");
+        } catch (error) {
+          console.log("Error suggesting chain:", error);
+
+          if (error.message && error.message.includes("/cosmos/bank/v1beta1/balances")) {
+            console.log("Ignoring error related to /balances endpoint");
+          } else if (error.message !== "Chain already exists.") {
+            throw error;
+          }
+        }
+
+        try {
+          await window.keplr.enable(chainId);
+          console.log("Chain enabled successfully");
+        } catch (error) {
+          throw new Error(`Error Enabling the Chain: ${error.message}`);
+        }
+      }
+
+      const offlineSigner = await window.keplr.getOfflineSigner(chainId);
+      const accounts = await offlineSigner.getAccounts();
+
+      return { offlineSigner, accounts };
+    },
+
+    disconnect() {
+      this.$store.dispatch("disconnectKeplr");
+      this.accountName = null;
+    },
+    
+    closeDialog() {
+      this.dialogVisible = false;
+    },
+
+    getChainInfo() {
+      return {
+        chainId: process.env.VUE_APP_DCL_CHAIN_ID,
+        chainName: process.env.VUE_APP_DCL_CHAIN_NAME || "DCL Chain",
         rpc: process.env.VUE_APP_DCL_RPC_NODE,
         rest: process.env.VUE_APP_DCL_API_NODE,
         stakeCurrency: {
@@ -117,9 +183,7 @@ export default {
           coinMinimalDenom: "DCL",
           coinDecimals: 6,
         },
-        bip44: {
-          coinType: 118,
-        },
+        bip44: { coinType: 118 },
         bech32Config: {
           bech32PrefixAccAddr: "cosmos",
           bech32PrefixAccPub: "cosmospub",
@@ -128,75 +192,11 @@ export default {
           bech32PrefixConsAddr: "cosmosvalcons",
           bech32PrefixConsPub: "cosmosvalconspub",
         },
-        currencies: [
-          {
-            coinDenom: "DCL",
-            coinMinimalDenom: "DCL",
-            coinDecimals: 6,
-          },
-        ],
-        feeCurrencies: [
-          {
-            coinDenom: "DCL",
-            coinMinimalDenom: "DCL",
-            coinDecimals: 6,
-          },
-        ],
-        gasPriceStep: {
-          low: 0.0,
-          average: 0.0,
-          high: 0.0,
-        },
+        currencies: [{ coinDenom: "DCL", coinMinimalDenom: "DCL", coinDecimals: 6 }],
+        feeCurrencies: [{ coinDenom: "DCL", coinMinimalDenom: "DCL", coinDecimals: 6 }],
+        gasPriceStep: { low: 0.0, average: 0.0, high: 0.0 },
       };
-
-      try {
-        await keplr.experimentalSuggestChain(chainInfo);
-      } catch (error) {
-        // This error might be thrown if the chain already exists, but you should inspect the error message to determine this
-        if (error.message !== "Chain already exists.") {
-          this.$toast.add({
-                  severity: 'error',
-                  summary: 'Error Adding the DCL Chain to Keplr Wallet',
-                  detail: error.message,
-                  life: 5000
-              });
-              return;
-        }
-      }
-
-      try {
-        await keplr.enable(chainId);
-      } catch (error) {
-        this.$toast.add({
-                  severity: 'error',
-                  summary: 'Error Enabling the DCL Chain on the Keplr Wallet',
-                  detail: error.message,
-                  life: 5000
-              });
-      }
-
-      try {
-        await this.$store.dispatch("setKeplrSigner");
-        const key = await keplr.getKey(process.env.VUE_APP_DCL_CHAIN_ID);
-        this.accountName = key.name;
-        this.$toast.add({
-          severity: "success",
-          summary: "Connected to Keplr wallet",
-          life: 5000,
-        });        
-      } catch (error) {
-        console.error("Error fetching account name:", error);
-      }
     },
-
-    disconnect() {
-      this.$store.dispatch("disconnectKeplr");
-    },
-    
-    closeDialog() {
-      this.dialogVisible = false;
-    },
-    // ... rest of the methods, created, etc.
   },
 };
 </script>

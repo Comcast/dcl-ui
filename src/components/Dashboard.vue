@@ -1,33 +1,6 @@
 <template>
 	<div class="grid">
     <!-- Warning Block -->
-    <div v-if="isTestnetOrLocalhost" class="card mb-0 col-12 mb-3 mt-3">
-      <div class="flex justify-content-between mb-3">
-        <div>
-          <span class="block text-500 font-medium text-lg mb-3">
-            Important Notice
-          </span>
-					<p>
-						The current wallet is not recommended and will be decommissioned soon. Please use our alternative site 
-						<a href="https://testnet-keplr.iotledger.io" target="_blank" rel="noopener noreferrer">
-							https://testnet-keplr.iotledger.io 
-							<i class="pi pi-external-link"></i>
-						</a>
-						that supports Keplr wallet.
-					</p>
-					<p>
-						One of the key features of the Keplr wallet is its support for hardware wallets, ensuring a higher level of security. For a more detailed overview and support, 
-						<a href="https://keplr.app/" target="_blank" rel="noopener noreferrer">
-							check out Keplr's official documentation 
-							<i class="pi pi-external-link"></i>
-						</a>.
-				</p>					
-        </div>
-        <div class="flex align-items-center justify-content-center bg-yellow-100 border-round" style="width: 2.5rem; height: 2.5rem">
-          <i class="pi pi-exclamation-triangle text-yellow-500 text-xl"></i>
-        </div>
-      </div>
-    </div>
 
 		<div class="col-12 lg:col-6 xl:col-3">
 			<div class="card mb-0">
@@ -326,8 +299,8 @@
 								@click="
 									copyToClipboard(
 										JSON.stringify({
-											type: '/cosmos.crypto.secp256k1.PubKey',
-											key: pubKey.value,
+											'@type': '/cosmos.crypto.secp256k1.PubKey',
+											'key': pubKey.value,
 										})
 									)
 								"
