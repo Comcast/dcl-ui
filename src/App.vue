@@ -49,7 +49,8 @@ export default {
                         { label: 'PKI', icon: 'pi pi-fw pi-lock', to: '/pki' },
                         { label: 'Validators', icon: 'pi pi-fw pi-server', to: '/validators' },
                         { label: 'Upgrades', icon: 'pi pi-fw pi-history', to: '/upgrades' },
-                        { label: 'Legacy Wallet', icon: 'pi pi-fw pi-wallet', to: '/legacy-wallet' }
+                        { label: 'Legacy Wallet', icon: 'pi pi-fw pi-wallet', to: '/legacy-wallet' },
+                        { label: 'Keplr Wallet - Guide', icon: 'pi pi-fw pi-book', to: '/keplr-wallet' }
 
                     ]
                 }

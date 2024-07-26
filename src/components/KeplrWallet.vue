@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <div v-if="!selectedKeplrAccount">
