@@ -18,7 +18,7 @@ import { RevokedRootCertificates } from "./module/types/pki/revoked_root_certifi
 import { UniqueCertificate } from "./module/types/pki/unique_certificate";
 export { ApprovedCertificates, ApprovedCertificatesBySubject, ApprovedRootCertificates, Certificate, CertificateIdentifier, ChildCertificates, Grant, PkiRevocationDistributionPoint, PkiRevocationDistributionPointsByIssuerSubjectKeyID, ProposedCertificate, ProposedCertificateRevocation, RejectedCertificate, RevokedCertificates, RevokedRootCertificates, UniqueCertificate };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }
