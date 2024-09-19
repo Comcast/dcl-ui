@@ -59,7 +59,6 @@ const model = ref([
             <li v-if="item.separator" class="menu-separator"></li>
         </template>
     </ul>
-    <div style="position: relative; padding-top: 2rem; font-size: 0.85rem">DCL UI Version {{ this.appVersion || 'local-development' }}</div>
 </template>
 
 <style lang="scss" scoped></style>
