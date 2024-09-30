@@ -4,6 +4,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import ModelVersionInfo from "./ModelVersionInfo.vue";
+import CertifyModel from "../Compliance/CertifyModel.vue";
 import Message from "primevue/message";
 
 export default {
@@ -14,6 +15,7 @@ export default {
     return {
       showModelVersionInfo: false,
       selectedModelVersionInfo: null,
+			showCertifyModel: false,
       viewOnly: false,
       error: null,
       modelVersionArray: [],
@@ -23,6 +25,14 @@ export default {
   methods: {
     dismissModelVersionInfoDialog() {
       this.showModelVersionInfo = false;
+    },
+		dismissCertifyModelDialog() {
+			this.showCertifyModel = false;
+		},
+		showCertifyModelDialog(modelVersionInfo) {
+			this.showModelVersionInfo = false;
+      this.selectedModelVersionInfo = modelVersionInfo;
+      this.showCertifyModel = true;
     },
     showModelVersionInfoDialog(modelVersionInfo, viewOnly) {
       this.showModelVersionInfo = true;
@@ -35,8 +45,9 @@ export default {
       this.viewOnly = false;
     },
     confirmDeleteModelVersion(modelVersion) {
+      console.log('inside conformation dialog');
       this.$confirm.require({
-        message: "Are you sure you want to proceed?",
+        message: "Are you sure you want to delete this model version ?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
@@ -48,9 +59,17 @@ export default {
       });
     },
     deleteModelVersion(modelVersion) {
-      const wallet = this.$store.getters["common/wallet/wallet"];
-      const account = wallet.accounts[0];
+      let account;
+
+      if(this.$store.state.selectedKeplrAccount) {
+          account = this.$store.state.selectedKeplrAccount;
+      } else {
+          const wallet = this.$store.getters['common/wallet/wallet'];
+          account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
+      }
       const creatorAddress = account.address;
+      this.txProcessing = true;
+			let loader = this.$loading.show();
       this.$store
         .dispatch(
           `zigbeealliance.distributedcomplianceledger.model/sendMsgDeleteModelVersion`,
@@ -66,6 +85,8 @@ export default {
         )
         .then(
           (response) => {
+            this.txProcessing = false;
+						loader.hide();
             if (response.code == 0) {
               this.error = null;
               this.$toast.add({
@@ -79,6 +100,8 @@ export default {
             }
           },
           (error) => {
+            this.txProcessing = false;
+						loader.hide();
             this.error = error.message;
           }
         );
@@ -146,13 +169,20 @@ export default {
         return null;
       }
     },
-  },
+		getHexValue(value) {
+			if (value)
+				return `${value} (0x${value.toString(16)})`;
+			else
+				return value;
+		},
+	},
   components: {
     DataTable,
     Column,
     Button,
     Dialog,
     ModelVersionInfo,
+		CertifyModel,
     Message,
   },
 
@@ -180,11 +210,17 @@ export default {
             modelVersions.push(modelVersion.modelVersion);
         }
       }
+			// Add hex values to vid and pid
+			modelVersions.forEach((modelVersion) => {
+				modelVersion.vidHex = this.getHexValue(modelVersion.vid);
+				modelVersion.pidHex = this.getHexValue(modelVersion.pid);
+			});
+
       return modelVersions;
     },
 
     isSignedIn() {
-      const loggedIn = this.$store.getters["common/wallet/loggedIn"];
+      const loggedIn = this.$store.getters["loggedIn"] || this.$store.getters["common/wallet/loggedIn"];
       return loggedIn;
     },
   },
@@ -197,7 +233,6 @@ export default {
 
 <template>
   <div class="prime-vue-container ml-5">
-    <ConfirmDialog></ConfirmDialog>
     <Message :closable="false" v-if="error" severity="error">{{
       errorMessage()
     }}</Message>
@@ -262,6 +297,30 @@ export default {
                 v-tooltip="'Update Model Version'"
               />
             </span>
+						<!-- Add button to approve the model version -->
+						<span style="margin-right: 0.1rem">
+							<Button
+								label=""
+								@click="showCertifyModelDialog(data)"
+								iconPos="left"
+								icon="pi pi-check"
+								class="p-button-rounded p-button-success p-button-text"
+								v-bind:class="{ 'p-disabled': !isSignedIn }"
+								v-tooltip="'Certify Model Version'"
+							/>
+						</span>
+            <!-- Add button to delete the model version -->
+            <span style="margin-right: 0.1rem">
+              <Button
+                label=""
+                @click="confirmDeleteModelVersion(data)"
+                iconPos="left"
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text"
+                v-bind:class="{ 'p-disabled': !isSignedIn }"
+                v-tooltip="'Delete Model Version'"
+              />
+            </span>  
 
           </template>
         </Column>
@@ -291,5 +350,20 @@ export default {
         @close-dialog="dismissModelVersionInfoDialog"
       ></ModelVersionInfo>
     </Dialog>
+
+    <Dialog
+      header="Certify a Device Model"
+      @update:visible="dismissCertifyModelDialog"
+      :visible="showCertifyModel"
+      :style="{ width: '50vw' }"
+      class="p-fluid"
+      :modal="true"
+    >
+      <CertifyModel
+        :model="selectedModelVersionInfo"
+        @close-dialog="dismissCertifyModelDialog"
+      ></CertifyModel>
+    </Dialog>
+
   </div>
 </template>

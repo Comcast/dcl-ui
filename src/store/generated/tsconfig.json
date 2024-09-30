@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // or your desired ECMAScript target
+    "rootDir": ".", // root directory for TypeScript files
+    "outDir": "dist", // output directory for JavaScript files
+    "baseUrl": ".", // base URL for module resolution
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "base/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

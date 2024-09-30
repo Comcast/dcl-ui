@@ -12,7 +12,7 @@ import { VotingParams } from "./module/types/cosmos/gov/v1beta1/gov";
 import { TallyParams } from "./module/types/cosmos/gov/v1beta1/gov";
 export { WeightedVoteOption, TextProposal, Deposit, Proposal, TallyResult, Vote, DepositParams, VotingParams, TallyParams };
 async function initTxClient(vuexGetters) {
-    return await txClient(vuexGetters['common/wallet/signer'], {
+    return await txClient(vuexGetters['keplrSigner'] || vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
     });
 }

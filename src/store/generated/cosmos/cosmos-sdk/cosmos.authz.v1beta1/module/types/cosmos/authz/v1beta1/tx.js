@@ -379,6 +379,7 @@ export const MsgRevokeResponse = {
     }
 };
 export class MsgClientImpl {
+    rpc;
     constructor(rpc) {
         this.rpc = rpc;
     }
