@@ -23,13 +23,14 @@ export interface Model {
   lsfRevision: number;
   creator: string;
   schemaVersion: number;
-  managedAclExtensionRequestFlowUrl: string;
   enhancedSetupFlowOptions: number;
   enhancedSetupFlowTCUrl: string;
   enhancedSetupFlowTCRevision: number;
   enhancedSetupFlowTCDigest: string;
   enhancedSetupFlowTCFileSize: number;
   maintenanceUrl: string;
+  discoveryCapabilitiesBitmask: number;
+  commissioningFallbackUrl: string;
 }
 
 function createBaseModel(): Model {
@@ -53,13 +54,14 @@ function createBaseModel(): Model {
     lsfRevision: 0,
     creator: "",
     schemaVersion: 0,
-    managedAclExtensionRequestFlowUrl: "",
     enhancedSetupFlowOptions: 0,
     enhancedSetupFlowTCUrl: "",
     enhancedSetupFlowTCRevision: 0,
     enhancedSetupFlowTCDigest: "",
     enhancedSetupFlowTCFileSize: 0,
     maintenanceUrl: "",
+    discoveryCapabilitiesBitmask: 0,
+    commissioningFallbackUrl: "",
   };
 }
 
@@ -122,224 +124,125 @@ export const Model = {
     if (message.schemaVersion !== 0) {
       writer.uint32(152).uint32(message.schemaVersion);
     }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      writer.uint32(162).string(message.managedAclExtensionRequestFlowUrl);
-    }
     if (message.enhancedSetupFlowOptions !== 0) {
-      writer.uint32(168).int32(message.enhancedSetupFlowOptions);
+      writer.uint32(160).int32(message.enhancedSetupFlowOptions);
     }
     if (message.enhancedSetupFlowTCUrl !== "") {
-      writer.uint32(178).string(message.enhancedSetupFlowTCUrl);
+      writer.uint32(170).string(message.enhancedSetupFlowTCUrl);
     }
     if (message.enhancedSetupFlowTCRevision !== 0) {
-      writer.uint32(184).int32(message.enhancedSetupFlowTCRevision);
+      writer.uint32(176).int32(message.enhancedSetupFlowTCRevision);
     }
     if (message.enhancedSetupFlowTCDigest !== "") {
-      writer.uint32(194).string(message.enhancedSetupFlowTCDigest);
+      writer.uint32(186).string(message.enhancedSetupFlowTCDigest);
     }
     if (message.enhancedSetupFlowTCFileSize !== 0) {
-      writer.uint32(200).uint32(message.enhancedSetupFlowTCFileSize);
+      writer.uint32(192).uint32(message.enhancedSetupFlowTCFileSize);
     }
     if (message.maintenanceUrl !== "") {
-      writer.uint32(210).string(message.maintenanceUrl);
+      writer.uint32(202).string(message.maintenanceUrl);
+    }
+    if (message.discoveryCapabilitiesBitmask !== 0) {
+      writer.uint32(208).uint32(message.discoveryCapabilitiesBitmask);
+    }
+    if (message.commissioningFallbackUrl !== "") {
+      writer.uint32(218).string(message.commissioningFallbackUrl);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Model {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModel();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.deviceTypeId = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.productName = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.productLabel = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.partNumber = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 56) {
-            break;
-          }
-
           message.commissioningCustomFlow = reader.int32();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.commissioningCustomFlowUrl = reader.string();
-          continue;
+          break;
         case 9:
-          if (tag !== 72) {
-            break;
-          }
-
           message.commissioningModeInitialStepsHint = reader.uint32();
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.commissioningModeInitialStepsInstruction = reader.string();
-          continue;
+          break;
         case 11:
-          if (tag !== 88) {
-            break;
-          }
-
           message.commissioningModeSecondaryStepsHint = reader.uint32();
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.commissioningModeSecondaryStepsInstruction = reader.string();
-          continue;
+          break;
         case 13:
-          if (tag !== 106) {
-            break;
-          }
-
           message.userManualUrl = reader.string();
-          continue;
+          break;
         case 14:
-          if (tag !== 114) {
-            break;
-          }
-
           message.supportUrl = reader.string();
-          continue;
+          break;
         case 15:
-          if (tag !== 122) {
-            break;
-          }
-
           message.productUrl = reader.string();
-          continue;
+          break;
         case 16:
-          if (tag !== 130) {
-            break;
-          }
-
           message.lsfUrl = reader.string();
-          continue;
+          break;
         case 17:
-          if (tag !== 136) {
-            break;
-          }
-
           message.lsfRevision = reader.int32();
-          continue;
+          break;
         case 18:
-          if (tag !== 146) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 19:
-          if (tag !== 152) {
-            break;
-          }
-
           message.schemaVersion = reader.uint32();
-          continue;
+          break;
         case 20:
-          if (tag !== 162) {
-            break;
-          }
-
-          message.managedAclExtensionRequestFlowUrl = reader.string();
-          continue;
-        case 21:
-          if (tag !== 168) {
-            break;
-          }
-
           message.enhancedSetupFlowOptions = reader.int32();
-          continue;
-        case 22:
-          if (tag !== 178) {
-            break;
-          }
-
+          break;
+        case 21:
           message.enhancedSetupFlowTCUrl = reader.string();
-          continue;
-        case 23:
-          if (tag !== 184) {
-            break;
-          }
-
+          break;
+        case 22:
           message.enhancedSetupFlowTCRevision = reader.int32();
-          continue;
-        case 24:
-          if (tag !== 194) {
-            break;
-          }
-
+          break;
+        case 23:
           message.enhancedSetupFlowTCDigest = reader.string();
-          continue;
-        case 25:
-          if (tag !== 200) {
-            break;
-          }
-
+          break;
+        case 24:
           message.enhancedSetupFlowTCFileSize = reader.uint32();
-          continue;
-        case 26:
-          if (tag !== 210) {
-            break;
-          }
-
+          break;
+        case 25:
           message.maintenanceUrl = reader.string();
-          continue;
+          break;
+        case 26:
+          message.discoveryCapabilitiesBitmask = reader.uint32();
+          break;
+        case 27:
+          message.commissioningFallbackUrl = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -375,9 +278,6 @@ export const Model = {
       lsfRevision: isSet(object.lsfRevision) ? Number(object.lsfRevision) : 0,
       creator: isSet(object.creator) ? String(object.creator) : "",
       schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
-      managedAclExtensionRequestFlowUrl: isSet(object.managedAclExtensionRequestFlowUrl)
-        ? String(object.managedAclExtensionRequestFlowUrl)
-        : "",
       enhancedSetupFlowOptions: isSet(object.enhancedSetupFlowOptions) ? Number(object.enhancedSetupFlowOptions) : 0,
       enhancedSetupFlowTCUrl: isSet(object.enhancedSetupFlowTCUrl) ? String(object.enhancedSetupFlowTCUrl) : "",
       enhancedSetupFlowTCRevision: isSet(object.enhancedSetupFlowTCRevision)
@@ -390,95 +290,56 @@ export const Model = {
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
       maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      discoveryCapabilitiesBitmask: isSet(object.discoveryCapabilitiesBitmask)
+        ? Number(object.discoveryCapabilitiesBitmask)
+        : 0,
+      commissioningFallbackUrl: isSet(object.commissioningFallbackUrl) ? String(object.commissioningFallbackUrl) : "",
     };
   },
 
   toJSON(message: Model): unknown {
     const obj: any = {};
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.deviceTypeId !== 0) {
-      obj.deviceTypeId = Math.round(message.deviceTypeId);
-    }
-    if (message.productName !== "") {
-      obj.productName = message.productName;
-    }
-    if (message.productLabel !== "") {
-      obj.productLabel = message.productLabel;
-    }
-    if (message.partNumber !== "") {
-      obj.partNumber = message.partNumber;
-    }
-    if (message.commissioningCustomFlow !== 0) {
-      obj.commissioningCustomFlow = Math.round(message.commissioningCustomFlow);
-    }
-    if (message.commissioningCustomFlowUrl !== "") {
-      obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl;
-    }
-    if (message.commissioningModeInitialStepsHint !== 0) {
-      obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint);
-    }
-    if (message.commissioningModeInitialStepsInstruction !== "") {
-      obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction;
-    }
-    if (message.commissioningModeSecondaryStepsHint !== 0) {
-      obj.commissioningModeSecondaryStepsHint = Math.round(message.commissioningModeSecondaryStepsHint);
-    }
-    if (message.commissioningModeSecondaryStepsInstruction !== "") {
-      obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction;
-    }
-    if (message.userManualUrl !== "") {
-      obj.userManualUrl = message.userManualUrl;
-    }
-    if (message.supportUrl !== "") {
-      obj.supportUrl = message.supportUrl;
-    }
-    if (message.productUrl !== "") {
-      obj.productUrl = message.productUrl;
-    }
-    if (message.lsfUrl !== "") {
-      obj.lsfUrl = message.lsfUrl;
-    }
-    if (message.lsfRevision !== 0) {
-      obj.lsfRevision = Math.round(message.lsfRevision);
-    }
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.schemaVersion !== 0) {
-      obj.schemaVersion = Math.round(message.schemaVersion);
-    }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      obj.managedAclExtensionRequestFlowUrl = message.managedAclExtensionRequestFlowUrl;
-    }
-    if (message.enhancedSetupFlowOptions !== 0) {
-      obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions);
-    }
-    if (message.enhancedSetupFlowTCUrl !== "") {
-      obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl;
-    }
-    if (message.enhancedSetupFlowTCRevision !== 0) {
-      obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision);
-    }
-    if (message.enhancedSetupFlowTCDigest !== "") {
-      obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest;
-    }
-    if (message.enhancedSetupFlowTCFileSize !== 0) {
-      obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize);
-    }
-    if (message.maintenanceUrl !== "") {
-      obj.maintenanceUrl = message.maintenanceUrl;
-    }
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.deviceTypeId !== undefined && (obj.deviceTypeId = Math.round(message.deviceTypeId));
+    message.productName !== undefined && (obj.productName = message.productName);
+    message.productLabel !== undefined && (obj.productLabel = message.productLabel);
+    message.partNumber !== undefined && (obj.partNumber = message.partNumber);
+    message.commissioningCustomFlow !== undefined
+      && (obj.commissioningCustomFlow = Math.round(message.commissioningCustomFlow));
+    message.commissioningCustomFlowUrl !== undefined
+      && (obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl);
+    message.commissioningModeInitialStepsHint !== undefined
+      && (obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint));
+    message.commissioningModeInitialStepsInstruction !== undefined
+      && (obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction);
+    message.commissioningModeSecondaryStepsHint !== undefined
+      && (obj.commissioningModeSecondaryStepsHint = Math.round(message.commissioningModeSecondaryStepsHint));
+    message.commissioningModeSecondaryStepsInstruction !== undefined
+      && (obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction);
+    message.userManualUrl !== undefined && (obj.userManualUrl = message.userManualUrl);
+    message.supportUrl !== undefined && (obj.supportUrl = message.supportUrl);
+    message.productUrl !== undefined && (obj.productUrl = message.productUrl);
+    message.lsfUrl !== undefined && (obj.lsfUrl = message.lsfUrl);
+    message.lsfRevision !== undefined && (obj.lsfRevision = Math.round(message.lsfRevision));
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
+    message.enhancedSetupFlowOptions !== undefined
+      && (obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions));
+    message.enhancedSetupFlowTCUrl !== undefined && (obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl);
+    message.enhancedSetupFlowTCRevision !== undefined
+      && (obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision));
+    message.enhancedSetupFlowTCDigest !== undefined
+      && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
+    message.enhancedSetupFlowTCFileSize !== undefined
+      && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
+    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.discoveryCapabilitiesBitmask !== undefined
+      && (obj.discoveryCapabilitiesBitmask = Math.round(message.discoveryCapabilitiesBitmask));
+    message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Model>, I>>(base?: I): Model {
-    return Model.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<Model>, I>>(object: I): Model {
     const message = createBaseModel();
     message.vid = object.vid ?? 0;
@@ -500,13 +361,14 @@ export const Model = {
     message.lsfRevision = object.lsfRevision ?? 0;
     message.creator = object.creator ?? "";
     message.schemaVersion = object.schemaVersion ?? 0;
-    message.managedAclExtensionRequestFlowUrl = object.managedAclExtensionRequestFlowUrl ?? "";
     message.enhancedSetupFlowOptions = object.enhancedSetupFlowOptions ?? 0;
     message.enhancedSetupFlowTCUrl = object.enhancedSetupFlowTCUrl ?? "";
     message.enhancedSetupFlowTCRevision = object.enhancedSetupFlowTCRevision ?? 0;
     message.enhancedSetupFlowTCDigest = object.enhancedSetupFlowTCDigest ?? "";
     message.enhancedSetupFlowTCFileSize = object.enhancedSetupFlowTCFileSize ?? 0;
     message.maintenanceUrl = object.maintenanceUrl ?? "";
+    message.discoveryCapabilitiesBitmask = object.discoveryCapabilitiesBitmask ?? 0;
+    message.commissioningFallbackUrl = object.commissioningFallbackUrl ?? "";
     return message;
   },
 };

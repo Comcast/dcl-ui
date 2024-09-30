@@ -160,8 +160,7 @@ export default {
             this.model.commissioningModeInitialStepsHint = 1;
 
             // default value for enhancedSetupFlowOptions
-            this.model.enhancedSetupFlowOptions = 1;
-            this.model.schemaVersion = 1;
+            this.model.schemaVersion = 0;
             this.update = false;
         }
     }

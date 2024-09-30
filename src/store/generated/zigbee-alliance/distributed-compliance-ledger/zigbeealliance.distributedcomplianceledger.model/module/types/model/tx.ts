@@ -23,13 +23,14 @@ export interface MsgCreateModel {
   productUrl: string;
   lsfUrl: string;
   schemaVersion: number;
-  managedAclExtensionRequestFlowUrl: string;
   enhancedSetupFlowOptions: number;
   enhancedSetupFlowTCUrl: string;
   enhancedSetupFlowTCRevision: number;
   enhancedSetupFlowTCDigest: string;
   enhancedSetupFlowTCFileSize: number;
   maintenanceUrl: string;
+  discoveryCapabilitiesBitmask: number;
+  commissioningFallbackUrl: string;
 }
 
 export interface MsgCreateModelResponse {
@@ -51,7 +52,6 @@ export interface MsgUpdateModel {
   lsfUrl: string;
   lsfRevision: number;
   schemaVersion: number;
-  managedAclExtensionRequestFlowUrl: string;
   commissioningModeInitialStepsHint: number;
   enhancedSetupFlowOptions: number;
   enhancedSetupFlowTCUrl: string;
@@ -59,6 +59,7 @@ export interface MsgUpdateModel {
   enhancedSetupFlowTCDigest: string;
   enhancedSetupFlowTCFileSize: number;
   maintenanceUrl: string;
+  commissioningFallbackUrl: string;
 }
 
 export interface MsgUpdateModelResponse {
@@ -143,13 +144,14 @@ function createBaseMsgCreateModel(): MsgCreateModel {
     productUrl: "",
     lsfUrl: "",
     schemaVersion: 0,
-    managedAclExtensionRequestFlowUrl: "",
     enhancedSetupFlowOptions: 0,
     enhancedSetupFlowTCUrl: "",
     enhancedSetupFlowTCRevision: 0,
     enhancedSetupFlowTCDigest: "",
     enhancedSetupFlowTCFileSize: 0,
     maintenanceUrl: "",
+    discoveryCapabilitiesBitmask: 0,
+    commissioningFallbackUrl: "",
   };
 }
 
@@ -209,217 +211,122 @@ export const MsgCreateModel = {
     if (message.schemaVersion !== 0) {
       writer.uint32(144).uint32(message.schemaVersion);
     }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      writer.uint32(154).string(message.managedAclExtensionRequestFlowUrl);
-    }
     if (message.enhancedSetupFlowOptions !== 0) {
-      writer.uint32(160).int32(message.enhancedSetupFlowOptions);
+      writer.uint32(152).int32(message.enhancedSetupFlowOptions);
     }
     if (message.enhancedSetupFlowTCUrl !== "") {
-      writer.uint32(170).string(message.enhancedSetupFlowTCUrl);
+      writer.uint32(162).string(message.enhancedSetupFlowTCUrl);
     }
     if (message.enhancedSetupFlowTCRevision !== 0) {
-      writer.uint32(176).int32(message.enhancedSetupFlowTCRevision);
+      writer.uint32(168).int32(message.enhancedSetupFlowTCRevision);
     }
     if (message.enhancedSetupFlowTCDigest !== "") {
-      writer.uint32(186).string(message.enhancedSetupFlowTCDigest);
+      writer.uint32(178).string(message.enhancedSetupFlowTCDigest);
     }
     if (message.enhancedSetupFlowTCFileSize !== 0) {
-      writer.uint32(192).uint32(message.enhancedSetupFlowTCFileSize);
+      writer.uint32(184).uint32(message.enhancedSetupFlowTCFileSize);
     }
     if (message.maintenanceUrl !== "") {
-      writer.uint32(202).string(message.maintenanceUrl);
+      writer.uint32(194).string(message.maintenanceUrl);
+    }
+    if (message.discoveryCapabilitiesBitmask !== 0) {
+      writer.uint32(200).uint32(message.discoveryCapabilitiesBitmask);
+    }
+    if (message.commissioningFallbackUrl !== "") {
+      writer.uint32(210).string(message.commissioningFallbackUrl);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateModel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateModel();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.deviceTypeId = reader.int32();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.productName = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.productLabel = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.partNumber = reader.string();
-          continue;
+          break;
         case 8:
-          if (tag !== 64) {
-            break;
-          }
-
           message.commissioningCustomFlow = reader.int32();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.commissioningCustomFlowUrl = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 80) {
-            break;
-          }
-
           message.commissioningModeInitialStepsHint = reader.uint32();
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.commissioningModeInitialStepsInstruction = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 96) {
-            break;
-          }
-
           message.commissioningModeSecondaryStepsHint = reader.uint32();
-          continue;
+          break;
         case 13:
-          if (tag !== 106) {
-            break;
-          }
-
           message.commissioningModeSecondaryStepsInstruction = reader.string();
-          continue;
+          break;
         case 14:
-          if (tag !== 114) {
-            break;
-          }
-
           message.userManualUrl = reader.string();
-          continue;
+          break;
         case 15:
-          if (tag !== 122) {
-            break;
-          }
-
           message.supportUrl = reader.string();
-          continue;
+          break;
         case 16:
-          if (tag !== 130) {
-            break;
-          }
-
           message.productUrl = reader.string();
-          continue;
+          break;
         case 17:
-          if (tag !== 138) {
-            break;
-          }
-
           message.lsfUrl = reader.string();
-          continue;
+          break;
         case 18:
-          if (tag !== 144) {
-            break;
-          }
-
           message.schemaVersion = reader.uint32();
-          continue;
+          break;
         case 19:
-          if (tag !== 154) {
-            break;
-          }
-
-          message.managedAclExtensionRequestFlowUrl = reader.string();
-          continue;
-        case 20:
-          if (tag !== 160) {
-            break;
-          }
-
           message.enhancedSetupFlowOptions = reader.int32();
-          continue;
-        case 21:
-          if (tag !== 170) {
-            break;
-          }
-
+          break;
+        case 20:
           message.enhancedSetupFlowTCUrl = reader.string();
-          continue;
-        case 22:
-          if (tag !== 176) {
-            break;
-          }
-
+          break;
+        case 21:
           message.enhancedSetupFlowTCRevision = reader.int32();
-          continue;
-        case 23:
-          if (tag !== 186) {
-            break;
-          }
-
+          break;
+        case 22:
           message.enhancedSetupFlowTCDigest = reader.string();
-          continue;
-        case 24:
-          if (tag !== 192) {
-            break;
-          }
-
+          break;
+        case 23:
           message.enhancedSetupFlowTCFileSize = reader.uint32();
-          continue;
-        case 25:
-          if (tag !== 202) {
-            break;
-          }
-
+          break;
+        case 24:
           message.maintenanceUrl = reader.string();
-          continue;
+          break;
+        case 25:
+          message.discoveryCapabilitiesBitmask = reader.uint32();
+          break;
+        case 26:
+          message.commissioningFallbackUrl = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -454,9 +361,6 @@ export const MsgCreateModel = {
       productUrl: isSet(object.productUrl) ? String(object.productUrl) : "",
       lsfUrl: isSet(object.lsfUrl) ? String(object.lsfUrl) : "",
       schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
-      managedAclExtensionRequestFlowUrl: isSet(object.managedAclExtensionRequestFlowUrl)
-        ? String(object.managedAclExtensionRequestFlowUrl)
-        : "",
       enhancedSetupFlowOptions: isSet(object.enhancedSetupFlowOptions) ? Number(object.enhancedSetupFlowOptions) : 0,
       enhancedSetupFlowTCUrl: isSet(object.enhancedSetupFlowTCUrl) ? String(object.enhancedSetupFlowTCUrl) : "",
       enhancedSetupFlowTCRevision: isSet(object.enhancedSetupFlowTCRevision)
@@ -469,92 +373,55 @@ export const MsgCreateModel = {
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
       maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      discoveryCapabilitiesBitmask: isSet(object.discoveryCapabilitiesBitmask)
+        ? Number(object.discoveryCapabilitiesBitmask)
+        : 0,
+      commissioningFallbackUrl: isSet(object.commissioningFallbackUrl) ? String(object.commissioningFallbackUrl) : "",
     };
   },
 
   toJSON(message: MsgCreateModel): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.deviceTypeId !== 0) {
-      obj.deviceTypeId = Math.round(message.deviceTypeId);
-    }
-    if (message.productName !== "") {
-      obj.productName = message.productName;
-    }
-    if (message.productLabel !== "") {
-      obj.productLabel = message.productLabel;
-    }
-    if (message.partNumber !== "") {
-      obj.partNumber = message.partNumber;
-    }
-    if (message.commissioningCustomFlow !== 0) {
-      obj.commissioningCustomFlow = Math.round(message.commissioningCustomFlow);
-    }
-    if (message.commissioningCustomFlowUrl !== "") {
-      obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl;
-    }
-    if (message.commissioningModeInitialStepsHint !== 0) {
-      obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint);
-    }
-    if (message.commissioningModeInitialStepsInstruction !== "") {
-      obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction;
-    }
-    if (message.commissioningModeSecondaryStepsHint !== 0) {
-      obj.commissioningModeSecondaryStepsHint = Math.round(message.commissioningModeSecondaryStepsHint);
-    }
-    if (message.commissioningModeSecondaryStepsInstruction !== "") {
-      obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction;
-    }
-    if (message.userManualUrl !== "") {
-      obj.userManualUrl = message.userManualUrl;
-    }
-    if (message.supportUrl !== "") {
-      obj.supportUrl = message.supportUrl;
-    }
-    if (message.productUrl !== "") {
-      obj.productUrl = message.productUrl;
-    }
-    if (message.lsfUrl !== "") {
-      obj.lsfUrl = message.lsfUrl;
-    }
-    if (message.schemaVersion !== 0) {
-      obj.schemaVersion = Math.round(message.schemaVersion);
-    }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      obj.managedAclExtensionRequestFlowUrl = message.managedAclExtensionRequestFlowUrl;
-    }
-    if (message.enhancedSetupFlowOptions !== 0) {
-      obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions);
-    }
-    if (message.enhancedSetupFlowTCUrl !== "") {
-      obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl;
-    }
-    if (message.enhancedSetupFlowTCRevision !== 0) {
-      obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision);
-    }
-    if (message.enhancedSetupFlowTCDigest !== "") {
-      obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest;
-    }
-    if (message.enhancedSetupFlowTCFileSize !== 0) {
-      obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize);
-    }
-    if (message.maintenanceUrl !== "") {
-      obj.maintenanceUrl = message.maintenanceUrl;
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.deviceTypeId !== undefined && (obj.deviceTypeId = Math.round(message.deviceTypeId));
+    message.productName !== undefined && (obj.productName = message.productName);
+    message.productLabel !== undefined && (obj.productLabel = message.productLabel);
+    message.partNumber !== undefined && (obj.partNumber = message.partNumber);
+    message.commissioningCustomFlow !== undefined
+      && (obj.commissioningCustomFlow = Math.round(message.commissioningCustomFlow));
+    message.commissioningCustomFlowUrl !== undefined
+      && (obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl);
+    message.commissioningModeInitialStepsHint !== undefined
+      && (obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint));
+    message.commissioningModeInitialStepsInstruction !== undefined
+      && (obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction);
+    message.commissioningModeSecondaryStepsHint !== undefined
+      && (obj.commissioningModeSecondaryStepsHint = Math.round(message.commissioningModeSecondaryStepsHint));
+    message.commissioningModeSecondaryStepsInstruction !== undefined
+      && (obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction);
+    message.userManualUrl !== undefined && (obj.userManualUrl = message.userManualUrl);
+    message.supportUrl !== undefined && (obj.supportUrl = message.supportUrl);
+    message.productUrl !== undefined && (obj.productUrl = message.productUrl);
+    message.lsfUrl !== undefined && (obj.lsfUrl = message.lsfUrl);
+    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
+    message.enhancedSetupFlowOptions !== undefined
+      && (obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions));
+    message.enhancedSetupFlowTCUrl !== undefined && (obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl);
+    message.enhancedSetupFlowTCRevision !== undefined
+      && (obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision));
+    message.enhancedSetupFlowTCDigest !== undefined
+      && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
+    message.enhancedSetupFlowTCFileSize !== undefined
+      && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
+    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.discoveryCapabilitiesBitmask !== undefined
+      && (obj.discoveryCapabilitiesBitmask = Math.round(message.discoveryCapabilitiesBitmask));
+    message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateModel>, I>>(base?: I): MsgCreateModel {
-    return MsgCreateModel.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgCreateModel>, I>>(object: I): MsgCreateModel {
     const message = createBaseMsgCreateModel();
     message.creator = object.creator ?? "";
@@ -575,13 +442,14 @@ export const MsgCreateModel = {
     message.productUrl = object.productUrl ?? "";
     message.lsfUrl = object.lsfUrl ?? "";
     message.schemaVersion = object.schemaVersion ?? 0;
-    message.managedAclExtensionRequestFlowUrl = object.managedAclExtensionRequestFlowUrl ?? "";
     message.enhancedSetupFlowOptions = object.enhancedSetupFlowOptions ?? 0;
     message.enhancedSetupFlowTCUrl = object.enhancedSetupFlowTCUrl ?? "";
     message.enhancedSetupFlowTCRevision = object.enhancedSetupFlowTCRevision ?? 0;
     message.enhancedSetupFlowTCDigest = object.enhancedSetupFlowTCDigest ?? "";
     message.enhancedSetupFlowTCFileSize = object.enhancedSetupFlowTCFileSize ?? 0;
     message.maintenanceUrl = object.maintenanceUrl ?? "";
+    message.discoveryCapabilitiesBitmask = object.discoveryCapabilitiesBitmask ?? 0;
+    message.commissioningFallbackUrl = object.commissioningFallbackUrl ?? "";
     return message;
   },
 };
@@ -596,17 +464,16 @@ export const MsgCreateModelResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateModelResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateModelResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -620,9 +487,6 @@ export const MsgCreateModelResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateModelResponse>, I>>(base?: I): MsgCreateModelResponse {
-    return MsgCreateModelResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgCreateModelResponse>, I>>(_: I): MsgCreateModelResponse {
     const message = createBaseMsgCreateModelResponse();
     return message;
@@ -646,7 +510,6 @@ function createBaseMsgUpdateModel(): MsgUpdateModel {
     lsfUrl: "",
     lsfRevision: 0,
     schemaVersion: 0,
-    managedAclExtensionRequestFlowUrl: "",
     commissioningModeInitialStepsHint: 0,
     enhancedSetupFlowOptions: 0,
     enhancedSetupFlowTCUrl: "",
@@ -654,6 +517,7 @@ function createBaseMsgUpdateModel(): MsgUpdateModel {
     enhancedSetupFlowTCDigest: "",
     enhancedSetupFlowTCFileSize: 0,
     maintenanceUrl: "",
+    commissioningFallbackUrl: "",
   };
 }
 
@@ -704,206 +568,113 @@ export const MsgUpdateModel = {
     if (message.schemaVersion !== 0) {
       writer.uint32(120).uint32(message.schemaVersion);
     }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      writer.uint32(130).string(message.managedAclExtensionRequestFlowUrl);
-    }
     if (message.commissioningModeInitialStepsHint !== 0) {
-      writer.uint32(136).uint32(message.commissioningModeInitialStepsHint);
+      writer.uint32(128).uint32(message.commissioningModeInitialStepsHint);
     }
     if (message.enhancedSetupFlowOptions !== 0) {
-      writer.uint32(144).int32(message.enhancedSetupFlowOptions);
+      writer.uint32(136).int32(message.enhancedSetupFlowOptions);
     }
     if (message.enhancedSetupFlowTCUrl !== "") {
-      writer.uint32(154).string(message.enhancedSetupFlowTCUrl);
+      writer.uint32(146).string(message.enhancedSetupFlowTCUrl);
     }
     if (message.enhancedSetupFlowTCRevision !== 0) {
-      writer.uint32(160).int32(message.enhancedSetupFlowTCRevision);
+      writer.uint32(152).int32(message.enhancedSetupFlowTCRevision);
     }
     if (message.enhancedSetupFlowTCDigest !== "") {
-      writer.uint32(170).string(message.enhancedSetupFlowTCDigest);
+      writer.uint32(162).string(message.enhancedSetupFlowTCDigest);
     }
     if (message.enhancedSetupFlowTCFileSize !== 0) {
-      writer.uint32(176).uint32(message.enhancedSetupFlowTCFileSize);
+      writer.uint32(168).uint32(message.enhancedSetupFlowTCFileSize);
     }
     if (message.maintenanceUrl !== "") {
-      writer.uint32(186).string(message.maintenanceUrl);
+      writer.uint32(178).string(message.maintenanceUrl);
+    }
+    if (message.commissioningFallbackUrl !== "") {
+      writer.uint32(186).string(message.commissioningFallbackUrl);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateModel();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.productName = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.productLabel = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.partNumber = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.commissioningCustomFlowUrl = reader.string();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.commissioningModeInitialStepsInstruction = reader.string();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.commissioningModeSecondaryStepsInstruction = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.userManualUrl = reader.string();
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.supportUrl = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.productUrl = reader.string();
-          continue;
+          break;
         case 13:
-          if (tag !== 106) {
-            break;
-          }
-
           message.lsfUrl = reader.string();
-          continue;
+          break;
         case 14:
-          if (tag !== 112) {
-            break;
-          }
-
           message.lsfRevision = reader.int32();
-          continue;
+          break;
         case 15:
-          if (tag !== 120) {
-            break;
-          }
-
           message.schemaVersion = reader.uint32();
-          continue;
+          break;
         case 16:
-          if (tag !== 130) {
-            break;
-          }
-
-          message.managedAclExtensionRequestFlowUrl = reader.string();
-          continue;
-        case 17:
-          if (tag !== 136) {
-            break;
-          }
-
           message.commissioningModeInitialStepsHint = reader.uint32();
-          continue;
-        case 18:
-          if (tag !== 144) {
-            break;
-          }
-
+          break;
+        case 17:
           message.enhancedSetupFlowOptions = reader.int32();
-          continue;
-        case 19:
-          if (tag !== 154) {
-            break;
-          }
-
+          break;
+        case 18:
           message.enhancedSetupFlowTCUrl = reader.string();
-          continue;
-        case 20:
-          if (tag !== 160) {
-            break;
-          }
-
+          break;
+        case 19:
           message.enhancedSetupFlowTCRevision = reader.int32();
-          continue;
-        case 21:
-          if (tag !== 170) {
-            break;
-          }
-
+          break;
+        case 20:
           message.enhancedSetupFlowTCDigest = reader.string();
-          continue;
-        case 22:
-          if (tag !== 176) {
-            break;
-          }
-
+          break;
+        case 21:
           message.enhancedSetupFlowTCFileSize = reader.uint32();
-          continue;
-        case 23:
-          if (tag !== 186) {
-            break;
-          }
-
+          break;
+        case 22:
           message.maintenanceUrl = reader.string();
-          continue;
+          break;
+        case 23:
+          message.commissioningFallbackUrl = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -931,9 +702,6 @@ export const MsgUpdateModel = {
       lsfUrl: isSet(object.lsfUrl) ? String(object.lsfUrl) : "",
       lsfRevision: isSet(object.lsfRevision) ? Number(object.lsfRevision) : 0,
       schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
-      managedAclExtensionRequestFlowUrl: isSet(object.managedAclExtensionRequestFlowUrl)
-        ? String(object.managedAclExtensionRequestFlowUrl)
-        : "",
       commissioningModeInitialStepsHint: isSet(object.commissioningModeInitialStepsHint)
         ? Number(object.commissioningModeInitialStepsHint)
         : 0,
@@ -949,86 +717,46 @@ export const MsgUpdateModel = {
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
       maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      commissioningFallbackUrl: isSet(object.commissioningFallbackUrl) ? String(object.commissioningFallbackUrl) : "",
     };
   },
 
   toJSON(message: MsgUpdateModel): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.productName !== "") {
-      obj.productName = message.productName;
-    }
-    if (message.productLabel !== "") {
-      obj.productLabel = message.productLabel;
-    }
-    if (message.partNumber !== "") {
-      obj.partNumber = message.partNumber;
-    }
-    if (message.commissioningCustomFlowUrl !== "") {
-      obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl;
-    }
-    if (message.commissioningModeInitialStepsInstruction !== "") {
-      obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction;
-    }
-    if (message.commissioningModeSecondaryStepsInstruction !== "") {
-      obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction;
-    }
-    if (message.userManualUrl !== "") {
-      obj.userManualUrl = message.userManualUrl;
-    }
-    if (message.supportUrl !== "") {
-      obj.supportUrl = message.supportUrl;
-    }
-    if (message.productUrl !== "") {
-      obj.productUrl = message.productUrl;
-    }
-    if (message.lsfUrl !== "") {
-      obj.lsfUrl = message.lsfUrl;
-    }
-    if (message.lsfRevision !== 0) {
-      obj.lsfRevision = Math.round(message.lsfRevision);
-    }
-    if (message.schemaVersion !== 0) {
-      obj.schemaVersion = Math.round(message.schemaVersion);
-    }
-    if (message.managedAclExtensionRequestFlowUrl !== "") {
-      obj.managedAclExtensionRequestFlowUrl = message.managedAclExtensionRequestFlowUrl;
-    }
-    if (message.commissioningModeInitialStepsHint !== 0) {
-      obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint);
-    }
-    if (message.enhancedSetupFlowOptions !== 0) {
-      obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions);
-    }
-    if (message.enhancedSetupFlowTCUrl !== "") {
-      obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl;
-    }
-    if (message.enhancedSetupFlowTCRevision !== 0) {
-      obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision);
-    }
-    if (message.enhancedSetupFlowTCDigest !== "") {
-      obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest;
-    }
-    if (message.enhancedSetupFlowTCFileSize !== 0) {
-      obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize);
-    }
-    if (message.maintenanceUrl !== "") {
-      obj.maintenanceUrl = message.maintenanceUrl;
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.productName !== undefined && (obj.productName = message.productName);
+    message.productLabel !== undefined && (obj.productLabel = message.productLabel);
+    message.partNumber !== undefined && (obj.partNumber = message.partNumber);
+    message.commissioningCustomFlowUrl !== undefined
+      && (obj.commissioningCustomFlowUrl = message.commissioningCustomFlowUrl);
+    message.commissioningModeInitialStepsInstruction !== undefined
+      && (obj.commissioningModeInitialStepsInstruction = message.commissioningModeInitialStepsInstruction);
+    message.commissioningModeSecondaryStepsInstruction !== undefined
+      && (obj.commissioningModeSecondaryStepsInstruction = message.commissioningModeSecondaryStepsInstruction);
+    message.userManualUrl !== undefined && (obj.userManualUrl = message.userManualUrl);
+    message.supportUrl !== undefined && (obj.supportUrl = message.supportUrl);
+    message.productUrl !== undefined && (obj.productUrl = message.productUrl);
+    message.lsfUrl !== undefined && (obj.lsfUrl = message.lsfUrl);
+    message.lsfRevision !== undefined && (obj.lsfRevision = Math.round(message.lsfRevision));
+    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
+    message.commissioningModeInitialStepsHint !== undefined
+      && (obj.commissioningModeInitialStepsHint = Math.round(message.commissioningModeInitialStepsHint));
+    message.enhancedSetupFlowOptions !== undefined
+      && (obj.enhancedSetupFlowOptions = Math.round(message.enhancedSetupFlowOptions));
+    message.enhancedSetupFlowTCUrl !== undefined && (obj.enhancedSetupFlowTCUrl = message.enhancedSetupFlowTCUrl);
+    message.enhancedSetupFlowTCRevision !== undefined
+      && (obj.enhancedSetupFlowTCRevision = Math.round(message.enhancedSetupFlowTCRevision));
+    message.enhancedSetupFlowTCDigest !== undefined
+      && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
+    message.enhancedSetupFlowTCFileSize !== undefined
+      && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
+    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateModel>, I>>(base?: I): MsgUpdateModel {
-    return MsgUpdateModel.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgUpdateModel>, I>>(object: I): MsgUpdateModel {
     const message = createBaseMsgUpdateModel();
     message.creator = object.creator ?? "";
@@ -1046,7 +774,6 @@ export const MsgUpdateModel = {
     message.lsfUrl = object.lsfUrl ?? "";
     message.lsfRevision = object.lsfRevision ?? 0;
     message.schemaVersion = object.schemaVersion ?? 0;
-    message.managedAclExtensionRequestFlowUrl = object.managedAclExtensionRequestFlowUrl ?? "";
     message.commissioningModeInitialStepsHint = object.commissioningModeInitialStepsHint ?? 0;
     message.enhancedSetupFlowOptions = object.enhancedSetupFlowOptions ?? 0;
     message.enhancedSetupFlowTCUrl = object.enhancedSetupFlowTCUrl ?? "";
@@ -1054,6 +781,7 @@ export const MsgUpdateModel = {
     message.enhancedSetupFlowTCDigest = object.enhancedSetupFlowTCDigest ?? "";
     message.enhancedSetupFlowTCFileSize = object.enhancedSetupFlowTCFileSize ?? 0;
     message.maintenanceUrl = object.maintenanceUrl ?? "";
+    message.commissioningFallbackUrl = object.commissioningFallbackUrl ?? "";
     return message;
   },
 };
@@ -1068,17 +796,16 @@ export const MsgUpdateModelResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModelResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateModelResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1092,9 +819,6 @@ export const MsgUpdateModelResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateModelResponse>, I>>(base?: I): MsgUpdateModelResponse {
-    return MsgUpdateModelResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgUpdateModelResponse>, I>>(_: I): MsgUpdateModelResponse {
     const message = createBaseMsgUpdateModelResponse();
     return message;
@@ -1120,38 +844,25 @@ export const MsgDeleteModel = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteModel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteModel();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1166,21 +877,12 @@ export const MsgDeleteModel = {
 
   toJSON(message: MsgDeleteModel): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDeleteModel>, I>>(base?: I): MsgDeleteModel {
-    return MsgDeleteModel.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgDeleteModel>, I>>(object: I): MsgDeleteModel {
     const message = createBaseMsgDeleteModel();
     message.creator = object.creator ?? "";
@@ -1200,17 +902,16 @@ export const MsgDeleteModelResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteModelResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteModelResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1224,9 +925,6 @@ export const MsgDeleteModelResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDeleteModelResponse>, I>>(base?: I): MsgDeleteModelResponse {
-    return MsgDeleteModelResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgDeleteModelResponse>, I>>(_: I): MsgDeleteModelResponse {
     const message = createBaseMsgDeleteModelResponse();
     return message;
@@ -1308,129 +1006,64 @@ export const MsgCreateModelVersion = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateModelVersion {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateModelVersion();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.softwareVersion = reader.uint32();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.softwareVersionString = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 48) {
-            break;
-          }
-
           message.cdVersionNumber = reader.int32();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.firmwareInformation = reader.string();
-          continue;
+          break;
         case 8:
-          if (tag !== 64) {
-            break;
-          }
-
           message.softwareVersionValid = reader.bool();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.otaUrl = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 80) {
-            break;
-          }
-
           message.otaFileSize = longToNumber(reader.uint64() as Long);
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.otaChecksum = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 96) {
-            break;
-          }
-
           message.otaChecksumType = reader.int32();
-          continue;
+          break;
         case 13:
-          if (tag !== 104) {
-            break;
-          }
-
           message.minApplicableSoftwareVersion = reader.uint32();
-          continue;
+          break;
         case 14:
-          if (tag !== 112) {
-            break;
-          }
-
           message.maxApplicableSoftwareVersion = reader.uint32();
-          continue;
+          break;
         case 15:
-          if (tag !== 122) {
-            break;
-          }
-
           message.releaseNotesUrl = reader.string();
-          continue;
+          break;
         case 16:
-          if (tag !== 128) {
-            break;
-          }
-
           message.schemaVersion = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1462,60 +1095,27 @@ export const MsgCreateModelVersion = {
 
   toJSON(message: MsgCreateModelVersion): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.softwareVersion !== 0) {
-      obj.softwareVersion = Math.round(message.softwareVersion);
-    }
-    if (message.softwareVersionString !== "") {
-      obj.softwareVersionString = message.softwareVersionString;
-    }
-    if (message.cdVersionNumber !== 0) {
-      obj.cdVersionNumber = Math.round(message.cdVersionNumber);
-    }
-    if (message.firmwareInformation !== "") {
-      obj.firmwareInformation = message.firmwareInformation;
-    }
-    if (message.softwareVersionValid === true) {
-      obj.softwareVersionValid = message.softwareVersionValid;
-    }
-    if (message.otaUrl !== "") {
-      obj.otaUrl = message.otaUrl;
-    }
-    if (message.otaFileSize !== 0) {
-      obj.otaFileSize = Math.round(message.otaFileSize);
-    }
-    if (message.otaChecksum !== "") {
-      obj.otaChecksum = message.otaChecksum;
-    }
-    if (message.otaChecksumType !== 0) {
-      obj.otaChecksumType = Math.round(message.otaChecksumType);
-    }
-    if (message.minApplicableSoftwareVersion !== 0) {
-      obj.minApplicableSoftwareVersion = Math.round(message.minApplicableSoftwareVersion);
-    }
-    if (message.maxApplicableSoftwareVersion !== 0) {
-      obj.maxApplicableSoftwareVersion = Math.round(message.maxApplicableSoftwareVersion);
-    }
-    if (message.releaseNotesUrl !== "") {
-      obj.releaseNotesUrl = message.releaseNotesUrl;
-    }
-    if (message.schemaVersion !== 0) {
-      obj.schemaVersion = Math.round(message.schemaVersion);
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.softwareVersion !== undefined && (obj.softwareVersion = Math.round(message.softwareVersion));
+    message.softwareVersionString !== undefined && (obj.softwareVersionString = message.softwareVersionString);
+    message.cdVersionNumber !== undefined && (obj.cdVersionNumber = Math.round(message.cdVersionNumber));
+    message.firmwareInformation !== undefined && (obj.firmwareInformation = message.firmwareInformation);
+    message.softwareVersionValid !== undefined && (obj.softwareVersionValid = message.softwareVersionValid);
+    message.otaUrl !== undefined && (obj.otaUrl = message.otaUrl);
+    message.otaFileSize !== undefined && (obj.otaFileSize = Math.round(message.otaFileSize));
+    message.otaChecksum !== undefined && (obj.otaChecksum = message.otaChecksum);
+    message.otaChecksumType !== undefined && (obj.otaChecksumType = Math.round(message.otaChecksumType));
+    message.minApplicableSoftwareVersion !== undefined
+      && (obj.minApplicableSoftwareVersion = Math.round(message.minApplicableSoftwareVersion));
+    message.maxApplicableSoftwareVersion !== undefined
+      && (obj.maxApplicableSoftwareVersion = Math.round(message.maxApplicableSoftwareVersion));
+    message.releaseNotesUrl !== undefined && (obj.releaseNotesUrl = message.releaseNotesUrl);
+    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateModelVersion>, I>>(base?: I): MsgCreateModelVersion {
-    return MsgCreateModelVersion.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgCreateModelVersion>, I>>(object: I): MsgCreateModelVersion {
     const message = createBaseMsgCreateModelVersion();
     message.creator = object.creator ?? "";
@@ -1548,17 +1148,16 @@ export const MsgCreateModelVersionResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateModelVersionResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateModelVersionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1572,9 +1171,6 @@ export const MsgCreateModelVersionResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateModelVersionResponse>, I>>(base?: I): MsgCreateModelVersionResponse {
-    return MsgCreateModelVersionResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgCreateModelVersionResponse>, I>>(_: I): MsgCreateModelVersionResponse {
     const message = createBaseMsgCreateModelVersionResponse();
     return message;
@@ -1640,101 +1236,52 @@ export const MsgUpdateModelVersion = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModelVersion {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateModelVersion();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.softwareVersion = reader.uint32();
-          continue;
+          break;
         case 5:
-          if (tag !== 40) {
-            break;
-          }
-
           message.softwareVersionValid = reader.bool();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.otaUrl = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 56) {
-            break;
-          }
-
           message.minApplicableSoftwareVersion = reader.uint32();
-          continue;
+          break;
         case 8:
-          if (tag !== 64) {
-            break;
-          }
-
           message.maxApplicableSoftwareVersion = reader.uint32();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.releaseNotesUrl = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 80) {
-            break;
-          }
-
           message.otaFileSize = longToNumber(reader.uint64() as Long);
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.otaChecksum = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 96) {
-            break;
-          }
-
           message.schemaVersion = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1762,48 +1309,23 @@ export const MsgUpdateModelVersion = {
 
   toJSON(message: MsgUpdateModelVersion): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.softwareVersion !== 0) {
-      obj.softwareVersion = Math.round(message.softwareVersion);
-    }
-    if (message.softwareVersionValid === true) {
-      obj.softwareVersionValid = message.softwareVersionValid;
-    }
-    if (message.otaUrl !== "") {
-      obj.otaUrl = message.otaUrl;
-    }
-    if (message.minApplicableSoftwareVersion !== 0) {
-      obj.minApplicableSoftwareVersion = Math.round(message.minApplicableSoftwareVersion);
-    }
-    if (message.maxApplicableSoftwareVersion !== 0) {
-      obj.maxApplicableSoftwareVersion = Math.round(message.maxApplicableSoftwareVersion);
-    }
-    if (message.releaseNotesUrl !== "") {
-      obj.releaseNotesUrl = message.releaseNotesUrl;
-    }
-    if (message.otaFileSize !== 0) {
-      obj.otaFileSize = Math.round(message.otaFileSize);
-    }
-    if (message.otaChecksum !== "") {
-      obj.otaChecksum = message.otaChecksum;
-    }
-    if (message.schemaVersion !== 0) {
-      obj.schemaVersion = Math.round(message.schemaVersion);
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.softwareVersion !== undefined && (obj.softwareVersion = Math.round(message.softwareVersion));
+    message.softwareVersionValid !== undefined && (obj.softwareVersionValid = message.softwareVersionValid);
+    message.otaUrl !== undefined && (obj.otaUrl = message.otaUrl);
+    message.minApplicableSoftwareVersion !== undefined
+      && (obj.minApplicableSoftwareVersion = Math.round(message.minApplicableSoftwareVersion));
+    message.maxApplicableSoftwareVersion !== undefined
+      && (obj.maxApplicableSoftwareVersion = Math.round(message.maxApplicableSoftwareVersion));
+    message.releaseNotesUrl !== undefined && (obj.releaseNotesUrl = message.releaseNotesUrl);
+    message.otaFileSize !== undefined && (obj.otaFileSize = Math.round(message.otaFileSize));
+    message.otaChecksum !== undefined && (obj.otaChecksum = message.otaChecksum);
+    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateModelVersion>, I>>(base?: I): MsgUpdateModelVersion {
-    return MsgUpdateModelVersion.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgUpdateModelVersion>, I>>(object: I): MsgUpdateModelVersion {
     const message = createBaseMsgUpdateModelVersion();
     message.creator = object.creator ?? "";
@@ -1832,17 +1354,16 @@ export const MsgUpdateModelVersionResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModelVersionResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateModelVersionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1856,9 +1377,6 @@ export const MsgUpdateModelVersionResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateModelVersionResponse>, I>>(base?: I): MsgUpdateModelVersionResponse {
-    return MsgUpdateModelVersionResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgUpdateModelVersionResponse>, I>>(_: I): MsgUpdateModelVersionResponse {
     const message = createBaseMsgUpdateModelVersionResponse();
     return message;
@@ -1887,45 +1405,28 @@ export const MsgDeleteModelVersion = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteModelVersion {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteModelVersion();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.creator = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.vid = reader.int32();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.pid = reader.int32();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.softwareVersion = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1941,24 +1442,13 @@ export const MsgDeleteModelVersion = {
 
   toJSON(message: MsgDeleteModelVersion): unknown {
     const obj: any = {};
-    if (message.creator !== "") {
-      obj.creator = message.creator;
-    }
-    if (message.vid !== 0) {
-      obj.vid = Math.round(message.vid);
-    }
-    if (message.pid !== 0) {
-      obj.pid = Math.round(message.pid);
-    }
-    if (message.softwareVersion !== 0) {
-      obj.softwareVersion = Math.round(message.softwareVersion);
-    }
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.vid !== undefined && (obj.vid = Math.round(message.vid));
+    message.pid !== undefined && (obj.pid = Math.round(message.pid));
+    message.softwareVersion !== undefined && (obj.softwareVersion = Math.round(message.softwareVersion));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDeleteModelVersion>, I>>(base?: I): MsgDeleteModelVersion {
-    return MsgDeleteModelVersion.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgDeleteModelVersion>, I>>(object: I): MsgDeleteModelVersion {
     const message = createBaseMsgDeleteModelVersion();
     message.creator = object.creator ?? "";
@@ -1979,17 +1469,16 @@ export const MsgDeleteModelVersionResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteModelVersionResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDeleteModelVersionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -2003,9 +1492,6 @@ export const MsgDeleteModelVersionResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDeleteModelVersionResponse>, I>>(base?: I): MsgDeleteModelVersionResponse {
-    return MsgDeleteModelVersionResponse.fromPartial(base ?? ({} as any));
-  },
   fromPartial<I extends Exact<DeepPartial<MsgDeleteModelVersionResponse>, I>>(_: I): MsgDeleteModelVersionResponse {
     const message = createBaseMsgDeleteModelVersionResponse();
     return message;
@@ -2023,12 +1509,9 @@ export interface Msg {
   DeleteModelVersion(request: MsgDeleteModelVersion): Promise<MsgDeleteModelVersionResponse>;
 }
 
-export const MsgServiceName = "zigbeealliance.distributedcomplianceledger.model.Msg";
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || MsgServiceName;
+  constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.CreateModel = this.CreateModel.bind(this);
     this.UpdateModel = this.UpdateModel.bind(this);
@@ -2039,38 +1522,50 @@ export class MsgClientImpl implements Msg {
   }
   CreateModel(request: MsgCreateModel): Promise<MsgCreateModelResponse> {
     const data = MsgCreateModel.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateModel", data);
-    return promise.then((data) => MsgCreateModelResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request("zigbeealliance.distributedcomplianceledger.model.Msg", "CreateModel", data);
+    return promise.then((data) => MsgCreateModelResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateModel(request: MsgUpdateModel): Promise<MsgUpdateModelResponse> {
     const data = MsgUpdateModel.encode(request).finish();
-    const promise = this.rpc.request(this.service, "UpdateModel", data);
-    return promise.then((data) => MsgUpdateModelResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request("zigbeealliance.distributedcomplianceledger.model.Msg", "UpdateModel", data);
+    return promise.then((data) => MsgUpdateModelResponse.decode(new _m0.Reader(data)));
   }
 
   DeleteModel(request: MsgDeleteModel): Promise<MsgDeleteModelResponse> {
     const data = MsgDeleteModel.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DeleteModel", data);
-    return promise.then((data) => MsgDeleteModelResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request("zigbeealliance.distributedcomplianceledger.model.Msg", "DeleteModel", data);
+    return promise.then((data) => MsgDeleteModelResponse.decode(new _m0.Reader(data)));
   }
 
   CreateModelVersion(request: MsgCreateModelVersion): Promise<MsgCreateModelVersionResponse> {
     const data = MsgCreateModelVersion.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateModelVersion", data);
-    return promise.then((data) => MsgCreateModelVersionResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "zigbeealliance.distributedcomplianceledger.model.Msg",
+      "CreateModelVersion",
+      data,
+    );
+    return promise.then((data) => MsgCreateModelVersionResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateModelVersion(request: MsgUpdateModelVersion): Promise<MsgUpdateModelVersionResponse> {
     const data = MsgUpdateModelVersion.encode(request).finish();
-    const promise = this.rpc.request(this.service, "UpdateModelVersion", data);
-    return promise.then((data) => MsgUpdateModelVersionResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "zigbeealliance.distributedcomplianceledger.model.Msg",
+      "UpdateModelVersion",
+      data,
+    );
+    return promise.then((data) => MsgUpdateModelVersionResponse.decode(new _m0.Reader(data)));
   }
 
   DeleteModelVersion(request: MsgDeleteModelVersion): Promise<MsgDeleteModelVersionResponse> {
     const data = MsgDeleteModelVersion.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DeleteModelVersion", data);
-    return promise.then((data) => MsgDeleteModelVersionResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "zigbeealliance.distributedcomplianceledger.model.Msg",
+      "DeleteModelVersion",
+      data,
+    );
+    return promise.then((data) => MsgDeleteModelVersionResponse.decode(new _m0.Reader(data)));
   }
 }
 
@@ -2078,10 +1573,10 @@ interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-declare const self: any | undefined;
-declare const window: any | undefined;
-declare const global: any | undefined;
-const tsProtoGlobalThis: any = (() => {
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -2110,7 +1605,7 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
 }
