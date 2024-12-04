@@ -1,7 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
+
 
 import AppMenuItem from './AppMenuItem.vue';
+const store = useStore();
+const appVersion = computed(() => store.getters.appVersion);
 
 menu: [
     {
@@ -51,7 +55,7 @@ const model = ref([
             { label: 'Keplr Wallet - Guide', icon: 'pi pi-fw pi-book', to: '/keplr-wallet' }
         ]
     }
-]);
+])
 </script>
 
 <template>
@@ -61,6 +65,9 @@ const model = ref([
             <li v-if="item.separator" class="menu-separator"></li>
         </template>
     </ul>
+    <div style="position: relative; padding-top: 2rem; font-size: 0.85rem">
+			DCL UI Version {{ appVersion }}
+	</div>
 </template>
 
 <style lang="scss" scoped></style>
