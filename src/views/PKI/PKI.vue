@@ -14,6 +14,8 @@ import PkiRevocationDistributionPoint from './PkiRevocationDistributionPoint.vue
 import AddLeafCertificate from './AddLeafCertificate.vue';
 import AddNocIcaCertificate from './AddNocIcaCertificate.vue';
 import LeafCertificates from './LeafCertificates.vue';
+import NocLeafCertificates from './NocLeafCertificates.vue';
+
 import { FilterMatchMode } from 'primevue/api';
 
 export default {
@@ -78,6 +80,7 @@ export default {
         AddLeafCertificate,
         AddNocIcaCertificate,
         LeafCertificates,
+        NocLeafCertificates,
         PkiRevocationDistributionPoint
     },
 
@@ -94,6 +97,7 @@ export default {
                     item.approvals = item.certs[0].approvals;
                     item.serialNumber = item.certs[0].serialNumber;
                     item.subjectAsText = item.certs[0].subjectAsText;
+                    item.certificateType = item.certs[0].certificateType;
                     item.vid = item.certs[0].vid ? item.certs[0].vid + ' (0x' + item.certs[0].vid.toString(16) + ")" : 'Not Set';
                     item.isNoc = item.certs[0].isNoc ? 'Yes' : 'No';
                     return item;
@@ -113,6 +117,7 @@ export default {
                     approvals: item.certs[0].approvals,
                     serialNumber: item.certs[0].serialNumber,
                     subjectAsText: item.certs[0].subjectAsText,
+                    certificateType: item.certs[0].certificateType,
                     subject: item.certs[0].subject,
                     subjectKeyId: item.certs[0].subjectKeyId,
                     isNoc: 'Yes' // Since these are NOC certificates by definition
@@ -544,7 +549,7 @@ export default {
 
                     <Column :expander="true" headerStyle="width: 3rem" />
                     <Column field="vid" header="Vendor ID" :sortable="true" />
-                    <Column field="isNoc" header="Noc" :sortable="true" />
+                    <Column field="certificateType" header="Certificate Type" :sortable="true" />
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
                     <Column field="subjectKeyId" header="Subject Key ID"></Column>
                     <Column field="approvals" header="Approvals">
@@ -618,7 +623,7 @@ export default {
 
                     <Column :expander="true" headerStyle="width: 3rem" />
                     <Column field="vid" header="Vendor ID" :sortable="true" />
-                    <Column field="isNoc" header="Noc" :sortable="true" />
+                    <Column field="certificateType" header="Certificate Type" :sortable="true" />
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
                     <Column field="subjectKeyId" header="Subject Key ID"></Column>
                     <Column field="approvals" header="Approvals">
@@ -629,7 +634,6 @@ export default {
                                     Time : {{ new Date(approval.time * 1000).toString() }} <br />
                                     Info : {{ approval.info }}
                                 </li>
-                                
                             </ol>
                         </template>
                     </Column>
@@ -642,25 +646,14 @@ export default {
                                 v-if="data.vid == 'Not Set'">
                             </Button>
                             <br />
-                            <Button label="Propose Revoke" class="p-button-danger mt-3"
-                                @click="showGrantActionRootCertificateDialog(data, 'ProposeRevokeX509RootCert')"
-                                iconPos="left" icon="pi pi-ban" v-bind:class="{ 'p-disabled': !isSignedIn }"
-                                v-if="data.isNoc == 'No'">
-                            </Button>
-
                             <Button label="Revoke NOC" class="p-button-warning mt-3"
                                 @click="showGrantActionRootCertificateDialog(data, 'RevokeNocX509RootCert')"
-                                iconPos="left" icon="pi pi-ban" v-bind:class="{ 'p-disabled': !isSignedIn }"
-                                v-if="data.isNoc == 'Yes'">
+                                iconPos="left" icon="pi pi-ban" v-bind:class="{ 'p-disabled': !isSignedIn }">
                             </Button>
-                            
                             <Button label="Remove NOC" class="p-button-danger mt-3"
                                 @click="showGrantActionRootCertificateDialog(data, 'RemoveNocX509RootCert')"
-                                iconPos="left" icon="pi pi-trash" v-bind:class="{ 'p-disabled': !isSignedIn }"
-                                v-if="data.isNoc == 'Yes'">
+                                iconPos="left" icon="pi pi-trash" v-bind:class="{ 'p-disabled': !isSignedIn }">
                             </Button>
-
-
                             <br />
                             <Button label="Download" class="p-button-success mt-3" icon="pi pi-download"
                                 @click="downloadCertificate(data)"></Button>
@@ -668,8 +661,10 @@ export default {
                     </Column>
                     <template #expansion="certificate">
                         <div>
-                            <LeafCertificates :subject="certificate.data.subject"
-                                :subjectKeyId="certificate.data.subjectKeyId"> </LeafCertificates>
+                            <NocLeafCertificates 
+                                :subject="certificate.data.subject"
+                                :subjectKeyId="certificate.data.subjectKeyId">
+                            </NocLeafCertificates>
                         </div>
                     </template>
                 </DataTable>
