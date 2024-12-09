@@ -158,7 +158,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
@@ -187,6 +186,34 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 text-lg mb-3">Network Info</span>
+                        <div class="text-900 font-medium text-lg mb-3">
+                            <i class="pi pi-tag mr-1"></i>
+                            DCL App Version
+                            <Badge :value="nodeInfo.application_version?.version || 'N/A'" severity="success" class="ml-2"></Badge>
+                        </div>
+                        <div class="text-900 font-medium text-lg mb-3">
+                            <i class="pi pi-code mr-1"></i>
+                            Cosmos Version
+                            <Badge :value="nodeInfo.application_version?.cosmos_sdk_version || 'N/A'" severity="info" class="ml-2"></Badge>
+                        </div>
+
+                        <div class="text-900 font-medium text-lg mb-3">
+                            <i class="pi pi-globe mr-1"></i>
+                            Network
+                            <Badge :value="nodeInfo.default_node_info?.network || 'N/A'" severity="warning" class="ml-2"></Badge>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-server text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>        
 
         <div v-if="isSignedIn" class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
@@ -248,6 +275,7 @@ export default {
             scaleClass: false,
             pubKey: null,
             loadValues: {},
+            nodeInfo: {},
             queries: [
                 {
                     namespace: 'zigbeealliance.distributedcomplianceledger.model',
@@ -293,6 +321,15 @@ export default {
             .then((data) => {
                 this.loadValues = data;
             });
+        // Fetch node info
+        fetch(import.meta.env.VITE_APP_DCL_API_NODE + '/cosmos/base/tendermint/v1beta1/node_info')
+            .then((response) => response.json())
+            .then((data) => {
+                this.nodeInfo = data;
+            })
+            .catch((error) => {
+                console.error('Error fetching node info:', error);
+            });            
 
         this.queries.forEach((query) => {
             this.$store.dispatch(`${query.namespace}/${query.method}`, {
