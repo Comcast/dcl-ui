@@ -38,6 +38,7 @@ export default defineConfig(() => {
         define: {
             'process.env': {},
             global: 'globalThis',
+            'APP_VERSION': JSON.stringify(require('./package.json').version),
         },
         build: {
             rollupOptions: {

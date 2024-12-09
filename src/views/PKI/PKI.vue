@@ -14,6 +14,8 @@ import PkiRevocationDistributionPoint from './PkiRevocationDistributionPoint.vue
 import AddLeafCertificate from './AddLeafCertificate.vue';
 import AddNocIcaCertificate from './AddNocIcaCertificate.vue';
 import LeafCertificates from './LeafCertificates.vue';
+import NocLeafCertificates from './NocLeafCertificates.vue';
+
 import { FilterMatchMode } from 'primevue/api';
 
 export default {
@@ -78,6 +80,7 @@ export default {
         AddLeafCertificate,
         AddNocIcaCertificate,
         LeafCertificates,
+        NocLeafCertificates,
         PkiRevocationDistributionPoint
     },
 
@@ -94,6 +97,7 @@ export default {
                     item.approvals = item.certs[0].approvals;
                     item.serialNumber = item.certs[0].serialNumber;
                     item.subjectAsText = item.certs[0].subjectAsText;
+                    item.certificateType = item.certs[0].certificateType;
                     item.vid = item.certs[0].vid ? item.certs[0].vid + ' (0x' + item.certs[0].vid.toString(16) + ")" : 'Not Set';
                     item.isNoc = item.certs[0].isNoc ? 'Yes' : 'No';
                     return item;
@@ -101,6 +105,27 @@ export default {
             }
             return rootCertificates;
         },
+
+        allNocRootCertificates() {
+        let nocRootCertificates = [];
+        const nocRootCertificatesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getNocRootCertificatesAll']();
+        if (nocRootCertificatesArray.nocRootCertificates) {
+            nocRootCertificates = nocRootCertificatesArray.nocRootCertificates.map((item) => {
+                return {
+                    ...item,
+                    vid: item.vid ? item.vid + ' (0x' + item.vid.toString(16) + ')' : 'Not Set',
+                    approvals: item.certs[0].approvals,
+                    serialNumber: item.certs[0].serialNumber,
+                    subjectAsText: item.certs[0].subjectAsText,
+                    certificateType: item.certs[0].certificateType,
+                    subject: item.certs[0].subject,
+                    subjectKeyId: item.certs[0].subjectKeyId,
+                    isNoc: 'Yes' // Since these are NOC certificates by definition
+                };
+            });
+        }
+        return nocRootCertificates;
+    },
 
         allPkiRevocationDistributionPoints() {
             const pkiRevocationDistributionPointArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getPkiRevocationDistributionPointAll']();
@@ -175,6 +200,22 @@ export default {
     created: function () {
         // Get all the approved certificates
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryApprovedCertificatesAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
+
+        // Get all the NOC Root certificates
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocRootCertificatesAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
+
+        // Get all the NOC Root certificates
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocIcaCertificatesAll', {
             options: {
                 subscribe: true,
                 all: true
@@ -374,6 +415,24 @@ export default {
             return childCertificates;
         },
 
+        getNocChildCertificates(parentCertificate) {
+            const allCerts = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getApprovedCertificatesAll']();
+            if (!allCerts?.approvedCertificates) return [];
+
+            const nocIcaCerts = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getNocIcaCertificatesAll']();
+            
+            return allCerts.approvedCertificates
+                .filter(cert => {
+                    const certData = cert.certs[0];
+                    return certData.authorityKeyId === parentCertificate.subjectKeyId;
+                })
+                .map(cert => ({
+                    ...cert.certs[0],
+                    certificateType: cert.certs[0].isRoot ? 'Root' : 'OperationalPKI',
+                    isNoc: cert.certs[0].isNoc || false
+                }));
+        },
+
         confirmDeletePkiRevocationDistributionPoint(pkiRevocationDistributionPoint) {
             this.$confirm.require({
                 message: `Are you sure you want to delete the PkiRevocationDistributionPoint with Label : ${pkiRevocationDistributionPoint.label} ?`,
@@ -490,7 +549,7 @@ export default {
 
                     <Column :expander="true" headerStyle="width: 3rem" />
                     <Column field="vid" header="Vendor ID" :sortable="true" />
-                    <Column field="isNoc" header="Noc" :sortable="true" />
+                    <Column field="certificateType" header="Certificate Type" :sortable="true" />
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
                     <Column field="subjectKeyId" header="Subject Key ID"></Column>
                     <Column field="approvals" header="Approvals">
@@ -542,6 +601,70 @@ export default {
                         <div>
                             <LeafCertificates :subject="certificate.data.subject"
                                 :subjectKeyId="certificate.data.subjectKeyId"> </LeafCertificates>
+                        </div>
+                    </template>
+                </DataTable>
+            </TabPanel>
+
+            <TabPanel header="All Noc Certificates">
+                <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
+                    v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
+                    stripedRows>
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <IconField>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Search" />
+                            </IconField>
+                        </div>
+                    </template>
+
+                    <Column :expander="true" headerStyle="width: 3rem" />
+                    <Column field="vid" header="Vendor ID" :sortable="true" />
+                    <Column field="certificateType" header="Certificate Type" :sortable="true" />
+                    <Column field="subjectAsText" header="Subject" :sortable="true" />
+                    <Column field="subjectKeyId" header="Subject Key ID"></Column>
+                    <Column field="approvals" header="Approvals">
+                        <template #body="row">
+                            <ol>
+                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
+                                    Address : {{ approval.address }} <br />
+                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
+                                    Info : {{ approval.info }}
+                                </li>
+                            </ol>
+                        </template>
+                    </Column>
+                    <Column headerStyle="width: 4rem; text-align: center"
+                        bodyStyle="text-align: center; overflow: visible">
+                        <template #body="{ data }">
+                            <Button label="Assign Vendor ID" class="p-button-primary"
+                                @click="showGrantActionRootCertificateDialog(data, 'AssignVid')" iconPos="left"
+                                icon="pi pi-user" v-bind:class="{ 'p-disabled': !isSignedIn }"
+                                v-if="data.vid == 'Not Set'">
+                            </Button>
+                            <br />
+                            <Button label="Revoke NOC" class="p-button-warning mt-3"
+                                @click="showGrantActionRootCertificateDialog(data, 'RevokeNocX509RootCert')"
+                                iconPos="left" icon="pi pi-ban" v-bind:class="{ 'p-disabled': !isSignedIn }">
+                            </Button>
+                            <Button label="Remove NOC" class="p-button-danger mt-3"
+                                @click="showGrantActionRootCertificateDialog(data, 'RemoveNocX509RootCert')"
+                                iconPos="left" icon="pi pi-trash" v-bind:class="{ 'p-disabled': !isSignedIn }">
+                            </Button>
+                            <br />
+                            <Button label="Download" class="p-button-success mt-3" icon="pi pi-download"
+                                @click="downloadCertificate(data)"></Button>
+                        </template>
+                    </Column>
+                    <template #expansion="certificate">
+                        <div>
+                            <NocLeafCertificates 
+                                :subject="certificate.data.subject"
+                                :subjectKeyId="certificate.data.subjectKeyId">
+                            </NocLeafCertificates>
                         </div>
                     </template>
                 </DataTable>

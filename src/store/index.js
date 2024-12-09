@@ -4,7 +4,7 @@ import init from './config'
 const store = createStore({
 	state() {
 		return {
-			packageVersion: import.meta.env.PACKAGE_VERSION || "0",
+			packageVersion: APP_VERSION,
 			keplrSigner: null,
 			selectedKeplrAccount: null,
 			selectedKeplrAccountName: null,

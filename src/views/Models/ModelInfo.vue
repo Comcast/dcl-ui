@@ -62,6 +62,7 @@ export default {
                 commissioningModeInitialStepsInstruction: {},
                 commissioningModeSecondaryStepsHint: {},
                 commissioningModeSecondaryStepsInstruction: {},
+                commissioningFallbackUrl: {},
                 userManualUrl: {},
                 supportUrl: {},
                 productUrl: {},
@@ -73,6 +74,7 @@ export default {
                 enhancedSetupFlowTCDigest: {},
                 enhancedSetupFlowTCFileSize: {},
                 maintenanceUrl: {},
+                discoveryCapabilitiesBitmask: {},
                 schemaVersion: {}
             }
         };
@@ -227,6 +229,10 @@ export default {
                     <td>{{ selectedModel.commissioningModeSecondaryStepsInstruction }}</td>
                 </tr>
                 <tr>
+                    <td>Commissioning Fallback URL</td>
+                    <td>{{ selectedModel.commissioningFallbackUrl }}</td>
+                </tr>
+                <tr>
                     <td>User Manual URL</td>
                     <td>{{ selectedModel.userManualUrl }}</td>
                 </tr>
@@ -265,6 +271,10 @@ export default {
                 <tr>
                     <td>Maintenance URL</td>
                     <td>{{ selectedModel.maintenanceUrl }}</td>
+                </tr>
+                <tr>
+                    <td>Discovery Capabilities Bitmask</td>
+                    <td>{{ selectedModel.discoveryCapabilitiesBitmask }}</td>
                 </tr>
                 <tr>
                     <td>Schema Version</td>
@@ -430,6 +440,18 @@ export default {
                         <div v-if="v$.model.commissioningModeSecondaryStepsInstruction.$invalid && submitted" class="p-error">Commissioning Mode Secondary Steps Instruction is required</div>
                     </div>
 
+                    <!-- Field for commissioningFallbackUrl -->
+                    <div class="field">
+                        <label for="commissioningFallbackUrl">
+                            <IconField v-tooltip.top="'URL for commissioning fallback details'">
+                                Commissioning Fallback URL
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="commissioningFallbackUrl" type="text" v-model="v$.model.commissioningFallbackUrl.$model" :class="{ 'p-invalid': v$.model.commissioningFallbackUrl.$invalid && submitted }" />
+                        <div v-if="v$.model.commissioningFallbackUrl.$invalid && submitted" class="p-error">Commissioning Fallback URL is required</div>
+                    </div>
+
                     <!-- Field for userManualUrl -->
                     <div class="field">
                         <label for="userManualUrl">
@@ -559,8 +581,22 @@ export default {
                             </IconField>
                         </label>
                         <InputText id="maintenanceUrl" type="text" v-model="v$.model.maintenanceUrl.$model" :class="{ 'p-invalid': v$.model.maintenanceUrl.$invalid && submitted }" />
-                        <div v-if="v$.model.maintenanceUrl.$invalid && submitted" class="p-error">Maintenance URL is required</div>
+                        <div v-if="v$.model.maintenanceUrl.$invalid && submitted" class="p-error">Maintenance URL is invalid</div>
                     </div>
+
+                    <!-- Field for discoverCapabilitiesBitmask -->
+                    <div class="field">
+                        <label for="discoveryCapabilitiesBitmask">
+                            <IconField v-tooltip.top="'Bitmask of the discovery capabilities supported by the device'">
+                                Discovery Capabilities Bitmask
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="discoveryCapabilitiesBitmask" type="text" v-model="v$.model.discoveryCapabilitiesBitmask.$model" :class="{ 'p-invalid': v$.model.discoveryCapabilitiesBitmask.$invalid && submitted }" />
+                        <div v-if="v$.model.discoveryCapabilitiesBitmask.$invalid && submitted" class="p-error">Discovery Capabilities Bitmask is invalid</div>
+                    </div>
+
+
 
                     <!-- Field for schemaVersion -->
                     <div class="field">
