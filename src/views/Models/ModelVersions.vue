@@ -297,7 +297,7 @@ export default {
                 v-tooltip="'Update Model Version'"
               />
             </span>
-						<!-- Add button to approve the model version -->
+						<!-- Add button to approve the model version 
 						<span style="margin-right: 0.1rem">
 							<Button
 								label=""
@@ -308,7 +308,9 @@ export default {
 								v-bind:class="{ 'p-disabled': !isSignedIn }"
 								v-tooltip="'Certify Model Version'"
 							/>
-						</span>
+						</span> 
+            Currently disabled based on request from CSA
+            -->
             <!-- Add button to delete the model version -->
             <span style="margin-right: 0.1rem">
               <Button
