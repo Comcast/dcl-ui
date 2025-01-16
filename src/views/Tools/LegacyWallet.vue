@@ -6,6 +6,7 @@
       <ul class="list-disc pl-5 mt-2">
         <li>Store your mnemonic securely in an offline location. This menmonic can also be used to create/restore this account in Keplr Wallet.</li>
         <li>Delete the wallet from local storage immediately.</li>
+        <li>Consider using a hardware wallet for enhanced security.</li>
       </ul>
     </div>
 
@@ -132,30 +133,9 @@ export default {
     const deleteWallet = () => {
       const index = wallets.value.findIndex(w => w.name === selectedWallet.value.name);
       if (index !== -1) {
-        // Check if the wallet being deleted is the lastWallet
-        const lastWalletName = localStorage.getItem('lastWallet');
-        const isLastWallet = lastWalletName === selectedWallet.value.name;
-
-        // Remove the wallet
         wallets.value.splice(index, 1);
-        
-        // Update wallets in localStorage
         localStorage.setItem('wallets', JSON.stringify(wallets.value));
-        
-        // Update lastWallet if necessary
-        if (isLastWallet) {
-          if (wallets.value.length > 0) {
-            // If there are remaining wallets, set lastWallet to the next one (or the first one if we deleted the last wallet)
-            const nextIndex = index < wallets.value.length ? index : 0;
-            const nextWalletName = wallets.value[nextIndex].name;
-            localStorage.setItem('lastWallet', nextWalletName);
-          } else {
-            // If no wallets remain, remove lastWallet from localStorage
-            localStorage.removeItem('lastWallet');
-          }
-        }
       }
-      
       deleteDialogVisible.value = false;
       selectedWallet.value = null;
     };
