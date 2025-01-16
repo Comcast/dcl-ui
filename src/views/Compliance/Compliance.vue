@@ -216,7 +216,9 @@ export default {
             </TabPanel>
 
             <TabPanel header="All Revoked Models">
-                <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" />
+                <!-- Disabled per request from CSA
+                <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" /> 
+                -->
 
                 <DataTable :value="allRevokedModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -243,7 +245,10 @@ export default {
                 </DataTable>
             </TabPanel>
             <TabPanel header="All Provisional Models">
+                
+                <!-- Disabled per request from CSA
                 <Button @click="showProvisionalModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Provision Model" />
+                 -->
                 <DataTable :value="allProvisionalModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

@@ -180,6 +180,13 @@ export default {
             getTXApi: import.meta.env.VITE_APP_DCL_TX_API,
             refresh: import.meta.env.VITE_APP_DCL_REFRESH
         });
+        // Get all the accounts
+        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll', {
+            options: {
+                subscribe: true,
+                all: true
+            }
+        });
         this.initialized = true;
     }
 };
@@ -203,5 +210,4 @@ input:read-only {
     color: #777;
 }
 </style>
-
 
