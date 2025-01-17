@@ -50,7 +50,13 @@ const model = ref([
             { label: 'Compliance', icon: 'pi pi-fw pi-check-circle', to: '/compliance' },
             { label: 'PKI', icon: 'pi pi-fw pi-lock', to: '/pki' },
             { label: 'Validators', icon: 'pi pi-fw pi-server', to: '/validators' },
-            { label: 'Upgrades', icon: 'pi pi-fw pi-history', to: '/upgrades' },
+            { label: 'Upgrades', icon: 'pi pi-fw pi-history', to: '/upgrades' }
+        ]
+    },
+    {
+        label: 'Tools and Documentation',
+        icon: 'pi pi-fw pi-book',
+        items: [
             { label: 'Transaction Blocks', icon: 'pi pi-fw pi-book', to: '/transactions/blocks' },
             { label: 'Legacy Wallet', icon: 'pi pi-fw pi-wallet', to: '/legacy-wallet' },
             { label: 'Keplr Wallet - Guide', icon: 'pi pi-fw pi-book', to: '/keplr-wallet' }
