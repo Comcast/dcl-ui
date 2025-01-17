@@ -1,63 +1,99 @@
-# DCL UI Web based app for managing CSA-DCL
+# DCL UI Web-based App for Managing CSA-DCL
 
-DCL-UI is [Vue.js](https://vuejs.org/) - based web application for managing the CSA Distributed Compliance Ledger. This app provides a web interface to view and manage the data in the Ledger.
+DCL-UI is a [Vue.js](https://vuejs.org/)-based web application for managing the CSA Distributed Compliance Ledger. This app provides a web interface to view and manage data in the Ledger.
+
+## Overview
+The DCL-UI provides features for:
+- Viewing and managing compliance records
+- Interacting with the distributed ledger
+- Managing user access and permissions
+- Monitoring ledger status and transactions
 
 ## Prerequisites
-You will need [Node.js](https://nodejs.org) version 20.x installed on your system.
+- [Node.js](https://nodejs.org) version 20.x
+- Git
+- Modern web browser (Chrome, Firefox, Safari, or Edge)
+- Basic knowledge of Vue.js and blockchain concepts
 
 ## Project Setup
 
-Get the code by cloning this repository using git
-
-    > git clone https://github.com/Comcast/dcl-ui.git
-
-Once downloaded, open the terminal in the project directory, and continue with:
-
+### Getting Started
+Clone the repository:
+```bash
+git clone https://github.com/Comcast/dcl-ui.git
+cd dcl-ui
 ```
+
+Install dependencies:
+```bash
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
+### Development
+Start the development server with hot-reload:
+```bash
 npm run dev
 ```
 
-### Compiles and minifies for production
-```
+Build for production:
+```bash
 npm run build
 ```
 
-
-## Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-### Configuring DCL-UI
-By default DCL UI connects to the CSA Testnet Observer Node when started in development mode. Since CORS is disabled on the CSA Observer Node (https://on.test-net.dcl.csa-iot.org) when the project is started in development mode it configures a http proxy server that takes the request for /api, /rpc and /websocket to the target CSA Observer Node. You can modify the configuration in vue.config.js file.
-
-.env.development file contains the following environment variables (Since the default server starts on port 8080. Please update the ports is you are running the local server on different port.)
+### Project Structure
 ```
-VUE_APP_DCL_API_NODE=http://localhost:8080/api
-VUE_APP_DCL_RPC_NODE=http://localhost:8080/rpc
-VUE_APP_DCL_WEBSOCKET_NODE=ws://localhost:8080/websocket
-VUE_APP_DCL_CHAIN_ID=testnet-2.0
-VUE_APP_DCL_CHAIN_NAME=DCL-Chain-Testnet
-VUE_APP_DCL_ADDR_PREFIX=cosmos
-VUE_APP_DCL_SDK_VERSION=Stargate
-VUE_APP_DCL_TX_API=/rpc/tx?hash=0x
-VUE_APP_DCL_REFRESH=500000
+dcl-ui/
+├── src/              # Source code
+├── public/           # Static assets
+├── dist/            # Production build output
+├── tests/           # Test files
+└── vite.config.js   # Vite configuration
 ```
 
-## Deploying a minified SPA (Single Page Application) 
+## Configuration
 
-### Configure for deployment
-Before the application can be deployed, please create a .env file and configure the the environment variables. You can take the .env.sample file as a reference.
+### Development Environment
+The default configuration connects to the CSA Testnet Observer Node. The development environment uses a proxy server for CORS-disabled endpoints.
 
-
-### Build the Application
+Environment variables (.env.development):
+```env
+VITE_APP_DCL_API_NODE=http://localhost:8080/api
+VITE_APP_DCL_RPC_NODE=http://localhost:8080/rpc
+VITE_APP_DCL_WEBSOCKET_NODE=ws://localhost:8080/websocket
+VITE_APP_DCL_CHAIN_ID=testnet-2.0
+VITE_APP_DCL_CHAIN_NAME=DCL-Chain-Testnet
+VITE_APP_DCL_ADDR_PREFIX=cosmos
+VITE_APP_DCL_SDK_VERSION=Stargate
+VITE_APP_DCL_TX_API=/rpc/tx?hash=0x
+VITE_APP_DCL_REFRESH=500000
 ```
-npm run build 
-```
-This will generate the compiled package in /dist folder. This folder contains the index.html file, that can be served from any web server. 
 
-For a more detailed explanation on how this application works, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### Production Deployment
+
+1. Create a `.env` file for production settings (use `.env.sample` as reference)
+2. Build the application:
+   ```bash
+   npm run build
+   ```
+3. Deploy the contents of the `/dist` folder to your web server
+
+## Troubleshooting
+
+Common issues and solutions:
+1. **CORS Issues**: Ensure proxy settings are correct in development
+2. **Build Errors**: Check Node.js version and dependencies
+3. **API Connection**: Verify environment variables and network connectivity
+
+## Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
+
+## Additional Resources
+- [Vue.js Documentation](https://vuejs.org/guide/introduction.html)
+- [Vite Documentation](https://vitejs.dev/guide/)
+- [CSA DCL](https://github.com/zigbee-alliance/distributed-compliance-ledger)
+
+
+## Support
+For issues and feature requests, please use the GitHub issue tracker.
