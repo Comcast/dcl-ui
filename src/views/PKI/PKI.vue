@@ -503,36 +503,36 @@ export default {
                     <Button @click="showCertificateDialog('propose-root')" 
                             :disabled="!isSignedIn"
                             icon="pi pi-plus-circle"
-                            label="Propose Root Cert"
+                            label="Propose Attestation Root CA"
                             class="mr-3 p-button-primary"
-                            v-tooltip.top="'Propose a new root certificate'"
+                            v-tooltip.top="'Propose a new Attestation Root CA'"
                     />
                     <Button @click="showCertificateDialog('add-leaf')"
                             :disabled="!isSignedIn"
                             icon="pi pi-file"
-                            label="Add Leaf Cert"
+                            label="Add Attestation Leaf Certificate"
                             class="mr-3 p-button-primary"
-                            v-tooltip.top="'Add a new leaf certificate'"
+                            v-tooltip.top="'Add a New Attestation Leaf Certificate'"
                     />
                     <Button @click="showCertificateDialog('add-noc-root')"
                             :disabled="!isSignedIn"
                             icon="pi pi-sitemap"
-                            label="Add NOC Root Cert"
+                            label="Add NOC Root CA (RCAC)"
                             class="mr-3 p-button-primary"
-                            v-tooltip.top="'Add a new NOC root certificate'"
+                            v-tooltip.top="'Add a new NOC Root CA (RCAC)'"
                     />
                     <Button @click="showCertificateDialog('add-noc-ica')"
                             :disabled="!isSignedIn"
                             icon="pi pi-server"
-                            label="Add NOC ICA Cert"
+                            label="Add NOC Intermediate CA (ICAC)"
                             class="p-button-primary"
-                            v-tooltip.top="'Add a new NOC ICA certificate'"
+                            v-tooltip.top="'Add a new NOC Intermediate CA (ICAC)'"
                     />
         </div>        
         <ConfirmDialog></ConfirmDialog>
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
-        <TabView>
-            <TabPanel header="All Approved Certificates">
+        <TabView :scrollable="true">
+            <TabPanel header="All Attestation Certificates">
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -551,7 +551,11 @@ export default {
                     <Column field="vid" header="Vendor ID" :sortable="true" />
                     <Column field="certificateType" header="Certificate Type" :sortable="true" />
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
-                    <Column field="subjectKeyId" header="Subject Key ID"></Column>
+                    <Column field="subjectKeyId" header="Subject Key ID">
+                        <template #body="slotProps">
+                            <span style="word-break: break-all;">{{slotProps.data.subjectKeyId}}</span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
                             <ol>
@@ -606,7 +610,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Noc Certificates">
+            <TabPanel header="All NOC Certificates">
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -625,7 +629,11 @@ export default {
                     <Column field="vid" header="Vendor ID" :sortable="true" />
                     <Column field="certificateType" header="Certificate Type" :sortable="true" />
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
-                    <Column field="subjectKeyId" header="Subject Key ID"></Column>
+                    <Column field="subjectKeyId" header="Subject Key ID">
+                        <template #body="slotProps">
+                            <span style="word-break: break-all;">{{slotProps.data.subjectKeyId}}</span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
                             <ol>
@@ -719,7 +727,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Certificates">
+            <TabPanel header="All Proposed Attestation Certificates">
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -735,7 +743,11 @@ export default {
 
                     <Column field="subjectAsText" header="Subject" :sortable="true"></Column>
 
-                    <Column field="subjectKeyId" header="Subject Key ID" :sortable="true"></Column>
+                    <Column field="subjectKeyId" header="Subject Key ID">
+                        <template #body="slotProps">
+                            <span style="word-break: break-all;">{{slotProps.data.subjectKeyId}}</span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
                             <ol>
@@ -778,7 +790,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Revoked Certificates">
+            <TabPanel header="All Proposed Revoked Attestation Certificates">
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -792,7 +804,11 @@ export default {
                         </div>
                     </template>
                     <Column field="subjectAsText" header="Subject" :sortable="true" />
-                    <Column field="subjectKeyId" header="Subject Key ID" :sortable="true"></Column>
+                    <Column field="subjectKeyId" header="Subject Key ID">
+                        <template #body="slotProps">
+                            <span style="word-break: break-all;">{{slotProps.data.subjectKeyId}}</span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
                             <ol>
@@ -815,7 +831,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Revoked Certificates">
+            <TabPanel header="All Revoked Attestation Certificates">
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -829,7 +845,11 @@ export default {
                         </div>
                     </template>
                     <Column class="subject" field="subjectAsText" header="Subject" :sortable="true"></Column>
-                    <Column field="subjectKeyId" header="Subject Key ID" :sortable="true"></Column>
+                    <Column field="subjectKeyId" header="Subject Key ID">
+                        <template #body="slotProps">
+                            <span style="word-break: break-all;">{{slotProps.data.subjectKeyId}}</span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
                             <ol>
