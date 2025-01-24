@@ -194,6 +194,13 @@ export default {
           </template>
 					</Column> -->
                     <Column field="vendorIDHex" header="Vendor ID" :sortable="true"></Column>
+                    <Column field="productIDs" header="Product IDs">
+                        <template #body="{ data }">
+                            <span style="white-space: pre-line">
+                                {{ data.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
+                            </span>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
                             <ol>
@@ -237,6 +244,13 @@ export default {
                     </Column>
                     <Column field="account.base_account.address" header="Address"></Column>
                     <Column field="account.vendorIDHex" header="Vendor ID"></Column>
+                    <Column field="productIDs" header="Product IDs">
+                        <template #body="{ data }">
+                            <span style="white-space: pre-line">
+                                {{ data.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
+                            </span>
+                        </template>
+                    </Column>                    
                     <Column field="account.approvals" header="Approvals">
                         <template #body="row">
                             <ol>
