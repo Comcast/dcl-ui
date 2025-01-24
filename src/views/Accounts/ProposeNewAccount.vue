@@ -90,7 +90,10 @@ export default {
                     value: {
                         signer: creatorAddress,
                         vendorID: this.vendorID,
-                        productIDS: this.productIDs,
+                        productIDs: this.productIDs ? this.productIDs.split(',').map(range => {
+                            const [min, max] = range.trim().split('-').map(Number);
+                            return { min, max };
+                        }) : [],
                         address: this.address,
                         pubKey: encodedBasePubkey,
                         roles: this.selectedRoles,
