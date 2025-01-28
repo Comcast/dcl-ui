@@ -133,7 +133,7 @@ export default {
 <template>
     <div class="prime-vue-container">
         <TabView>
-            <TabPanel header="All Approved Upgrades">
+            <TabPanel header="Approved Upgrades">
                 <Button @click="showProposeUpgradeDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Upgrade">Propose Upgrade</Button>
 
                 <div class="mb-4"></div>
@@ -183,7 +183,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Upgrades">
+            <TabPanel header="Proposed Upgrades">
                 <DataTable :value="allProposedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -235,7 +235,7 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="All Rejected Upgrades">
+            <TabPanel header="Rejected Upgrades">
                 <DataTable :value="allRejectedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

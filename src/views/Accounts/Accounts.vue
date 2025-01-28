@@ -82,7 +82,7 @@ export default {
     computed: {
         allProposedAccounts() {
             const pendingAccountsArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclauth/getPendingAccountAll']();
-            // Add the hex value to the vendor ID to all the accounts
+            // Add the hex value to the vendor ID to the accounts
             pendingAccountsArray?.pendingAccount?.forEach((pendingAccount) => {
                 pendingAccount.account.vendorIDHex = this.addHexValueToVendorID(pendingAccount.account.vendorID);
             });
@@ -96,7 +96,7 @@ export default {
 
         allActiveAccounts() {
             const allAccountsArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll']();
-            // Add the hex value to the vendor ID to all the accounts
+            // Add the hex value to the vendor ID to the accounts
             allAccountsArray?.account?.forEach((account) => {
                 account.vendorIDHex = this.addHexValueToVendorID(account.vendorID);
             });
@@ -125,21 +125,21 @@ export default {
     },
 
     created: function () {
-        // Get all the accounts
+        // Get the accounts
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll', {
             options: {
                 subscribe: true,
                 all: true
             }
         });
-        // Get all the pending accounts
+        // Get the pending accounts
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountAll', {
             options: {
                 subscribe: true,
                 all: true
             }
         });
-        // Get all the revoked accounts
+        // Get the revoked accounts
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountRevocationAll', {
             options: {
                 subscribe: true,
@@ -153,7 +153,7 @@ export default {
 <template>
     <div class="prime-vue-container">
         <TabView>
-            <TabPanel header="All Active Accounts">
+            <TabPanel header="Active Accounts">
                 <Button @click="showProposeNewAccountDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Account">Propose Account</Button>
                 <div class="mb-4"></div>
                 <DataTable :value="allActiveAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
@@ -220,7 +220,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Accounts">
+            <TabPanel header="Proposed Accounts">
                 <DataTable :value="allProposedAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -247,7 +247,7 @@ export default {
                     <Column field="productIDs" header="Product IDs">
                         <template #body="{ data }">
                             <span style="white-space: pre-line">
-                                {{ data.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
+                                {{ data.account.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
                             </span>
                         </template>
                     </Column>                    
@@ -281,7 +281,7 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="All Active Accounts - Pending Revocation">
+            <TabPanel header="Active Accounts - Pending Revocation">
                 <DataTable :value="allActiveRevocations" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

@@ -532,7 +532,7 @@ export default {
         <ConfirmDialog></ConfirmDialog>
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
         <TabView :scrollable="true">
-            <TabPanel header="All Attestation Certificates">
+            <TabPanel header="Attestation Certificates">
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -610,7 +610,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All NOC Certificates">
+            <TabPanel header="NOC Certificates">
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -727,7 +727,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Attestation Certificates">
+            <TabPanel header="Proposed Attestation Certificates">
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -790,7 +790,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Proposed Revoked Attestation Certificates">
+            <TabPanel header="Proposed Revoked Attestation Certificates">
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -831,7 +831,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Revoked Attestation Certificates">
+            <TabPanel header="Revoked Attestation Certificates">
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>

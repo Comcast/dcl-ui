@@ -164,7 +164,7 @@ export default {
 <template>
     <div class="prime-vue-container">
         <TabView>
-            <TabPanel header="All Certified Models">
+            <TabPanel header="Certified Models">
                 <DataTable :value="allCertifiedModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -215,7 +215,7 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="All Revoked Models">
+            <TabPanel header="Revoked Models">
                 <!-- Disabled per request from CSA
                 <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" /> 
                 -->
@@ -244,7 +244,7 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="All Provisional Models">
+            <TabPanel header="Provisional Models">
                 
                 <!-- Disabled per request from CSA
                 <Button @click="showProvisionalModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Provision Model" />
