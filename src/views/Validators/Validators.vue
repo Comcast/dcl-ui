@@ -159,7 +159,7 @@ export default {
 <template>
     <div class="prime-vue-container ml-5">
         <TabView>
-            <TabPanel header="All Current Validators">
+            <TabPanel header="Current Validators">
                 <!-- <div class="mb-5 ml-2">
 					<Button
 						@click="showValidatorInfoDialog"
@@ -202,7 +202,7 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="All Jailed Validators">
+            <TabPanel header="Jailed Validators">
                 <DataTable :value="jailedValidators(allValidators)" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -228,7 +228,7 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="All Proposed Disable Validators">
+            <TabPanel header="Proposed Disable Validators">
                 <DataTable :value="allProposedDisableValidators" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
