@@ -1,4 +1,5 @@
 <script>
+import { ref, onMounted } from 'vue'
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
@@ -18,7 +19,9 @@ export default {
     },
     mixins: [scrollToTopMixin],
     setup() {
-        return { v$: useVuelidate() };
+        const multiSelectRef = ref(null) 
+        const v$ = useVuelidate(false)
+        return { v$, multiSelectRef};
     },
     data() {
         return {
@@ -178,7 +181,7 @@ export default {
                                 <i class="pi pi-info-circle ml-2"></i>
                             </IconField>
                         </label>
-                        <MultiSelect :options="roles" :showToggleAll="false" v-model="selectedRoles" :class="{ 'p-invalid': v$.selectedRoles.$invalid && submitted }" />
+                        <MultiSelect ref="multiSelectRef" :options="roles" :showToggleAll="false" v-model="selectedRoles" :class="{ 'p-invalid': v$.selectedRoles.$invalid && submitted }" />
                         <div v-if="v$.selectedRoles.$invalid && submitted" class="p-error">At least one role is required</div>
                     </div>
 
