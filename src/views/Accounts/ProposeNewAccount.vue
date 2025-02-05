@@ -1,4 +1,5 @@
 <script>
+import { ref, onMounted } from 'vue'
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
@@ -18,7 +19,17 @@ export default {
     },
     mixins: [scrollToTopMixin],
     setup() {
-        return { v$: useVuelidate() };
+        const multiSelectRef = ref(null);
+        const v$ = useVuelidate();
+        
+        onMounted(() => {
+            // Ensure the MultiSelect is properly initialized after mount
+            if (multiSelectRef.value) {
+                multiSelectRef.value.$el.setAttribute('id', 'roles-multiselect');
+            }
+        });
+        
+        return { v$, multiSelectRef };
     },
     data() {
         return {
@@ -173,12 +184,23 @@ export default {
                     </div>
                     <div class="field">
                         <label for="info">
-                            <IconField v-tooltip.top="'The list of roles assigning to the account.'">
+                            <IconField v-tooltip.top="'The list of roles assigning to the account'">
                                 Roles <span class="required">*</span>
                                 <i class="pi pi-info-circle ml-2"></i>
                             </IconField>
                         </label>
-                        <MultiSelect :options="roles" :showToggleAll="false" v-model="selectedRoles" :class="{ 'p-invalid': v$.selectedRoles.$invalid && submitted }" />
+                        <MultiSelect
+                            ref="multiSelectRef"
+                            id="roles-multiselect"
+                            v-model="selectedRoles"
+                            :options="roles"
+                            :showToggleAll="false"
+                            optionLabel=""
+                            display="chip"
+                            :class="{ 'p-invalid': v$.selectedRoles.$invalid && submitted }"
+                            placeholder="Select Roles"
+                        />
+
                         <div v-if="v$.selectedRoles.$invalid && submitted" class="p-error">At least one role is required</div>
                     </div>
 
