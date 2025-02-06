@@ -104,8 +104,7 @@ export default {
         },
 
         isSignedIn() {
-            const loggedIn = this.$store.getters['loggedIn'] || this.$store.getters['common/wallet/loggedIn'];
-            return loggedIn;
+            return this.$store.getters['loggedIn'];
         },
         validatorDialogHeader() {
             return this.viewOnly ? 'Validator Info' : 'Add a new Validator';

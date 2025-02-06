@@ -86,7 +86,7 @@ export default {
         },
 
         isSignedIn() {
-            return this.$store.getters['loggedIn'] || this.$store.getters['common/wallet/loggedIn'];
+            return this.$store.getters['loggedIn'];
         }
     },
 

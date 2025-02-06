@@ -1,6 +1,8 @@
 <script>
 import { onMounted } from 'vue';
 import { ref } from 'vue';
+import { nextTick } from 'vue';
+
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import TabView from 'primevue/tabview';
@@ -24,6 +26,7 @@ export default {
             showGrantActionAccount: false,
             selectedAccount: null,
             grantAction: null,
+            dialogKey: 0, // This is to force the dialog to re-render
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS }
             }
@@ -32,7 +35,10 @@ export default {
 
     methods: {
         showProposeNewAccountDialog() {
-            this.showProposeNewAccount = true;
+            this.dialogKey++;
+            nextTick(() => {
+                this.showProposeNewAccount = true;
+            });
         },
         dismissProposeNewAccountDialog() {
             this.showProposeNewAccount = false;
@@ -104,7 +110,7 @@ export default {
         },
 
         isSignedIn() {
-            const loggedIn = this.$store.getters['loggedIn'] || this.$store.getters['common/wallet/loggedIn'];
+            const loggedIn = this.$store.getters['loggedIn'];
             return loggedIn;
         },
 
@@ -315,12 +321,34 @@ export default {
             </TabPanel>
         </TabView>
 
-        <Dialog :header="grantActionHeader" @update:visible="dismissGrantActionAccountDialog" :visible="showGrantActionAccount" :style="{ width: '50vw' }" :modal="true">
-            <GrantActionAccount :account="selectedAccount" :action="grantAction" @close-dialog="dismissGrantActionAccountDialog"></GrantActionAccount>
+        <Dialog 
+            :header="grantActionHeader" 
+            @update:visible="dismissGrantActionAccountDialog" 
+            v-model:visible="showGrantActionAccount" 
+            :style="{ width: '50vw' }" 
+            :modal="true"
+        >
+            <GrantActionAccount 
+                :account="selectedAccount" 
+                :action="grantAction" 
+                @close-dialog="dismissGrantActionAccountDialog">
+            </GrantActionAccount>
         </Dialog>
 
-        <Dialog header="Propose a new account" @update:visible="dismissProposeNewAccountDialog" :visible="showProposeNewAccount" :style="{ width: '50vw' }" class="p-fluid" :modal="true">
-            <ProposeNewAccount @close-dialog="dismissProposeNewAccountDialog"></ProposeNewAccount>
+        <Dialog 
+            header="Propose a new account" 
+            v-model:visible="showProposeNewAccount"
+            :style="{ width: '50vw' }" 
+            :modal="true"
+            :closable="true"
+            :closeOnEscape="true"
+            @hide="dismissProposeNewAccountDialog"
+        >
+            <ProposeNewAccount 
+                v-if="showProposeNewAccount"
+                :key="dialogKey"
+                @close-dialog="dismissProposeNewAccountDialog"
+            />
         </Dialog>
     </div>
 </template>
