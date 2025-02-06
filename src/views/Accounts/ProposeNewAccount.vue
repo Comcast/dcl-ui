@@ -22,12 +22,7 @@ export default {
         const multiSelectRef = ref(null);
         const v$ = useVuelidate();
         
-        onMounted(() => {
-            // Ensure the MultiSelect is properly initialized after mount
-            if (multiSelectRef.value) {
-                multiSelectRef.value.$el.setAttribute('id', 'roles-multiselect');
-            }
-        });
+
         
         return { v$, multiSelectRef };
     },
@@ -89,8 +84,8 @@ export default {
             if (this.$store.state.selectedKeplrAccount) {
                 account = this.$store.state.selectedKeplrAccount;
             } else {
-                const wallet = this.$store.getters['common/wallet/wallet'];
-                account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
+                this.$toast.add({ severity: 'error', summary: 'Error getting account from Keplr Wallet', detail: 'Tx failed', life: 3000 });
+                return;
             }
             const creatorAddress = account.address;
 
