@@ -51,18 +51,18 @@ export default defineConfig(() => {
             port: 8080,
             proxy: {
                 '/api': {
-                    target: 'http://localhost:26640',
+                    target: 'https://on.test-net.dcl.csa-iot.org', //Use http://localhost:26640 (if running a local-net)                       
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/api/, '')
                 },
                 '/rpc': {
-                    target: 'http://localhost:26657',
+                    target: 'http://on.test-net.dcl.csa-iot.org:26657', //Use http://localhost:26657 (if running a local-net)
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/rpc/, ''),
                     ws: true
                 },
                 '/websocket': {
-                    target: 'http://localhost:26657',
+                    target: 'http://on.test-net.dcl.csa-iot.org:26657', //Use http://localhost:26657 (if running a local-net)
                     changeOrigin: true,
                     ws: true,
                     upgrade: true
