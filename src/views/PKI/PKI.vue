@@ -532,7 +532,7 @@ export default {
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
         <TabView :scrollable="true">
             <TabPanel header="Attestation Certificates">
-                <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
                     <template #header>
@@ -610,7 +610,7 @@ export default {
             </TabPanel>
 
             <TabPanel header="NOC Certificates">
-                <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
                     <template #header>
@@ -682,7 +682,7 @@ export default {
                     class="p-button-primary mb-4 mr-4" v-bind:class="{ 'p-disabled': !isSignedIn }"
                     label="Add Revocation Distribution Point" />
 
-                <DataTable :value="allPkiRevocationDistributionPoints" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable :value="allPkiRevocationDistributionPoints" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines
                     stripedRows>
                     <template #header>
@@ -727,7 +727,7 @@ export default {
             </TabPanel>
 
             <TabPanel header="Proposed Attestation Certificates">
-                <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -790,7 +790,7 @@ export default {
             </TabPanel>
 
             <TabPanel header="Proposed Revoked Attestation Certificates">
-                <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -831,7 +831,7 @@ export default {
             </TabPanel>
 
             <TabPanel header="Revoked Attestation Certificates">
-                <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10"
+                <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

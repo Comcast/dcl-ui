@@ -10,7 +10,7 @@
       </ul>
     </div>
 
-    <DataTable :value="wallets" :paginator="true" :rows="10" class="p-datatable-sm">
+    <DataTable :value="wallets" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" class="p-datatable-sm">
       <Column field="name" header="Wallet Name" style="width: 60%;">
         <template #body="slotProps">
           <div class="wallet-name">{{ slotProps.data.name }}</div>

@@ -164,7 +164,7 @@ export default {
     <div class="prime-vue-container">
         <TabView>
             <TabPanel header="Certified Models">
-                <DataTable :value="allCertifiedModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allCertifiedModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -219,7 +219,7 @@ export default {
                 <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" /> 
                 -->
 
-                <DataTable :value="allRevokedModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allRevokedModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -248,7 +248,7 @@ export default {
                 <!-- Disabled per request from CSA
                 <Button @click="showProvisionalModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Provision Model" />
                  -->
-                <DataTable :value="allProvisionalModels" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allProvisionalModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
