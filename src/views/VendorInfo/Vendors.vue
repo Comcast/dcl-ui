@@ -74,7 +74,7 @@ export default {
         <div class="mb-5 ml-2">
             <Button @click="showVendorInfoDialog(nil, false)" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="New Vendor">New Vendor</Button>
         </div>
-        <DataTable :value="allVendors" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+        <DataTable :value="allVendors" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
             <template #header>
                 <div class="flex justify-content-end">
                     <IconField>

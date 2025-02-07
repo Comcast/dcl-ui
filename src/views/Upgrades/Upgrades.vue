@@ -136,7 +136,7 @@ export default {
                 <Button @click="showProposeUpgradeDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Upgrade">Propose Upgrade</Button>
 
                 <div class="mb-4"></div>
-                <DataTable :value="allApprovedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allApprovedUpgrades" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -183,7 +183,7 @@ export default {
             </TabPanel>
 
             <TabPanel header="Proposed Upgrades">
-                <DataTable :value="allProposedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allProposedUpgrades" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -235,7 +235,7 @@ export default {
                 </DataTable>
             </TabPanel>
             <TabPanel header="Rejected Upgrades">
-                <DataTable :value="allRejectedUpgrades" :auto-layout="true" :paginator="true" :rows="10" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allRejectedUpgrades" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>

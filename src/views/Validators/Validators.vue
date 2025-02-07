@@ -202,7 +202,7 @@ export default {
                 </DataTable>
             </TabPanel>
             <TabPanel header="Jailed Validators">
-                <DataTable :value="jailedValidators(allValidators)" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="jailedValidators(allValidators)" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -228,7 +228,7 @@ export default {
                 </DataTable>
             </TabPanel>
             <TabPanel header="Proposed Disable Validators">
-                <DataTable :value="allProposedDisableValidators" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="allProposedDisableValidators" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>

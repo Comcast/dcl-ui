@@ -251,7 +251,7 @@ export default {
         :value="allModelVersions"
         :auto-layout="true"
         :paginator="true"
-        :rows="10"
+        :rows="10" 
         showGridlines
         stripedRows
       >
