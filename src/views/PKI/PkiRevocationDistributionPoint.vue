@@ -191,25 +191,25 @@ export default {
                     <!-- Field for vid -->
                     <div class="field">
                         <label for="vid">Vendor ID <span class="required">*</span> </label>
-                        <InputText id="vid" type="text" v-model="v$.pkiRevocationDistributionPoint.vid.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.vid.$invalid && submitted }" />
+                        <InputText id="vid" type="text" v-model="v$.pkiRevocationDistributionPoint.vid.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.vid.$invalid && submitted }" :readonly="update"  />
                     </div>
 
                     <!-- Field for pid -->
                     <div class="field">
                         <label for="pid">Product ID </label>
-                        <InputText id="pid" type="text" v-model="v$.pkiRevocationDistributionPoint.pid.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.pid.$invalid && submitted }" />
+                        <InputText id="pid" type="text" v-model="v$.pkiRevocationDistributionPoint.pid.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.pid.$invalid && submitted }" :readonly="update"  />
                     </div>
 
                     <!-- Field for label -->
                     <div class="field">
                         <label for="label">Label <span class="required">*</span> </label>
-                        <InputText id="label" type="text" v-model="v$.pkiRevocationDistributionPoint.label.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.label.$invalid && submitted }" />
+                        <InputText id="label" type="text" v-model="v$.pkiRevocationDistributionPoint.label.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.label.$invalid && submitted }"  :readonly="update" />
                     </div>
 
                     <!-- Field for issuerSubjectKeyID -->
                     <div class="field">
                         <label for="issuerSubjectKeyID">Issuer Subject Key ID <span class="required">*</span> </label>
-                        <InputText id="issuerSubjectKeyID" type="text" v-model="v$.pkiRevocationDistributionPoint.issuerSubjectKeyID.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.issuerSubjectKeyID.$invalid && submitted }" />
+                        <InputText id="issuerSubjectKeyID" type="text" v-model="v$.pkiRevocationDistributionPoint.issuerSubjectKeyID.$model" :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.issuerSubjectKeyID.$invalid && submitted }"  :readonly="update" />
                     </div>
 
                     <!-- Field for isPAA -->
@@ -225,6 +225,7 @@ export default {
                             optionLabel="label"
                             optionValue="value"
                             :class="{ 'p-invalid': v$.pkiRevocationDistributionPoint.isPAA.$invalid && submitted }"
+                            :disabled="update" 
                         />
                     </div>
 
@@ -295,4 +296,20 @@ td:first-child {
     text-align: left;
     padding-right: 2em;
 }
+:deep(.p-inputtext[readonly]) {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+:deep(.p-dropdown.p-component:disabled),
+:deep(.p-dropdown.p-disabled) {
+    opacity: 1;
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+:deep(.p-dropdown.p-disabled .p-dropdown-label) {
+    color: #6c757d;
+}
 </style>
+
+

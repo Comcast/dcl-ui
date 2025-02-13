@@ -62,14 +62,7 @@ export default {
             });
         },
         deleteModel(model) {
-            let account;
-
-            if (this.$store.state.selectedKeplrAccount) {
-                account = this.$store.state.selectedKeplrAccount;
-            } else {
-                const wallet = this.$store.getters['common/wallet/wallet'];
-                account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
-            }
+            const account = this.$store.state.selectedKeplrAccount;
             const creatorAddress = account.address;
             let loader = this.$loading.show();
             this.$store
