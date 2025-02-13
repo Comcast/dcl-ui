@@ -62,14 +62,8 @@ export default {
                 return;
             }
 
-            let account;
+            const account = this.$store.state.selectedKeplrAccount;
 
-            if (this.$store.state.selectedKeplrAccount) {
-                account = this.$store.state.selectedKeplrAccount;
-            } else {
-                const wallet = this.$store.getters['common/wallet/wallet'];
-                account = wallet && wallet.accounts && wallet.accounts.length > 0 ? wallet.accounts[0] : null;
-            }
             const creatorAddress = account.address;
 
             this.txProcessing = true;
