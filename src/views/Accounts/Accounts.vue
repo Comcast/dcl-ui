@@ -10,6 +10,7 @@ import TabPanel from 'primevue/tabpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Tooltip from 'primevue/tooltip';
+import Card from 'primevue/card';
 import { email, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { FilterMatchMode } from 'primevue/api';
@@ -29,7 +30,8 @@ export default {
             dialogKey: 0, // This is to force the dialog to re-render
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-            }
+            },
+            activeTabIndex: 0
         };
     },
 
@@ -81,6 +83,7 @@ export default {
         Button,
         Dialog,
         Tooltip,
+        Card,
         ProposeNewAccount,
         GrantActionAccount
     },
@@ -152,14 +155,33 @@ export default {
                 all: true
             }
         });
+
+        // Check if tab query parameter is present
+        if (this.$route.query.tab) {
+            this.activeTabIndex = parseInt(this.$route.query.tab);
+        }
+    },
+
+    watch: {
+        '$route.query.tab': function(newTab) {
+            if (newTab !== undefined) {
+                this.activeTabIndex = parseInt(newTab);
+            }
+        }
     }
 };
 </script>
 
 <template>
     <div class="prime-vue-container">
-        <TabView>
-            <TabPanel header="Active Accounts">
+        <Card class="shadow-2 border-round-lg">
+            <template #content>
+                <TabView v-model:activeIndex="activeTabIndex">
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-users mr-2"></i>
+                            <span class="font-semibold">Active Accounts</span>
+                        </template>
                 <Button @click="showProposeNewAccountDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Account">Propose Account</Button>
                 <div class="mb-4"></div>
                 <DataTable :value="allActiveAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
@@ -226,7 +248,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Accounts">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock mr-2"></i>
+                    <span class="font-semibold">Proposed Accounts</span>
+                </template>
                 <DataTable :value="allProposedAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -287,7 +313,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Active Accounts - Pending Revocation">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-ban mr-2"></i>
+                    <span class="font-semibold">Pending Revocations</span>
+                </template>
                 <DataTable :value="allActiveRevocations" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -320,6 +350,8 @@ export default {
                 </DataTable>
             </TabPanel>
         </TabView>
+            </template>
+        </Card>
 
         <Dialog 
             :header="grantActionHeader" 
@@ -352,5 +384,3 @@ export default {
         </Dialog>
     </div>
 </template>
-
-

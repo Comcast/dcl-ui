@@ -36,6 +36,7 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS }
             },
             selectedCertificate: null,
+            activeTabIndex: 0,
             downloadDropdownItems: [
                 {
                     label: 'Certificate Chain',
@@ -251,6 +252,19 @@ export default {
                 all: true
             }
         });
+
+        // Check if tab query parameter is present
+        if (this.$route.query.tab) {
+            this.activeTabIndex = parseInt(this.$route.query.tab);
+        }
+    },
+
+    watch: {
+        '$route.query.tab': function(newTab) {
+            if (newTab !== undefined) {
+                this.activeTabIndex = parseInt(newTab);
+            }
+        }
     },
 
     methods: {
@@ -529,7 +543,7 @@ export default {
         </div>        
         <ConfirmDialog></ConfirmDialog>
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
-        <TabView :scrollable="true">
+        <TabView :scrollable="true" v-model:activeIndex="activeTabIndex">
             <TabPanel header="Attestation Certificates">
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"

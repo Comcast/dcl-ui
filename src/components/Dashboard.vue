@@ -1,7 +1,12 @@
 <template>
-    <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+    <div>
+        <!-- Quick Actions Section -->
+        <QuickActions v-if="isSignedIn" />
+
+        <!-- Dashboard Grid -->
+        <div class="grid">
+            <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 text-lg mb-3">Accounts</span>
@@ -28,7 +33,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Roles</span>
@@ -64,7 +69,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Validator Nodes</span>
@@ -96,7 +101,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Data Summary</span>
@@ -131,7 +136,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Block Height</span>
@@ -159,7 +164,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Last Block Consensus %</span>
@@ -187,7 +192,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 text-lg mb-3">Network Info</span>
@@ -213,10 +218,10 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
 
         <div v-if="isSignedIn" class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg">Current User</span>
@@ -255,6 +260,7 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </template>
@@ -263,11 +269,13 @@
 import Vue3autocounter from 'vue3-autocounter';
 import { decodePubkey } from '@cosmjs/proto-signing';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import QuickActions from './QuickActions.vue';
 
 export default {
     name: 'Dashboard',
     components: {
-        'vue3-autocounter': Vue3autocounter
+        'vue3-autocounter': Vue3autocounter,
+        QuickActions
     },
     data() {
         return {

@@ -6,7 +6,7 @@ import Textarea from 'primevue/textarea';
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import Message from 'primevue/message'
-import { MsgProposeAddX509RootCert } from '../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.pki/module/types/pki/tx'
+import { MsgProposeAddX509RootCert } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.pki/types'
 
 export default {
   name: 'ProposeRootCertificate',

@@ -10,7 +10,7 @@ import { assertIsBroadcastTxSuccess, SigningStargateClient, StargateClient } fro
 import { fromBase64 } from '@cosmjs/encoding';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 import { decodePubkey, encodePubkey } from '@cosmjs/proto-signing';
-import { Model } from '../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.model/module/types/model/model';
+import { Model } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.model/types';
 import Message from 'primevue/message';
 import { scrollToTopMixin } from '../../mixins/scrollToTopMixin';
 export default {

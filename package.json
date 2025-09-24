@@ -39,7 +39,8 @@
     "vue-loading-overlay": "^5.0.3",
     "vue-router": "^4.1.5",
     "vue3-autocounter": "^1.0.6",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "zigbee-alliance-distributed-compliance-ledger-client-ts": "file:./ts-client"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
