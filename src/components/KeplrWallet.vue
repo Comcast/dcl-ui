@@ -42,6 +42,7 @@ export default {
       return {
           dialogVisible: false,
           accountName: null,
+          isAutoConnecting: false,
           menuItems: [
               {
                   label: 'Disconnect Keplr',
@@ -143,24 +144,90 @@ export default {
               await this.$store.dispatch('setKeplrSigner');
               const key = await keplr.getKey(import.meta.env.VITE_APP_DCL_CHAIN_ID);
               this.accountName = key.name;
-              this.$toast.add({
-                  severity: 'success',
-                  summary: 'Connected to Keplr wallet',
-                  life: 5000
-              });
+
+              // Save connection state to localStorage
+              localStorage.setItem('keplr_connected', 'true');
+              localStorage.setItem('keplr_chain_id', chainId);
+
+              // Only show success toast if not auto-connecting
+              if (!this.isAutoConnecting) {
+                  this.$toast.add({
+                      severity: 'success',
+                      summary: 'Connected to Keplr wallet',
+                      life: 5000
+                  });
+              }
           } catch (error) {
               console.error('Error fetching account name:', error);
           }
       },
 
       disconnect() {
+          // Clear localStorage
+          localStorage.removeItem('keplr_connected');
+          localStorage.removeItem('keplr_chain_id');
+
+          // Remove account change listener
+          if (window.keplr && window.keplr._events) {
+              window.removeEventListener('keplr_keystorechange', this.handleAccountChange);
+          }
+
           this.$store.dispatch('disconnectKeplr');
+
+          this.$toast.add({
+              severity: 'info',
+              summary: 'Disconnected from Keplr wallet',
+              life: 3000
+          });
+      },
+
+      handleAccountChange() {
+          // Auto-reconnect when user changes account in Keplr
+          console.log('Keplr account changed, reconnecting...');
+          this.connect();
       },
 
       closeDialog() {
           this.dialogVisible = false;
+      },
+
+      async autoReconnect() {
+          const wasConnected = localStorage.getItem('keplr_connected');
+          const savedChainId = localStorage.getItem('keplr_chain_id');
+          const currentChainId = import.meta.env.VITE_APP_DCL_CHAIN_ID;
+
+          if (wasConnected === 'true' && savedChainId === currentChainId && window.keplr) {
+              this.isAutoConnecting = true;
+              try {
+                  await this.connect();
+                  console.log('Auto-reconnected to Keplr wallet');
+              } catch (error) {
+                  console.error('Auto-reconnect failed:', error);
+                  // Clear invalid connection state
+                  localStorage.removeItem('keplr_connected');
+                  localStorage.removeItem('keplr_chain_id');
+              } finally {
+                  this.isAutoConnecting = false;
+              }
+          }
       }
-      // ... rest of the methods, created, etc.
+  },
+
+  async mounted() {
+      // Attempt auto-reconnect on component mount
+      await this.autoReconnect();
+
+      // Listen for account changes
+      if (window.keplr) {
+          window.addEventListener('keplr_keystorechange', this.handleAccountChange.bind(this));
+      }
+  },
+
+  beforeUnmount() {
+      // Clean up event listener
+      if (window.keplr) {
+          window.removeEventListener('keplr_keystorechange', this.handleAccountChange);
+      }
   }
 };
 </script>

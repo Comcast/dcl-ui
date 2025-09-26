@@ -7,6 +7,9 @@ import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import SplitButton from 'primevue/splitbutton';
 import Dialog from 'primevue/dialog';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import ProposeRootCertificate from './ProposeRootCertificate.vue';
 import AddRootNocCertificate from './AddRootNocCertificate.vue';
 import GrantActionRootCertificate from './GrantActionRootCertificate.vue';
@@ -75,6 +78,9 @@ export default {
         ButtonGroup,
         SplitButton,
         Dialog,
+        IconField,
+        InputIcon,
+        InputText,
         GrantActionRootCertificate,
         ProposeRootCertificate,
         AddRootNocCertificate,
@@ -544,7 +550,11 @@ export default {
         <ConfirmDialog></ConfirmDialog>
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
         <TabView :scrollable="true" v-model:activeIndex="activeTabIndex">
-            <TabPanel header="Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-shield text-green-500 mr-2"></i>
+                    <span class="font-semibold">Attestation Certificates</span>
+                </template>
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -622,7 +632,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="NOC Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-sitemap text-blue-500 mr-2"></i>
+                    <span class="font-semibold">NOC Certificates</span>
+                </template>
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -690,7 +704,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="PKI Revocation Distribution Point">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-server text-purple-500 mr-2"></i>
+                    <span class="font-semibold">PKI Revocation Distribution Point</span>
+                </template>
                 <Button @click="showPkiRevocationDistributionPointDialog(null, false)"
                     class="p-button-primary mb-4 mr-4" v-bind:class="{ 'p-disabled': !isSignedIn }"
                     label="Add Revocation Distribution Point" />
@@ -739,7 +757,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Attestation Certificates</span>
+                </template>
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -802,7 +824,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Revoked Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-exclamation-triangle text-yellow-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Revoked Attestation Certificates</span>
+                </template>
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -843,7 +869,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Revoked Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-ban text-red-500 mr-2"></i>
+                    <span class="font-semibold">Revoked Attestation Certificates</span>
+                </template>
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
