@@ -25,9 +25,10 @@ import { RevokedNocIcaCertificates } from "./types/zigbeealliance/distributedcom
 import { RevokedNocRootCertificates } from "./types/zigbeealliance/distributedcomplianceledger/pki/revoked_noc_root_certificates"
 import { RevokedRootCertificates } from "./types/zigbeealliance/distributedcomplianceledger/pki/revoked_root_certificates"
 import { UniqueCertificate } from "./types/zigbeealliance/distributedcomplianceledger/pki/unique_certificate"
+import { MsgAddNocX509RootCert, MsgAddX509Cert, MsgAddNocX509IcaCert, MsgProposeAddX509RootCert } from "./types/zigbeealliance/distributedcomplianceledger/pki/tx"
 
 
-export {     
+export {
     AllCertificates,
     AllCertificatesBySubject,
     AllCertificatesBySubjectKeyId,
@@ -55,5 +56,9 @@ export {
     RevokedNocRootCertificates,
     RevokedRootCertificates,
     UniqueCertificate,
-    
+    MsgAddNocX509RootCert,
+    MsgAddX509Cert,
+    MsgAddNocX509IcaCert,
+    MsgProposeAddX509RootCert,
+
  }

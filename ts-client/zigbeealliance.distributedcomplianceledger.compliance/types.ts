@@ -4,14 +4,18 @@ import { ComplianceInfo } from "./types/zigbeealliance/distributedcomplianceledg
 import { DeviceSoftwareCompliance } from "./types/zigbeealliance/distributedcomplianceledger/compliance/device_software_compliance"
 import { ProvisionalModel } from "./types/zigbeealliance/distributedcomplianceledger/compliance/provisional_model"
 import { RevokedModel } from "./types/zigbeealliance/distributedcomplianceledger/compliance/revoked_model"
+import { MsgCertifyModel, MsgRevokeModel, MsgProvisionModel } from "./types/zigbeealliance/distributedcomplianceledger/compliance/tx"
 
 
-export {     
+export {
     CertifiedModel,
     ComplianceHistoryItem,
     ComplianceInfo,
     DeviceSoftwareCompliance,
     ProvisionalModel,
     RevokedModel,
-    
+    MsgCertifyModel,
+    MsgRevokeModel,
+    MsgProvisionModel,
+
  }
