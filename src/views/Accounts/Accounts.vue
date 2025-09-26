@@ -68,12 +68,7 @@ export default {
             }
         },
         copyToClipboard(value) {
-            const el = document.createElement('textarea');
-            el.value = value;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            navigator.clipboard.writeText(value);
         },
 
         addHexValueToVendorID(vendorID) {
@@ -221,7 +216,21 @@ export default {
                             </ul>
                         </template>
                     </Column>
-                    <Column field="base_account.address" header="Address"></Column>
+                    <Column field="base_account.address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.base_account.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.base_account.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <!-- <Column field="base_account" header="Public Key">
 					<template #body="{ data }">
 						<span> {{ trimAddress(data.base_account.pub_key.key) }}
@@ -278,7 +287,21 @@ export default {
                             </ul>
                         </template>
                     </Column>
-                    <Column field="account.base_account.address" header="Address"></Column>
+                    <Column field="account.base_account.address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.account.base_account.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.account.base_account.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <Column field="account.vendorIDHex" header="Vendor ID"></Column>
                     <Column field="productIDs" header="Product IDs">
                         <template #body="{ data }">
@@ -320,7 +343,21 @@ export default {
                         </div>
                     </template>
 
-                    <Column field="address" header="Address"></Column>
+                    <Column field="address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
                             <ApprovalDisplay
@@ -380,5 +417,33 @@ export default {
 
 .p-tabview .p-tabview-nav li .p-tabview-nav-link > * {
     vertical-align: middle;
+}
+
+/* Utility classes */
+.flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.font-mono {
+    font-family: monospace;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+/* Button styles */
+.p-button-xs {
+    padding: 0 !important;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.p-button-xs .p-button-icon {
+    font-size: 0.75rem;
 }
 </style>
