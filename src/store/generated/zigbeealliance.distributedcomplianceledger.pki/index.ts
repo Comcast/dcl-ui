@@ -32,8 +32,11 @@ import { UniqueCertificate } from "zigbee-alliance-distributed-compliance-ledger
 export { AllCertificates, AllCertificatesBySubject, AllCertificatesBySubjectKeyId, ApprovedCertificates, ApprovedCertificatesBySubject, ApprovedCertificatesBySubjectKeyId, ApprovedRootCertificates, Certificate, CertificateIdentifier, ChildCertificates, Grant, NocCertificates, NocCertificatesBySubject, NocCertificatesBySubjectKeyID, NocCertificatesByVidAndSkid, NocIcaCertificates, NocRootCertificates, PkiRevocationDistributionPoint, PkiRevocationDistributionPointsByIssuerSubjectKeyID, ProposedCertificate, ProposedCertificateRevocation, RejectedCertificate, RevokedCertificates, RevokedNocIcaCertificates, RevokedNocRootCertificates, RevokedRootCertificates, UniqueCertificate };
 
 function initClient(vuexGetters) {
-	const env = vuexGetters['common/env/getEnv'];
-	return new Client({ apiURL: env?.apiNode, rpcURL: env?.rpcNode, prefix: env?.addrPrefix }, vuexGetters['common/wallet/signer'])
+	return new Client({
+		apiURL: vuexGetters['common/env/apiCosmos'],
+		rpcURL: vuexGetters['common/env/apiTendermint'],
+		prefix: vuexGetters['common/env/addrPrefix']
+	}, vuexGetters['common/wallet/signer'])
 }
 
 function mergeResults(value, next_values) {
