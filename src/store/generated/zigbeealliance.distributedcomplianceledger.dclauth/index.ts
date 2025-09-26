@@ -12,7 +12,8 @@ import { RevokedAccount } from "zigbee-alliance-distributed-compliance-ledger-cl
 export { Account, AccountStat, Grant, PendingAccount, PendingAccountRevocation, RejectedAccount, RevokedAccount };
 
 function initClient(vuexGetters) {
-	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
+	const env = vuexGetters['common/env/getEnv'];
+	return new Client({ apiURL: env?.apiNode, rpcURL: env?.rpcNode, prefix: env?.addrPrefix }, vuexGetters['common/wallet/signer'])
 }
 
 function mergeResults(value, next_values) {

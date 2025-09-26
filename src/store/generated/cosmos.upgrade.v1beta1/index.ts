@@ -9,7 +9,8 @@ import { ModuleVersion } from "zigbee-alliance-distributed-compliance-ledger-cli
 export { Plan, SoftwareUpgradeProposal, CancelSoftwareUpgradeProposal, ModuleVersion };
 
 function initClient(vuexGetters) {
-	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
+	const env = vuexGetters['common/env/getEnv'];
+	return new Client({ apiURL: env?.apiNode, rpcURL: env?.rpcNode, prefix: env?.addrPrefix }, vuexGetters['common/wallet/signer'])
 }
 
 function mergeResults(value, next_values) {

@@ -11,7 +11,8 @@ import { PermanentLockedAccount } from "zigbee-alliance-distributed-compliance-l
 export { BaseVestingAccount, ContinuousVestingAccount, DelayedVestingAccount, Period, PeriodicVestingAccount, PermanentLockedAccount };
 
 function initClient(vuexGetters) {
-	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
+	const env = vuexGetters['common/env/getEnv'];
+	return new Client({ apiURL: env?.apiNode, rpcURL: env?.rpcNode, prefix: env?.addrPrefix }, vuexGetters['common/wallet/signer'])
 }
 
 function mergeResults(value, next_values) {
