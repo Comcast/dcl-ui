@@ -18,6 +18,7 @@ import AddLeafCertificate from './AddLeafCertificate.vue';
 import AddNocIcaCertificate from './AddNocIcaCertificate.vue';
 import LeafCertificates from './LeafCertificates.vue';
 import NocLeafCertificates from './NocLeafCertificates.vue';
+import ApprovalDisplay from './ApprovalDisplay.vue';
 
 import { FilterMatchMode } from 'primevue/api';
 
@@ -88,7 +89,8 @@ export default {
         AddNocIcaCertificate,
         LeafCertificates,
         NocLeafCertificates,
-        PkiRevocationDistributionPoint
+        PkiRevocationDistributionPoint,
+        ApprovalDisplay
     },
 
     computed: {
@@ -526,14 +528,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                                
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -608,13 +605,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -730,24 +723,10 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
-                        </template>
-                    </Column>
-                    <Column field="rejects" header="Rejects">
-                        <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(reject, index) in row.data.rejects" :key="index">
-                                    Address : {{ trimAddress(reject.address) }} <br />
-                                    Time : {{ new Date(reject.time * 1000).toString() }} <br />
-                                    Info : {{ reject.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                                :rejects="row.data.rejects || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -795,13 +774,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -840,13 +815,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
