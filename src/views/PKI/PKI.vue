@@ -204,60 +204,6 @@ export default {
     },
 
     created: function () {
-        // Get all the approved certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryApprovedCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the NOC Root certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocRootCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the NOC Root certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocIcaCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the revocation distribution points
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryPkiRevocationDistributionPointAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the proposed certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryProposedCertificateAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryRevokedCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all certificates that are proposed for revocation
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryProposedCertificateRevocationAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
 
         // Check if tab query parameter is present
         if (this.$route.query.tab) {

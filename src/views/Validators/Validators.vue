@@ -143,14 +143,6 @@ export default {
                 this.lastBlock = data;
             });
 
-        // Get all the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.validator/QueryValidatorAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.validator/QueryProposedDisableValidatorAll', {
             options: {
                 subscribe: true,

@@ -156,20 +156,6 @@ export default {
     },
 
     created: function () {
-        // Get the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get the pending accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
         // Get the revoked accounts
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountRevocationAll', {
             options: {

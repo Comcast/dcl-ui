@@ -90,35 +90,6 @@ export default {
     },
 
     created: function () {
-        // Get all the certified compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryComplianceInfoAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the certified compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryCertifiedModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryRevokedModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the provisional compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryProvisionalModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
     },
 
     methods: {

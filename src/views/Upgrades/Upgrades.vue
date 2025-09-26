@@ -110,27 +110,6 @@ export default {
     },
 
     created: function () {
-        // Get all the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryApprovedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the pending accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryProposedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryRejectedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
     }
 };
 </script>
