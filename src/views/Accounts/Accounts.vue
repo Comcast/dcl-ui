@@ -11,12 +11,18 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Tooltip from 'primevue/tooltip';
 import Card from 'primevue/card';
+import Timeline from 'primevue/timeline';
+import Tag from 'primevue/tag';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import { email, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { FilterMatchMode } from 'primevue/api';
 
 import ProposeNewAccount from './ProposeNewAccount.vue';
 import GrantActionAccount from './GrantActionAccount.vue';
+import ApprovalDisplay from './ApprovalDisplay.vue';
 
 export default {
     name: 'Accounts',
@@ -73,6 +79,16 @@ export default {
         addHexValueToVendorID(vendorID) {
             if (vendorID) return `${vendorID} (0x${vendorID.toString(16)})`;
             else return 'Not Set';
+        },
+        formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
     },
     components: {
@@ -84,8 +100,14 @@ export default {
         Dialog,
         Tooltip,
         Card,
+        Timeline,
+        Tag,
+        IconField,
+        InputIcon,
+        InputText,
         ProposeNewAccount,
-        GrantActionAccount
+        GrantActionAccount,
+        ApprovalDisplay
     },
 
     computed: {
@@ -179,7 +201,7 @@ export default {
                 <TabView v-model:activeIndex="activeTabIndex">
                     <TabPanel>
                         <template #header>
-                            <i class="pi pi-users mr-2"></i>
+                            <i class="pi pi-check-circle text-green-500 mr-2"></i>
                             <span class="font-semibold">Active Accounts</span>
                         </template>
                 <Button @click="showProposeNewAccountDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Account">Propose Account</Button>
@@ -231,13 +253,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -250,7 +268,7 @@ export default {
 
             <TabPanel>
                 <template #header>
-                    <i class="pi pi-clock mr-2"></i>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
                     <span class="font-semibold">Proposed Accounts</span>
                 </template>
                 <DataTable :value="allProposedAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
@@ -282,27 +300,13 @@ export default {
                                 {{ data.account.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
                             </span>
                         </template>
-                    </Column>                    
+                    </Column>
                     <Column field="account.approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.account.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
-                        </template>
-                    </Column>
-                    <Column field="rejects" header="Rejects">
-                        <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(reject, index) in row.data.account.rejects" :key="index">
-                                    Address : {{ trimAddress(reject.address) }} <br />
-                                    Time : {{ new Date(reject.time * 1000).toString() }} <br />
-                                    Info : {{ reject.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.account.approvals || []"
+                                :rejects="row.data.account.rejects || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: left" bodyStyle="text-align: left; overflow: visible">
@@ -315,9 +319,9 @@ export default {
             </TabPanel>
             <TabPanel>
                 <template #header>
-                    <i class="pi pi-ban mr-2"></i>
+                    <i class="pi pi-ban text-red-500 mr-2"></i>
                     <span class="font-semibold">Pending Revocations</span>
-                </template>
+                </template>                
                 <DataTable :value="allActiveRevocations" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -333,13 +337,9 @@ export default {
                     <Column field="address" header="Address"></Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -384,3 +384,15 @@ export default {
         </Dialog>
     </div>
 </template>
+
+<style scoped>
+/* Fix for tab header alignment and underline */
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link > * {
+    vertical-align: middle;
+}
+</style>

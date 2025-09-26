@@ -1,7 +1,18 @@
 <template>
     <div>
-        <!-- Quick Actions Section -->
-        <QuickActions v-if="isSignedIn" />
+        <!-- Wallet Connection Warning -->
+        <div v-if="isSignedIn && !isAccountOnChain" class="surface-section px-4 py-3 border-round mb-3">
+            <div class="flex align-items-center">
+                <i class="pi pi-exclamation-triangle text-orange-500 text-2xl mr-3"></i>
+                <div>
+                    <div class="text-900 font-medium text-lg">Wallet Account Not Found on Chain</div>
+                    <div class="text-500">The connected Keplr wallet account ({{ shortenAddress(currentAddress) }}) is not registered on this chain. You may be connected with a different account.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section - Only show for Trustees -->
+        <QuickActions v-if="isSignedIn && isTrustee" />
 
         <!-- Dashboard Grid -->
         <div class="grid">
@@ -493,7 +504,27 @@ export default {
             const lastBlock = blockArray[blockArray.length - 2];
             return parseInt(lastBlock.height);
         },
-        currentUser() {}
+        currentUser() {},
+
+        currentUserAccount() {
+            if (!this.isSignedIn || !this.currentAddress) return null;
+
+            const allAccountsArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll']();
+            const accounts = allAccountsArray?.account || [];
+
+            return accounts.find(account => account.base_account.address === this.currentAddress);
+        },
+
+        isAccountOnChain() {
+            return !!this.currentUserAccount;
+        },
+
+        isTrustee() {
+            const account = this.currentUserAccount;
+            if (!account) return false;
+
+            return account.roles && account.roles.includes('Trustee');
+        }
     },
     methods: {
         theFormat(number) {
