@@ -9,7 +9,7 @@ function initClient(vuexGetters) {
 		apiURL: vuexGetters['common/env/apiCosmos'],
 		rpcURL: vuexGetters['common/env/apiTendermint'],
 		prefix: vuexGetters['common/env/addrPrefix']
-	}, vuexGetters['common/wallet/signer'])
+	}, vuexGetters['keplrSigner'])
 }
 
 function mergeResults(value, next_values) {
