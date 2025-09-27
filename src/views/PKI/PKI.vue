@@ -95,46 +95,14 @@ export default {
 
     computed: {
         allApprovedRootCertificates() {
-            let rootCertificates = [];
-            const approvedCertificatesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getApprovedCertificatesAll']();
-            if (approvedCertificatesArray.approvedCertificates) {
-                let allCerts = approvedCertificatesArray.approvedCertificates;
-                rootCertificates = allCerts.filter((cert) => {
-                    return cert.certs[0].isRoot;
-                });
-                rootCertificates = rootCertificates.map((item) => {
-                    item.approvals = item.certs[0].approvals;
-                    item.serialNumber = item.certs[0].serialNumber;
-                    item.subjectAsText = item.certs[0].subjectAsText;
-                    item.certificateType = item.certs[0].certificateType;
-                    item.vid = item.certs[0].vid ? item.certs[0].vid + ' (0x' + item.certs[0].vid.toString(16) + ")" : 'Not Set';
-                    item.isNoc = item.certs[0].isNoc ? 'Yes' : 'No';
-                    return item;
-                });
-            }
-            return rootCertificates;
+            // Use optimized getter with memoization
+            return this.$store.getters['pkiOptimized/getProcessedApprovedRootCertificates']();
         },
 
         allNocRootCertificates() {
-        let nocRootCertificates = [];
-        const nocRootCertificatesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getNocRootCertificatesAll']();
-        if (nocRootCertificatesArray.nocRootCertificates) {
-            nocRootCertificates = nocRootCertificatesArray.nocRootCertificates.map((item) => {
-                return {
-                    ...item,
-                    vid: item.vid ? item.vid + ' (0x' + item.vid.toString(16) + ')' : 'Not Set',
-                    approvals: item.certs[0].approvals,
-                    serialNumber: item.certs[0].serialNumber,
-                    subjectAsText: item.certs[0].subjectAsText,
-                    certificateType: item.certs[0].certificateType,
-                    subject: item.certs[0].subject,
-                    subjectKeyId: item.certs[0].subjectKeyId,
-                    isNoc: 'Yes' // Since these are NOC certificates by definition
-                };
-            });
-        }
-        return nocRootCertificates;
-    },
+            // Use optimized getter with memoization
+            return this.$store.getters['pkiOptimized/getProcessedNocRootCertificates']();
+        },
 
         allPkiRevocationDistributionPoints() {
             const pkiRevocationDistributionPointArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getPkiRevocationDistributionPointAll']();
@@ -167,19 +135,8 @@ export default {
         },
 
         allProposedCertificateRevocation() {
-            let proposedCertificateRevocation = [];
-            const proposedCertificateRevocationArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getProposedCertificateRevocationAll']();
-            if (proposedCertificateRevocationArray.proposedCertificateRevocation) {
-                // SubjectAsText is missing, get it from the approved certificate array
-                proposedCertificateRevocation = proposedCertificateRevocationArray.proposedCertificateRevocation;
-                proposedCertificateRevocation = proposedCertificateRevocation
-                    .map((item) => {
-                        item.subjectAsText = this.allApprovedRootCertificates.find((cert) => cert.subjectKeyId === item.subjectKeyId).subjectAsText;
-                        return item;
-                    })
-                    .filter((item) => item.subjectAsText !== undefined);
-            }
-            return proposedCertificateRevocation;
+            // Use optimized getter with indexed lookups
+            return this.$store.getters['pkiOptimized/getProcessedProposedCertificateRevocation']();
         },
 
         allRevokedCertificates() {
@@ -206,6 +163,8 @@ export default {
     },
 
     created: function () {
+        // Update certificate indexes for optimized lookups
+        this.$store.dispatch('pkiOptimized/updateCertificateIndexes');
 
         // Check if tab query parameter is present
         if (this.$route.query.tab) {
@@ -218,6 +177,13 @@ export default {
             if (newTab !== undefined) {
                 this.activeTabIndex = parseInt(newTab);
             }
+        },
+        // Watch for changes in the certificate data and update indexes
+        'allApprovedCertificates': {
+            handler() {
+                this.$store.dispatch('pkiOptimized/updateCertificateIndexes');
+            },
+            deep: false
         }
     },
 
@@ -505,7 +471,7 @@ export default {
                 </template>
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
-                    stripedRows>
+                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -582,7 +548,7 @@ export default {
                 </template>
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
-                    stripedRows>
+                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -654,7 +620,7 @@ export default {
 
                 <DataTable :value="allPkiRevocationDistributionPoints" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines
-                    stripedRows>
+                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -702,7 +668,7 @@ export default {
                     <span class="font-semibold">Proposed Attestation Certificates</span>
                 </template>
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -755,7 +721,7 @@ export default {
                     <span class="font-semibold">Proposed Revoked Attestation Certificates</span>
                 </template>
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -796,7 +762,7 @@ export default {
                     <span class="font-semibold">Revoked Attestation Certificates</span>
                 </template>
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>

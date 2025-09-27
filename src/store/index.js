@@ -1,7 +1,11 @@
 import { createStore } from 'vuex'
 import init from './config'
+import pkiOptimized from './pki-optimized'
 
 const store = createStore({
+	modules: {
+		pkiOptimized
+	},
 	state() {
 		return {
 			packageVersion: APP_VERSION,

@@ -87,6 +87,9 @@ export default {
       })
     ]);
 
+    // Update certificate indexes for optimized lookups
+    await store.dispatch('pkiOptimized/updateCertificateIndexes');
+
     this.initialized = true;
     console.log('All DCL stores initialized');
   }
