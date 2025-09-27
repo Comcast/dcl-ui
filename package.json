@@ -51,12 +51,6 @@
     "prettier": "^2.7.1",
     "sass": "^1.55.0",
     "typescript": "^5.4.5",
-    "vite": "^4.5.14"
-  },
-  "overrides": {
-    "axios": "^1.7.9",
-    "follow-redirects": "^1.15.9",
-    "protobufjs": "^7.4.0",
-    "esbuild": "^0.25.10"
+    "vite": "^4.5.5"
   }
 }
