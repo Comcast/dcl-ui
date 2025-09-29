@@ -430,7 +430,7 @@ export default {
 </script>
 
 <template>
-    <div class="prime-vue-container">
+    <div class="prime-vue-container pki-full-height">
         <div class="certificate-actions">
                     <Button @click="showCertificateDialog('propose-root')" 
                             :disabled="!isSignedIn"
@@ -471,7 +471,7 @@ export default {
                 </template>
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
-                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -548,7 +548,7 @@ export default {
                 </template>
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
-                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -620,7 +620,7 @@ export default {
 
                 <DataTable :value="allPkiRevocationDistributionPoints" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines
-                    stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -668,7 +668,7 @@ export default {
                     <span class="font-semibold">Proposed Attestation Certificates</span>
                 </template>
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -721,7 +721,7 @@ export default {
                     <span class="font-semibold">Proposed Revoked Attestation Certificates</span>
                 </template>
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -762,7 +762,7 @@ export default {
                     <span class="font-semibold">Revoked Attestation Certificates</span>
                 </template>
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
-                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows :virtualScrollerOptions="{ itemSize: 46, numToleratedItems: 10 }" scrollHeight="500px">
+                    v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField>
@@ -844,6 +844,30 @@ export default {
 </template>
 
 <style scoped>
+.pki-full-height {
+  height: calc(100vh - 80px); /* Adjust based on your header height */
+  display: flex;
+  flex-direction: column;
+}
+
+.pki-full-height ::v-deep(.p-tabview) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pki-full-height ::v-deep(.p-tabview-panels) {
+  flex: 1;
+  min-height: 0;
+}
+
+.pki-full-height ::v-deep(.p-tabview-panel) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 td.subject {
     max-width: 400px;
     text-overflow: ellipsis;
