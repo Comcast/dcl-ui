@@ -43,7 +43,7 @@
                                         <span v-if="account?.account?.vendorID"> | VID: {{ account.account.vendorID }}</span>
                                     </div>
                                 </div>
-                                <Badge :value="`${account?.approvals?.length || 0}/${getRequiredApprovals('account')} approvals`" severity="info" class="ml-2 flex-shrink-0"></Badge>
+                                <Badge :value="`${account?.approvals?.length || 0} approvals`" severity="info" class="ml-2 flex-shrink-0"></Badge>
                             </div>
                             <div v-if="pendingAccounts.length > 3" class="text-500 text-sm mt-2">
                                 ... and {{ pendingAccounts.length - 3 }} more
@@ -77,7 +77,7 @@
                                     <div class="text-900 font-medium text-truncate">{{ shortenAddress(revocation?.address) }}</div>
                                     <div class="text-500 text-sm text-truncate">Reason: {{ revocation?.reason || 'Not specified' }}</div>
                                 </div>
-                                <Badge :value="`${revocation?.approvals?.length || 0}/${getRequiredApprovals('revocation')} approvals`" severity="danger" class="ml-2 flex-shrink-0"></Badge>
+                                <Badge :value="`${revocation?.approvals?.length || 0} approvals`" severity="danger" class="ml-2 flex-shrink-0"></Badge>
                             </div>
                             <div v-if="pendingRevocations.length > 3" class="text-500 text-sm mt-2">
                                 ... and {{ pendingRevocations.length - 3 }} more
@@ -116,7 +116,7 @@
                                         <span v-if="cert?.vid"> | VID: {{ cert.vid }}</span>
                                     </div>
                                 </div>
-                                <Badge :value="`${cert?.approvals?.length || 0}/${getRequiredApprovals('certificate')} approvals`" severity="warning" class="ml-2 flex-shrink-0"></Badge>
+                                <Badge :value="`${cert?.approvals?.length || 0} approvals`" severity="warning" class="ml-2 flex-shrink-0"></Badge>
                             </div>
                             <div v-if="proposedCertificates.length > 3" class="text-500 text-sm mt-2">
                                 ... and {{ proposedCertificates.length - 3 }} more
@@ -155,7 +155,7 @@
                                         <span v-if="revocation?.reason"> | Reason: {{ revocation.reason }}</span>
                                     </div>
                                 </div>
-                                <Badge :value="`${revocation?.approvals?.length || 0}/${getRequiredApprovals('certRevocation')} approvals`" severity="danger" class="ml-2 flex-shrink-0"></Badge>
+                                <Badge :value="`${revocation?.approvals?.length || 0} approvals`" severity="danger" class="ml-2 flex-shrink-0"></Badge>
                             </div>
                             <div v-if="proposedCertRevocations.length > 3" class="text-500 text-sm mt-2">
                                 ... and {{ proposedCertRevocations.length - 3 }} more
@@ -278,20 +278,6 @@ export default {
             return 'Unknown Certificate';
         },
 
-        getRequiredApprovals(type) {
-            // These values should ideally come from chain configuration
-            // For now using common defaults
-            switch(type) {
-                case 'account':
-                case 'revocation':
-                    return 2; // Typically needs 2/3 of trustees
-                case 'certificate':
-                case 'certRevocation':
-                    return 2; // Typically needs 2/3 of trustees
-                default:
-                    return 2;
-            }
-        },
 
         navigateToAccounts() {
             // Navigate to the Proposed Accounts tab (index 1)
