@@ -244,17 +244,10 @@
                             </button>
                         </div>
                         <div class="text-900 font-medium text-lg">
-                            CLI Format Public Key :
-                            <span class="text-500 font-medium">{{ shortenKey(JSON.stringify(pubKey)) }}</span>
+                            Public Key :
+                            <span class="text-500 font-medium">{{ shortenKey(cliFormatPubKey) }}</span>
                             <button
-                                @click="
-                                    copyToClipboard(
-                                        JSON.stringify({
-                                            type: '/cosmos.crypto.secp256k1.PubKey',
-                                            key: pubKey.value
-                                        })
-                                    )
-                                "
+                                @click="copyToClipboard(cliFormatPubKey)"
                                 class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
                                 type="button"
                             >
@@ -387,6 +380,15 @@ export default {
             } else {
             return '';
             }
+        },
+        cliFormatPubKey() {
+            if (this.pubKey) {
+                return JSON.stringify({
+                    '@type': this.pubKey.type,
+                    key: this.pubKey.value
+                });
+            }
+            return '';
         },
         blockHeight: {
             get() {
