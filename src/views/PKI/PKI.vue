@@ -7,6 +7,9 @@ import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import SplitButton from 'primevue/splitbutton';
 import Dialog from 'primevue/dialog';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import ProposeRootCertificate from './ProposeRootCertificate.vue';
 import AddRootNocCertificate from './AddRootNocCertificate.vue';
 import GrantActionRootCertificate from './GrantActionRootCertificate.vue';
@@ -15,6 +18,7 @@ import AddLeafCertificate from './AddLeafCertificate.vue';
 import AddNocIcaCertificate from './AddNocIcaCertificate.vue';
 import LeafCertificates from './LeafCertificates.vue';
 import NocLeafCertificates from './NocLeafCertificates.vue';
+import ApprovalDisplay from './ApprovalDisplay.vue';
 
 import { FilterMatchMode } from 'primevue/api';
 
@@ -36,6 +40,7 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS }
             },
             selectedCertificate: null,
+            activeTabIndex: 0,
             downloadDropdownItems: [
                 {
                     label: 'Certificate Chain',
@@ -74,6 +79,9 @@ export default {
         ButtonGroup,
         SplitButton,
         Dialog,
+        IconField,
+        InputIcon,
+        InputText,
         GrantActionRootCertificate,
         ProposeRootCertificate,
         AddRootNocCertificate,
@@ -81,51 +89,20 @@ export default {
         AddNocIcaCertificate,
         LeafCertificates,
         NocLeafCertificates,
-        PkiRevocationDistributionPoint
+        PkiRevocationDistributionPoint,
+        ApprovalDisplay
     },
 
     computed: {
         allApprovedRootCertificates() {
-            let rootCertificates = [];
-            const approvedCertificatesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getApprovedCertificatesAll']();
-            if (approvedCertificatesArray.approvedCertificates) {
-                let allCerts = approvedCertificatesArray.approvedCertificates;
-                rootCertificates = allCerts.filter((cert) => {
-                    return cert.certs[0].isRoot;
-                });
-                rootCertificates = rootCertificates.map((item) => {
-                    item.approvals = item.certs[0].approvals;
-                    item.serialNumber = item.certs[0].serialNumber;
-                    item.subjectAsText = item.certs[0].subjectAsText;
-                    item.certificateType = item.certs[0].certificateType;
-                    item.vid = item.certs[0].vid ? item.certs[0].vid + ' (0x' + item.certs[0].vid.toString(16) + ")" : 'Not Set';
-                    item.isNoc = item.certs[0].isNoc ? 'Yes' : 'No';
-                    return item;
-                });
-            }
-            return rootCertificates;
+            // Use optimized getter with memoization
+            return this.$store.getters['pkiOptimized/getProcessedApprovedRootCertificates']();
         },
 
         allNocRootCertificates() {
-        let nocRootCertificates = [];
-        const nocRootCertificatesArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getNocRootCertificatesAll']();
-        if (nocRootCertificatesArray.nocRootCertificates) {
-            nocRootCertificates = nocRootCertificatesArray.nocRootCertificates.map((item) => {
-                return {
-                    ...item,
-                    vid: item.vid ? item.vid + ' (0x' + item.vid.toString(16) + ')' : 'Not Set',
-                    approvals: item.certs[0].approvals,
-                    serialNumber: item.certs[0].serialNumber,
-                    subjectAsText: item.certs[0].subjectAsText,
-                    certificateType: item.certs[0].certificateType,
-                    subject: item.certs[0].subject,
-                    subjectKeyId: item.certs[0].subjectKeyId,
-                    isNoc: 'Yes' // Since these are NOC certificates by definition
-                };
-            });
-        }
-        return nocRootCertificates;
-    },
+            // Use optimized getter with memoization
+            return this.$store.getters['pkiOptimized/getProcessedNocRootCertificates']();
+        },
 
         allPkiRevocationDistributionPoints() {
             const pkiRevocationDistributionPointArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getPkiRevocationDistributionPointAll']();
@@ -158,19 +135,8 @@ export default {
         },
 
         allProposedCertificateRevocation() {
-            let proposedCertificateRevocation = [];
-            const proposedCertificateRevocationArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.pki/getProposedCertificateRevocationAll']();
-            if (proposedCertificateRevocationArray.proposedCertificateRevocation) {
-                // SubjectAsText is missing, get it from the approved certificate array
-                proposedCertificateRevocation = proposedCertificateRevocationArray.proposedCertificateRevocation;
-                proposedCertificateRevocation = proposedCertificateRevocation
-                    .map((item) => {
-                        item.subjectAsText = this.allApprovedRootCertificates.find((cert) => cert.subjectKeyId === item.subjectKeyId).subjectAsText;
-                        return item;
-                    })
-                    .filter((item) => item.subjectAsText !== undefined);
-            }
-            return proposedCertificateRevocation;
+            // Use optimized getter with indexed lookups
+            return this.$store.getters['pkiOptimized/getProcessedProposedCertificateRevocation']();
         },
 
         allRevokedCertificates() {
@@ -197,60 +163,28 @@ export default {
     },
 
     created: function () {
-        // Get all the approved certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryApprovedCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
+        // Update certificate indexes for optimized lookups
+        this.$store.dispatch('pkiOptimized/updateCertificateIndexes');
 
-        // Get all the NOC Root certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocRootCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
+        // Check if tab query parameter is present
+        if (this.$route.query.tab) {
+            this.activeTabIndex = parseInt(this.$route.query.tab);
+        }
+    },
 
-        // Get all the NOC Root certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryNocIcaCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
+    watch: {
+        '$route.query.tab': function(newTab) {
+            if (newTab !== undefined) {
+                this.activeTabIndex = parseInt(newTab);
             }
-        });
-
-        // Get all the revocation distribution points
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryPkiRevocationDistributionPointAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the proposed certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryProposedCertificateAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked certificates
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryRevokedCertificatesAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all certificates that are proposed for revocation
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.pki/QueryProposedCertificateRevocationAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
+        },
+        // Watch for changes in the certificate data and update indexes
+        'allApprovedCertificates': {
+            handler() {
+                this.$store.dispatch('pkiOptimized/updateCertificateIndexes');
+            },
+            deep: false
+        }
     },
 
     methods: {
@@ -496,7 +430,7 @@ export default {
 </script>
 
 <template>
-    <div class="prime-vue-container">
+    <div class="prime-vue-container pki-full-height">
         <div class="certificate-actions">
                     <Button @click="showCertificateDialog('propose-root')" 
                             :disabled="!isSignedIn"
@@ -529,8 +463,12 @@ export default {
         </div>        
         <ConfirmDialog></ConfirmDialog>
         <Message :closable="false" v-if="error" severity="error">{{ errorMessage() }}</Message>
-        <TabView :scrollable="true">
-            <TabPanel header="Attestation Certificates">
+        <TabView :scrollable="true" v-model:activeIndex="activeTabIndex">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-shield text-green-500 mr-2"></i>
+                    <span class="font-semibold">Attestation Certificates</span>
+                </template>
                 <DataTable responsiveLayout="stack" :value="allApprovedRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -556,14 +494,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                                
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -608,7 +541,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="NOC Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-sitemap text-blue-500 mr-2"></i>
+                    <span class="font-semibold">NOC Certificates</span>
+                </template>
                 <DataTable responsiveLayout="stack" :value="allNocRootCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines :tableStyle="{ minWidth: '50rem' }"
                     stripedRows>
@@ -634,13 +571,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -676,7 +609,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="PKI Revocation Distribution Point">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-server text-purple-500 mr-2"></i>
+                    <span class="font-semibold">PKI Revocation Distribution Point</span>
+                </template>
                 <Button @click="showPkiRevocationDistributionPointDialog(null, false)"
                     class="p-button-primary mb-4 mr-4" v-bind:class="{ 'p-disabled': !isSignedIn }"
                     label="Add Revocation Distribution Point" />
@@ -725,7 +662,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Attestation Certificates</span>
+                </template>
                 <DataTable :value="allProposedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -748,24 +689,10 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
-                        </template>
-                    </Column>
-                    <Column field="rejects" header="Rejects">
-                        <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(reject, index) in row.data.rejects" :key="index">
-                                    Address : {{ trimAddress(reject.address) }} <br />
-                                    Time : {{ new Date(reject.time * 1000).toString() }} <br />
-                                    Info : {{ reject.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                                :rejects="row.data.rejects || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -788,7 +715,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Revoked Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-exclamation-triangle text-yellow-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Revoked Attestation Certificates</span>
+                </template>
                 <DataTable :value="allProposedCertificateRevocation" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -809,13 +740,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -829,7 +756,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Revoked Attestation Certificates">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-ban text-red-500 mr-2"></i>
+                    <span class="font-semibold">Revoked Attestation Certificates</span>
+                </template>
                 <DataTable :value="allRevokedCertificates" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]"
                     v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
@@ -850,13 +781,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Revokes">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ approval.address }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column headerStyle="width: 4rem; text-align: center"
@@ -917,6 +844,30 @@ export default {
 </template>
 
 <style scoped>
+.pki-full-height {
+  height: calc(100vh - 80px); /* Adjust based on your header height */
+  display: flex;
+  flex-direction: column;
+}
+
+.pki-full-height ::v-deep(.p-tabview) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pki-full-height ::v-deep(.p-tabview-panels) {
+  flex: 1;
+  min-height: 0;
+}
+
+.pki-full-height ::v-deep(.p-tabview-panel) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 td.subject {
     max-width: 400px;
     text-overflow: ellipsis;

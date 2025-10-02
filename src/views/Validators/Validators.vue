@@ -5,6 +5,9 @@ import TabPanel from 'primevue/tabpanel';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import ValidatorInfo from './ValidatorInfo.vue';
 import { FilterMatchMode } from 'primevue/api';
 import GrantActionValidator from './GrantActionValidator.vue';
@@ -63,6 +66,9 @@ export default {
         Column,
         Button,
         Dialog,
+        IconField,
+        InputIcon,
+        InputText,
         ValidatorInfo,
         TabView,
         TabPanel,
@@ -137,14 +143,6 @@ export default {
                 this.lastBlock = data;
             });
 
-        // Get all the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.validator/QueryValidatorAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.validator/QueryProposedDisableValidatorAll', {
             options: {
                 subscribe: true,
@@ -158,7 +156,11 @@ export default {
 <template>
     <div class="prime-vue-container ml-5">
         <TabView>
-            <TabPanel header="Current Validators">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-check-circle text-green-500 mr-2"></i>
+                    <span class="font-semibold">Current Validators</span>
+                </template>
                 <!-- <div class="mb-5 ml-2">
 					<Button
 						@click="showValidatorInfoDialog"
@@ -201,7 +203,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Jailed Validators">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-lock text-red-500 mr-2"></i>
+                    <span class="font-semibold">Jailed Validators</span>
+                </template>
                 <DataTable :value="jailedValidators(allValidators)" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -227,7 +233,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Proposed Disable Validators">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-exclamation-triangle text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Disable Validators</span>
+                </template>
                 <DataTable :value="allProposedDisableValidators" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

@@ -10,7 +10,21 @@
       </ul>
     </div>
 
-    <DataTable :value="wallets" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" class="p-datatable-sm">
+    <div v-if="wallets.length === 0" class="empty-state">
+      <div class="empty-state-content">
+        <i class="pi pi-wallet empty-state-icon"></i>
+        <h3 class="empty-state-title">No Legacy Wallets Found</h3>
+        <p class="empty-state-description">
+          Great news! You don't have any legacy wallets stored in your browser's local storage.
+        </p>
+        <div class="empty-state-info">
+          <i class="pi pi-info-circle mr-2"></i>
+          <span>If you're looking to connect a wallet, please use Keplr Wallet from the top navigation bar.</span>
+        </div>
+      </div>
+    </div>
+
+    <DataTable v-else :value="wallets" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" class="p-datatable-sm">
       <Column field="name" header="Wallet Name" style="width: 60%;">
         <template #body="slotProps">
           <div class="wallet-name">{{ slotProps.data.name }}</div>
@@ -223,5 +237,59 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.empty-state-content {
+  text-align: center;
+  padding: 3rem;
+  max-width: 500px;
+}
+
+.empty-state-icon {
+  font-size: 5rem;
+  color: #667eea;
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.empty-state-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 1rem 0;
+}
+
+.empty-state-description {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.empty-state-info {
+  display: inline-flex;
+  align-items: center;
+  background: #f3f4f6;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: #4b5563;
+  font-size: 0.95rem;
+  border-left: 4px solid #667eea;
+}
+
+.empty-state-info i {
+  color: #667eea;
 }
 </style>

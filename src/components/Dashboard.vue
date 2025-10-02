@@ -1,7 +1,23 @@
 <template>
-    <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+    <div>
+        <!-- Wallet Connection Warning -->
+        <div v-if="isSignedIn && !isAccountOnChain" class="surface-section px-4 py-3 border-round mb-3">
+            <div class="flex align-items-center">
+                <i class="pi pi-exclamation-triangle text-orange-500 text-2xl mr-3"></i>
+                <div>
+                    <div class="text-900 font-medium text-lg">Wallet Account Not Found on Chain</div>
+                    <div class="text-500">The connected Keplr wallet account ({{ shortenAddress(currentAddress) }}) is not registered on this chain. You may be connected with a different account.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section - Only show for Trustees -->
+        <QuickActions v-if="isSignedIn && isTrustee" />
+
+        <!-- Dashboard Grid -->
+        <div class="grid">
+            <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 text-lg mb-3">Accounts</span>
@@ -28,7 +44,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Roles</span>
@@ -64,7 +80,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Validator Nodes</span>
@@ -96,7 +112,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Data Summary</span>
@@ -131,7 +147,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Block Height</span>
@@ -159,7 +175,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg mb-3">Last Block Consensus %</span>
@@ -187,7 +203,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 text-lg mb-3">Network Info</span>
@@ -213,10 +229,10 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
 
         <div v-if="isSignedIn" class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" style="min-height: 280px;">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium text-lg">Current User</span>
@@ -228,17 +244,10 @@
                             </button>
                         </div>
                         <div class="text-900 font-medium text-lg">
-                            CLI Format Public Key :
-                            <span class="text-500 font-medium">{{ shortenKey(JSON.stringify(pubKey)) }}</span>
+                            Public Key :
+                            <span class="text-500 font-medium">{{ shortenKey(cliFormatPubKey) }}</span>
                             <button
-                                @click="
-                                    copyToClipboard(
-                                        JSON.stringify({
-                                            type: '/cosmos.crypto.secp256k1.PubKey',
-                                            key: pubKey.value
-                                        })
-                                    )
-                                "
+                                @click="copyToClipboard(cliFormatPubKey)"
                                 class="ml-1 p-button p-component p-button-icon-only p-button-rounded p-button-text"
                                 type="button"
                             >
@@ -255,6 +264,7 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </template>
@@ -263,11 +273,13 @@
 import Vue3autocounter from 'vue3-autocounter';
 import { decodePubkey } from '@cosmjs/proto-signing';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import QuickActions from './QuickActions.vue';
 
 export default {
     name: 'Dashboard',
     components: {
-        'vue3-autocounter': Vue3autocounter
+        'vue3-autocounter': Vue3autocounter,
+        QuickActions
     },
     data() {
         return {
@@ -368,6 +380,15 @@ export default {
             } else {
             return '';
             }
+        },
+        cliFormatPubKey() {
+            if (this.pubKey) {
+                return JSON.stringify({
+                    '@type': this.pubKey.type,
+                    key: this.pubKey.value
+                });
+            }
+            return '';
         },
         blockHeight: {
             get() {
@@ -485,7 +506,27 @@ export default {
             const lastBlock = blockArray[blockArray.length - 2];
             return parseInt(lastBlock.height);
         },
-        currentUser() {}
+        currentUser() {},
+
+        currentUserAccount() {
+            if (!this.isSignedIn || !this.currentAddress) return null;
+
+            const allAccountsArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll']();
+            const accounts = allAccountsArray?.account || [];
+
+            return accounts.find(account => account.base_account.address === this.currentAddress);
+        },
+
+        isAccountOnChain() {
+            return !!this.currentUserAccount;
+        },
+
+        isTrustee() {
+            const account = this.currentUserAccount;
+            if (!account) return false;
+
+            return account.roles && account.roles.includes('Trustee');
+        }
     },
     methods: {
         theFormat(number) {

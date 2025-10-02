@@ -5,6 +5,10 @@ import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
+import Tag from 'primevue/tag';
 import CertifyModel from './CertifyModel.vue';
 import RevokeModel from './RevokeModel.vue';
 import ProvisionModel from './ProvisionModel.vue';
@@ -32,6 +36,10 @@ export default {
         TabPanel,
         Button,
         Dialog,
+        IconField,
+        InputIcon,
+        InputText,
+        Tag,
         CertifyModel,
         RevokeModel,
         ProvisionModel
@@ -82,35 +90,6 @@ export default {
     },
 
     created: function () {
-        // Get all the certified compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryComplianceInfoAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-
-        // Get all the certified compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryCertifiedModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryRevokedModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the provisional compliance models
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryProvisionalModelAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
     },
 
     methods: {
@@ -163,7 +142,11 @@ export default {
 <template>
     <div class="prime-vue-container">
         <TabView>
-            <TabPanel header="Certified Models">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-verified text-green-500 mr-2"></i>
+                    <span class="font-semibold">Certified Models</span>
+                </template>
                 <DataTable :value="allCertifiedModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -214,7 +197,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Revoked Models">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-ban text-red-500 mr-2"></i>
+                    <span class="font-semibold">Revoked Models</span>
+                </template>
                 <!-- Disabled per request from CSA
                 <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" /> 
                 -->
@@ -243,7 +230,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Provisional Models">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Provisional Models</span>
+                </template>
                 
                 <!-- Disabled per request from CSA
                 <Button @click="showProvisionalModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Provision Model" />

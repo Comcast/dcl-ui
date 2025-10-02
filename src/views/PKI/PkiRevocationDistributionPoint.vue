@@ -10,7 +10,7 @@ import { assertIsBroadcastTxSuccess, SigningStargateClient, StargateClient } fro
 import { fromBase64 } from '@cosmjs/encoding';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 import { decodePubkey, encodePubkey } from '@cosmjs/proto-signing';
-import { PkiRevocationDistributionPoint } from '../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.pki/module/types/pki/pki_revocation_distribution_point';
+import { PkiRevocationDistributionPoint } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.pki/types';
 import Message from 'primevue/message';
 import Dropdown from 'primevue/dropdown';
 export default {

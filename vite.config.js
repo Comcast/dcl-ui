@@ -6,9 +6,9 @@ import vue from '@vitejs/plugin-vue';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import NodePolyfills from 'rollup-plugin-polyfill-node';
 
-const useLocal = true; // set to false to use the test-net
+const useLocal = false; // set to false to use the test-net
 const apiTarget = useLocal ? 'http://localhost:26640' : 'https://on.test-net.dcl.csa-iot.org';
-const rpcTarget = useLocal ? 'http://localhost:26657' : 'http://on.test-net.dcl.csa-iot.org:26657';
+const rpcTarget = useLocal ? 'http://localhost:26657' : 'https://on.test-net.dcl.csa-iot.org:26657';
 
 export default defineConfig(() => {
     return {

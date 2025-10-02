@@ -10,12 +10,19 @@ import TabPanel from 'primevue/tabpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Tooltip from 'primevue/tooltip';
+import Card from 'primevue/card';
+import Timeline from 'primevue/timeline';
+import Tag from 'primevue/tag';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import { email, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { FilterMatchMode } from 'primevue/api';
 
 import ProposeNewAccount from './ProposeNewAccount.vue';
 import GrantActionAccount from './GrantActionAccount.vue';
+import ApprovalDisplay from './ApprovalDisplay.vue';
 
 export default {
     name: 'Accounts',
@@ -29,7 +36,8 @@ export default {
             dialogKey: 0, // This is to force the dialog to re-render
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-            }
+            },
+            activeTabIndex: 0
         };
     },
 
@@ -60,17 +68,22 @@ export default {
             }
         },
         copyToClipboard(value) {
-            const el = document.createElement('textarea');
-            el.value = value;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            navigator.clipboard.writeText(value);
         },
 
         addHexValueToVendorID(vendorID) {
             if (vendorID) return `${vendorID} (0x${vendorID.toString(16)})`;
             else return 'Not Set';
+        },
+        formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
     },
     components: {
@@ -81,8 +94,15 @@ export default {
         Button,
         Dialog,
         Tooltip,
+        Card,
+        Timeline,
+        Tag,
+        IconField,
+        InputIcon,
+        InputText,
         ProposeNewAccount,
-        GrantActionAccount
+        GrantActionAccount,
+        ApprovalDisplay
     },
 
     computed: {
@@ -131,20 +151,6 @@ export default {
     },
 
     created: function () {
-        // Get the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get the pending accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
         // Get the revoked accounts
         this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryPendingAccountRevocationAll', {
             options: {
@@ -152,14 +158,33 @@ export default {
                 all: true
             }
         });
+
+        // Check if tab query parameter is present
+        if (this.$route.query.tab) {
+            this.activeTabIndex = parseInt(this.$route.query.tab);
+        }
+    },
+
+    watch: {
+        '$route.query.tab': function(newTab) {
+            if (newTab !== undefined) {
+                this.activeTabIndex = parseInt(newTab);
+            }
+        }
     }
 };
 </script>
 
 <template>
     <div class="prime-vue-container">
-        <TabView>
-            <TabPanel header="Active Accounts">
+        <Card class="shadow-2 border-round-lg">
+            <template #content>
+                <TabView v-model:activeIndex="activeTabIndex">
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-check-circle text-green-500 mr-2"></i>
+                            <span class="font-semibold">Active Accounts</span>
+                        </template>
                 <Button @click="showProposeNewAccountDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Account">Propose Account</Button>
                 <div class="mb-4"></div>
                 <DataTable :value="allActiveAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
@@ -191,7 +216,21 @@ export default {
                             </ul>
                         </template>
                     </Column>
-                    <Column field="base_account.address" header="Address"></Column>
+                    <Column field="base_account.address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.base_account.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.base_account.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <!-- <Column field="base_account" header="Public Key">
 					<template #body="{ data }">
 						<span> {{ trimAddress(data.base_account.pub_key.key) }}
@@ -209,13 +248,9 @@ export default {
                     </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -226,7 +261,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Accounts">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Accounts</span>
+                </template>
                 <DataTable :value="allProposedAccounts" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -248,7 +287,21 @@ export default {
                             </ul>
                         </template>
                     </Column>
-                    <Column field="account.base_account.address" header="Address"></Column>
+                    <Column field="account.base_account.address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.account.base_account.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.account.base_account.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <Column field="account.vendorIDHex" header="Vendor ID"></Column>
                     <Column field="productIDs" header="Product IDs">
                         <template #body="{ data }">
@@ -256,27 +309,13 @@ export default {
                                 {{ data.account.productIDs?.map(range => `${range.min}-${range.max}`).join('\n') }}
                             </span>
                         </template>
-                    </Column>                    
+                    </Column>
                     <Column field="account.approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.account.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
-                        </template>
-                    </Column>
-                    <Column field="rejects" header="Rejects">
-                        <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(reject, index) in row.data.account.rejects" :key="index">
-                                    Address : {{ trimAddress(reject.address) }} <br />
-                                    Time : {{ new Date(reject.time * 1000).toString() }} <br />
-                                    Info : {{ reject.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.account.approvals || []"
+                                :rejects="row.data.account.rejects || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: left" bodyStyle="text-align: left; overflow: visible">
@@ -287,7 +326,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Active Accounts - Pending Revocation">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-ban text-red-500 mr-2"></i>
+                    <span class="font-semibold">Pending Revocations</span>
+                </template>                
                 <DataTable :value="allActiveRevocations" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -300,16 +343,26 @@ export default {
                         </div>
                     </template>
 
-                    <Column field="address" header="Address"></Column>
+                    <Column field="address" header="Address">
+                        <template #body="{ data }">
+                            <div class="flex align-items-center">
+                                <span class="font-mono">{{ trimAddress(data.address) }}</span>
+                                <button
+                                    @click="copyToClipboard(data.address)"
+                                    class="ml-2 p-button p-component p-button-icon-only p-button-text p-button-xs"
+                                    type="button"
+                                    v-tooltip.top="'Copy address'"
+                                >
+                                    <span class="p-button-icon pi pi-copy"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
                     <Column field="approvals" header="Approvals">
                         <template #body="row">
-                            <ol>
-                                <li class="mb-2" v-for="(approval, index) in row.data.approvals" :key="index">
-                                    Address : {{ trimAddress(approval.address) }} <br />
-                                    Time : {{ new Date(approval.time * 1000).toString() }} <br />
-                                    Info : {{ approval.info }}
-                                </li>
-                            </ol>
+                            <ApprovalDisplay
+                                :approvals="row.data.approvals || []"
+                            />
                         </template>
                     </Column>
                     <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -320,6 +373,8 @@ export default {
                 </DataTable>
             </TabPanel>
         </TabView>
+            </template>
+        </Card>
 
         <Dialog 
             :header="grantActionHeader" 
@@ -353,4 +408,42 @@ export default {
     </div>
 </template>
 
+<style scoped>
+/* Fix for tab header alignment and underline */
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    white-space: nowrap;
+    display: inline-block;
+}
 
+.p-tabview .p-tabview-nav li .p-tabview-nav-link > * {
+    vertical-align: middle;
+}
+
+/* Utility classes */
+.flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.font-mono {
+    font-family: monospace;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+/* Button styles */
+.p-button-xs {
+    padding: 0 !important;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.p-button-xs .p-button-icon {
+    font-size: 0.75rem;
+}
+</style>

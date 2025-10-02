@@ -10,7 +10,7 @@ import { assertIsBroadcastTxSuccess, SigningStargateClient, StargateClient } fro
 import { fromBase64 } from '@cosmjs/encoding';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 import { decodePubkey, encodePubkey } from '@cosmjs/proto-signing';
-import { Model } from '../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.model/module/types/model/model';
+import { Model } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.model/types';
 import Message from 'primevue/message';
 import { scrollToTopMixin } from '../../mixins/scrollToTopMixin';
 export default {
@@ -75,7 +75,11 @@ export default {
                 enhancedSetupFlowTCFileSize: {},
                 maintenanceUrl: {},
                 discoveryCapabilitiesBitmask: {},
-                schemaVersion: {}
+                schemaVersion: {},
+                icdUserActiveModeTriggerHint: {},
+                icdUserActiveModeTriggerInstruction: {},
+                factoryResetStepsHint: {},
+                factoryResetStepsInstruction: {}
             }
         };
     },
@@ -272,6 +276,22 @@ export default {
                 <tr>
                     <td>Schema Version</td>
                     <td>{{ selectedModel.schemaVersion }}</td>
+                </tr>
+                <tr>
+                    <td>ICD User Active Mode Trigger Hint</td>
+                    <td>{{ selectedModel.icdUserActiveModeTriggerHint }}</td>
+                </tr>
+                <tr>
+                    <td>ICD User Active Mode Trigger Instruction</td>
+                    <td>{{ selectedModel.icdUserActiveModeTriggerInstruction }}</td>
+                </tr>
+                <tr>
+                    <td>Factory Reset Steps Hint</td>
+                    <td>{{ selectedModel.factoryResetStepsHint }}</td>
+                </tr>
+                <tr>
+                    <td>Factory Reset Steps Instruction</td>
+                    <td>{{ selectedModel.factoryResetStepsInstruction }}</td>
                 </tr>
             </table>
         </div>
@@ -601,6 +621,54 @@ export default {
                         </label>
                         <InputText id="schemaVersion" type="text" v-model="v$.model.schemaVersion.$model" :class="{ 'p-invalid': v$.model.schemaVersion.$invalid && submitted }" />
                         <div v-if="v$.model.schemaVersion.$invalid && submitted" class="p-error">Schema Version is required</div>
+                    </div>
+
+                    <!-- Field for icdUserActiveModeTriggerHint -->
+                    <div class="field">
+                        <label for="icdUserActiveModeTriggerHint">
+                            <IconField v-tooltip.top="'Hint for steps to trigger user active mode on Intermittently Connected Devices (ICD)'">
+                                ICD User Active Mode Trigger Hint
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="icdUserActiveModeTriggerHint" type="text" v-model="v$.model.icdUserActiveModeTriggerHint.$model" :class="{ 'p-invalid': v$.model.icdUserActiveModeTriggerHint.$invalid && submitted }" />
+                        <div v-if="v$.model.icdUserActiveModeTriggerHint.$invalid && submitted" class="p-error">ICD User Active Mode Trigger Hint is invalid</div>
+                    </div>
+
+                    <!-- Field for icdUserActiveModeTriggerInstruction -->
+                    <div class="field">
+                        <label for="icdUserActiveModeTriggerInstruction">
+                            <IconField v-tooltip.top="'Instructions for triggering user active mode on Intermittently Connected Devices (ICD)'">
+                                ICD User Active Mode Trigger Instruction
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="icdUserActiveModeTriggerInstruction" type="text" v-model="v$.model.icdUserActiveModeTriggerInstruction.$model" :class="{ 'p-invalid': v$.model.icdUserActiveModeTriggerInstruction.$invalid && submitted }" />
+                        <div v-if="v$.model.icdUserActiveModeTriggerInstruction.$invalid && submitted" class="p-error">ICD User Active Mode Trigger Instruction is invalid</div>
+                    </div>
+
+                    <!-- Field for factoryResetStepsHint -->
+                    <div class="field">
+                        <label for="factoryResetStepsHint">
+                            <IconField v-tooltip.top="'Hint for steps to perform factory reset on the device'">
+                                Factory Reset Steps Hint
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="factoryResetStepsHint" type="text" v-model="v$.model.factoryResetStepsHint.$model" :class="{ 'p-invalid': v$.model.factoryResetStepsHint.$invalid && submitted }" />
+                        <div v-if="v$.model.factoryResetStepsHint.$invalid && submitted" class="p-error">Factory Reset Steps Hint is invalid</div>
+                    </div>
+
+                    <!-- Field for factoryResetStepsInstruction -->
+                    <div class="field">
+                        <label for="factoryResetStepsInstruction">
+                            <IconField v-tooltip.top="'Instructions for performing factory reset on the device'">
+                                Factory Reset Steps Instruction
+                                <i class="pi pi-info-circle ml-2"></i>
+                            </IconField>
+                        </label>
+                        <InputText id="factoryResetStepsInstruction" type="text" v-model="v$.model.factoryResetStepsInstruction.$model" :class="{ 'p-invalid': v$.model.factoryResetStepsInstruction.$invalid && submitted }" />
+                        <div v-if="v$.model.factoryResetStepsInstruction.$invalid && submitted" class="p-error">Factory Reset Steps Instruction is invalid</div>
                     </div>
 
                     <div class="field">

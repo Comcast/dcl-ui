@@ -16,6 +16,7 @@
 <script>
 import AppTopBar from './AppTopbar.vue';
 import AppMenu from './AppMenu.vue';
+import storeInitializer from '@/store/initializer';
 
 export default {
     emits: ['change-theme'],
@@ -180,13 +181,9 @@ export default {
             getTXApi: import.meta.env.VITE_APP_DCL_TX_API,
             refresh: import.meta.env.VITE_APP_DCL_REFRESH
         });
-        // Get all the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclauth/QueryAccountAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
+
+        // Then initialize all stores once
+        await storeInitializer.initializeAllStores(this.$store);
         this.initialized = true;
     }
 };

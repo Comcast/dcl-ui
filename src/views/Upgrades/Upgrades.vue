@@ -7,6 +7,9 @@ import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import { email, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { FilterMatchMode } from 'primevue/api';
@@ -67,6 +70,9 @@ export default {
         TabPanel,
         Button,
         Dialog,
+        IconField,
+        InputIcon,
+        InputText,
         GrantActionUpgrade,
         ProposeUpgrade
     },
@@ -104,27 +110,6 @@ export default {
     },
 
     created: function () {
-        // Get all the accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryApprovedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the pending accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryProposedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
-        // Get all the revoked accounts
-        this.$store.dispatch('zigbeealliance.distributedcomplianceledger.dclupgrade/QueryRejectedUpgradeAll', {
-            options: {
-                subscribe: true,
-                all: true
-            }
-        });
     }
 };
 </script>
@@ -132,7 +117,11 @@ export default {
 <template>
     <div class="prime-vue-container">
         <TabView>
-            <TabPanel header="Approved Upgrades">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-check-circle text-green-500 mr-2"></i>
+                    <span class="font-semibold">Approved Upgrades</span>
+                </template>
                 <Button @click="showProposeUpgradeDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Propose-Upgrade">Propose Upgrade</Button>
 
                 <div class="mb-4"></div>
@@ -182,7 +171,11 @@ export default {
                 </DataTable>
             </TabPanel>
 
-            <TabPanel header="Proposed Upgrades">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-clock text-orange-500 mr-2"></i>
+                    <span class="font-semibold">Proposed Upgrades</span>
+                </template>
                 <DataTable :value="allProposedUpgrades" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">
@@ -234,7 +227,11 @@ export default {
                     </Column>
                 </DataTable>
             </TabPanel>
-            <TabPanel header="Rejected Upgrades">
+            <TabPanel>
+                <template #header>
+                    <i class="pi pi-times-circle text-red-500 mr-2"></i>
+                    <span class="font-semibold">Rejected Upgrades</span>
+                </template>
                 <DataTable :value="allRejectedUpgrades" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
                     <template #header>
                         <div class="flex justify-content-end">

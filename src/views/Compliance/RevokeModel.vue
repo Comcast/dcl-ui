@@ -5,7 +5,7 @@ import Button from 'primevue/button';
 import { required, minValue } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import Message from 'primevue/message';
-import { MsgRevokeModel } from '../../store/generated/zigbee-alliance/distributed-compliance-ledger/zigbeealliance.distributedcomplianceledger.compliance/module/types/compliance/tx';
+import { MsgRevokeModel } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.compliance/types';
 
 export default {
     name: 'RevokeModel',
