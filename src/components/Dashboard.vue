@@ -244,7 +244,7 @@
                             </button>
                         </div>
                         <div class="text-900 font-medium text-lg">
-                            Public Key :
+                            CLI Public Key :
                             <span class="text-500 font-medium">{{ shortenKey(cliFormatPubKey) }}</span>
                             <button
                                 @click="copyToClipboard(cliFormatPubKey)"
