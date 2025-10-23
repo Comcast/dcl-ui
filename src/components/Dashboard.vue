@@ -384,7 +384,7 @@ export default {
         cliFormatPubKey() {
             if (this.pubKey) {
                 return JSON.stringify({
-                    '@type': this.pubKey.type,
+                    '@type': '/cosmos.crypto.secp256k1.PubKey',
                     key: this.pubKey.value
                 });
             }
