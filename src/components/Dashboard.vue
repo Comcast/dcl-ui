@@ -244,7 +244,7 @@
                             </button>
                         </div>
                         <div class="text-900 font-medium text-lg">
-                            Public Key :
+                            CLI Public Key :
                             <span class="text-500 font-medium">{{ shortenKey(cliFormatPubKey) }}</span>
                             <button
                                 @click="copyToClipboard(cliFormatPubKey)"
@@ -384,7 +384,7 @@ export default {
         cliFormatPubKey() {
             if (this.pubKey) {
                 return JSON.stringify({
-                    '@type': this.pubKey.type,
+                    '@type': '/cosmos.crypto.secp256k1.PubKey',
                     key: this.pubKey.value
                 });
             }

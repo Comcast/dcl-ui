@@ -1,6 +1,6 @@
 {
   "name": "dcl-ui",
-  "version": "1.15.1",
+  "version": "1.15.3",
   "description": "A Vuejs based application for managing CSA Distributed Compliance Ledger",
   "author": "Comcast Inc.",
   "private": true,
