@@ -198,6 +198,21 @@ export default {
                             </IconField>
                         </div>
                     </template>
+                    
+                    <template #empty>
+                        <div class="text-center py-6">
+                            <i class="pi pi-users text-4xl text-gray-400 mb-3 block"></i>
+                            <h3 class="text-xl text-gray-600 mb-2">No Active Accounts</h3>
+                            <p class="text-gray-500 mb-4">There are currently no active accounts in the system.</p>
+                            <Button 
+                                @click="showProposeNewAccountDialog" 
+                                icon="pi pi-plus" 
+                                label="Propose New Account"
+                                class="p-button-outlined"
+                                v-bind:class="{ 'p-disabled': !isSignedIn }"
+                            />
+                        </div>
+                    </template>
 
                     <Column field="base_account.account_number" header="Account Number" :sortable="true">
                         <template #body="{ data }">
@@ -277,6 +292,21 @@ export default {
                             </IconField>
                         </div>
                     </template>
+                    
+                    <template #empty>
+                        <div class="text-center py-6">
+                            <i class="pi pi-clock text-4xl text-orange-400 mb-3 block"></i>
+                            <h3 class="text-xl text-gray-600 mb-2">No Proposed Accounts</h3>
+                            <p class="text-gray-500 mb-4">There are currently no account proposals pending approval.</p>
+                            <Button 
+                                @click="showProposeNewAccountDialog" 
+                                icon="pi pi-plus" 
+                                label="Propose New Account"
+                                class="p-button-outlined"
+                                v-bind:class="{ 'p-disabled': !isSignedIn }"
+                            />
+                        </div>
+                    </template>
 
                     <Column field="account.roles" header="Roles">
                         <template #body="row">
@@ -340,6 +370,14 @@ export default {
                                 </InputIcon>
                                 <InputText v-model="filters['global'].value" placeholder="Search" />
                             </IconField>
+                        </div>
+                    </template>
+                    
+                    <template #empty>
+                        <div class="text-center py-6">
+                            <i class="pi pi-check-circle text-4xl text-green-400 mb-3 block"></i>
+                            <h3 class="text-xl text-gray-600 mb-2">No Pending Revocations</h3>
+                            <p class="text-gray-500">There are currently no account revocations pending approval.</p>
                         </div>
                     </template>
 
@@ -445,5 +483,59 @@ export default {
 
 .p-button-xs .p-button-icon {
     font-size: 0.75rem;
+}
+
+/* Empty state styling */
+.text-center {
+    text-align: center;
+}
+
+.py-6 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.text-4xl {
+    font-size: 2.25rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.text-gray-400 {
+    color: #9ca3af;
+}
+
+.text-gray-500 {
+    color: #6b7280;
+}
+
+.text-gray-600 {
+    color: #4b5563;
+}
+
+.text-orange-400 {
+    color: #fb923c;
+}
+
+.text-green-400 {
+    color: #4ade80;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.block {
+    display: block;
 }
 </style>
