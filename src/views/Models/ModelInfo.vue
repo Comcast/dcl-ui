@@ -266,7 +266,7 @@ export default {
                     <td>{{ selectedModel.enhancedSetupFlowTCFileSize }}</td>
                 </tr>
                 <tr>
-                    <td>Maintenance URL</td>
+                    <td>Enhanced Setup Flow Maintenance URL</td>
                     <td>{{ selectedModel.maintenanceUrl }}</td>
                 </tr>
                 <tr>
@@ -588,13 +588,13 @@ export default {
                     <!-- Field for maintenanceUrl -->
                     <div class="field">
                         <label for="maintenanceUrl">
-                            <IconField v-tooltip.top="'URL for maintenance details'">
-                                Maintenance URL
+                            <IconField v-tooltip.top="'Enhanced Setup Flow Maintenance URL details'">
+                                Enhanced Setup Flow Maintenance URL
                                 <i class="pi pi-info-circle ml-2"></i>
                             </IconField>
                         </label>
                         <InputText id="maintenanceUrl" type="text" v-model="v$.model.maintenanceUrl.$model" :class="{ 'p-invalid': v$.model.maintenanceUrl.$invalid && submitted }" />
-                        <div v-if="v$.model.maintenanceUrl.$invalid && submitted" class="p-error">Maintenance URL is invalid</div>
+                        <div v-if="v$.model.maintenanceUrl.$invalid && submitted" class="p-error">Enhanced Setup Flow Maintenance URL is invalid</div>
                     </div>
 
                     <!-- Field for discoverCapabilitiesBitmask -->
@@ -614,7 +614,7 @@ export default {
                     <!-- Field for schemaVersion -->
                     <div class="field">
                         <label for="schemaVersion">
-                            <IconField v-tooltip.top="'Schema version to support backward/forward compatibility (default 1)'">
+                            <IconField v-tooltip.top="'Schema version to support backward/forward compatibility (default 0)'">
                                 Schema Version
                                 <i class="pi pi-info-circle ml-2"></i>
                             </IconField>
