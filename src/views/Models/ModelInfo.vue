@@ -158,6 +158,14 @@ export default {
             */
             this.model.commissioningModeInitialStepsHint = 1;
 
+            /*
+             default value for commissioningModeSecondaryStepsHint is set to 1
+             commissioningModeSecondaryStepsHint SHALL identify a hint for the steps that can be used to put 
+             into commissioning mode a device that has already been commissioned. This field is a bitmap with 
+             values defined in the Pairing Hint Table (default 1).
+            */
+            this.model.commissioningModeSecondaryStepsHint = 1;
+
             // default value for enhancedSetupFlowOptions
             this.model.schemaVersion = 0;
             this.update = false;
