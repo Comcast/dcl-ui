@@ -2,7 +2,7 @@
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
-import { required } from '@vuelidate/validators';
+import { required, maxValue } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 //import {encoding_1} from "@cosmjs/encoding";
 //const encoding_1 = require("@cosmjs/encoding");
@@ -53,7 +53,9 @@ export default {
                 otaUrl: {},
                 otaFileSize: {},
                 otaChecksum: {},
-                otaChecksumType: {},
+                otaChecksumType: {
+                    maxValue: maxValue(12)
+                },
                 minApplicableSoftwareVersion: {
                     required
                 },
@@ -471,7 +473,7 @@ export default {
                                 'p-disabled': this.update
                             }"
                         />
-                        <div v-if="v$.modelVersion.otaChecksumType.$invalid && submitted" class="p-error">OTA Checksum Type is required</div>
+                        <div v-if="v$.modelVersion.otaChecksumType.$invalid && submitted" class="p-error">OTA Checksum Type must be between 0 and 12</div>
                     </div>
 
                     <!-- Field for releaseNotesUrl -->

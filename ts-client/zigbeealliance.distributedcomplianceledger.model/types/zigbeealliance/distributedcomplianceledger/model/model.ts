@@ -321,7 +321,9 @@ export const Model = {
       enhancedSetupFlowTCFileSize: isSet(object.enhancedSetupFlowTCFileSize)
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
-      maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      maintenanceUrl: isSet(object.maintenanceUrl)
+        ? String(object.maintenanceUrl)
+        : "",
       discoveryCapabilitiesBitmask: isSet(object.discoveryCapabilitiesBitmask)
         ? Number(object.discoveryCapabilitiesBitmask)
         : 0,
@@ -375,7 +377,8 @@ export const Model = {
       && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
     message.enhancedSetupFlowTCFileSize !== undefined
       && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
-    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.maintenanceUrl !== undefined
+      && (obj.maintenanceUrl = message.maintenanceUrl);
     message.discoveryCapabilitiesBitmask !== undefined
       && (obj.discoveryCapabilitiesBitmask = Math.round(message.discoveryCapabilitiesBitmask));
     message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);

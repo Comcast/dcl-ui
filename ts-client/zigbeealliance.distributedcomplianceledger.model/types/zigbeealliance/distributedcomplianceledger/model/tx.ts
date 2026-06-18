@@ -100,6 +100,11 @@ export interface MsgCreateModelVersion {
   maxApplicableSoftwareVersion: number;
   releaseNotesUrl: string;
   schemaVersion: number;
+  /**
+   * Deprecated: usage is moved to provisioning/certifying ModelVersion (Compliance Module);
+   *
+   * @deprecated
+   */
   specificationVersion: number;
 }
 
@@ -119,6 +124,7 @@ export interface MsgUpdateModelVersion {
   otaFileSize: number;
   otaChecksum: string;
   schemaVersion: number;
+  otaChecksumType: number;
 }
 
 export interface MsgUpdateModelVersionResponse {
@@ -410,7 +416,9 @@ export const MsgCreateModel = {
       enhancedSetupFlowTCFileSize: isSet(object.enhancedSetupFlowTCFileSize)
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
-      maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      maintenanceUrl: isSet(object.maintenanceUrl)
+        ? String(object.maintenanceUrl)
+        : "",
       discoveryCapabilitiesBitmask: isSet(object.discoveryCapabilitiesBitmask)
         ? Number(object.discoveryCapabilitiesBitmask)
         : 0,
@@ -463,7 +471,8 @@ export const MsgCreateModel = {
       && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
     message.enhancedSetupFlowTCFileSize !== undefined
       && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
-    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.maintenanceUrl !== undefined
+      && (obj.maintenanceUrl = message.maintenanceUrl);
     message.discoveryCapabilitiesBitmask !== undefined
       && (obj.discoveryCapabilitiesBitmask = Math.round(message.discoveryCapabilitiesBitmask));
     message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);
@@ -811,7 +820,9 @@ export const MsgUpdateModel = {
       enhancedSetupFlowTCFileSize: isSet(object.enhancedSetupFlowTCFileSize)
         ? Number(object.enhancedSetupFlowTCFileSize)
         : 0,
-      maintenanceUrl: isSet(object.maintenanceUrl) ? String(object.maintenanceUrl) : "",
+      maintenanceUrl: isSet(object.maintenanceUrl)
+        ? String(object.maintenanceUrl)
+        : "",
       commissioningFallbackUrl: isSet(object.commissioningFallbackUrl) ? String(object.commissioningFallbackUrl) : "",
       commissioningModeSecondaryStepsHint: isSet(object.commissioningModeSecondaryStepsHint)
         ? Number(object.commissioningModeSecondaryStepsHint)
@@ -860,7 +871,8 @@ export const MsgUpdateModel = {
       && (obj.enhancedSetupFlowTCDigest = message.enhancedSetupFlowTCDigest);
     message.enhancedSetupFlowTCFileSize !== undefined
       && (obj.enhancedSetupFlowTCFileSize = Math.round(message.enhancedSetupFlowTCFileSize));
-    message.maintenanceUrl !== undefined && (obj.maintenanceUrl = message.maintenanceUrl);
+    message.maintenanceUrl !== undefined
+      && (obj.maintenanceUrl = message.maintenanceUrl);
     message.commissioningFallbackUrl !== undefined && (obj.commissioningFallbackUrl = message.commissioningFallbackUrl);
     message.commissioningModeSecondaryStepsHint !== undefined
       && (obj.commissioningModeSecondaryStepsHint = Math.round(message.commissioningModeSecondaryStepsHint));
@@ -1324,6 +1336,7 @@ function createBaseMsgUpdateModelVersion(): MsgUpdateModelVersion {
     otaFileSize: 0,
     otaChecksum: "",
     schemaVersion: 0,
+    otaChecksumType: 0,
   };
 }
 
@@ -1364,6 +1377,9 @@ export const MsgUpdateModelVersion = {
     }
     if (message.schemaVersion !== 0) {
       writer.uint32(96).uint32(message.schemaVersion);
+    }
+    if (message.otaChecksumType !== 0) {
+      writer.uint32(104).int32(message.otaChecksumType);
     }
     return writer;
   },
@@ -1411,6 +1427,9 @@ export const MsgUpdateModelVersion = {
         case 12:
           message.schemaVersion = reader.uint32();
           break;
+        case 13:
+          message.otaChecksumType = reader.int32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1437,6 +1456,7 @@ export const MsgUpdateModelVersion = {
       otaFileSize: isSet(object.otaFileSize) ? Number(object.otaFileSize) : 0,
       otaChecksum: isSet(object.otaChecksum) ? String(object.otaChecksum) : "",
       schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
+      otaChecksumType: isSet(object.otaChecksumType) ? Number(object.otaChecksumType) : 0,
     };
   },
 
@@ -1456,6 +1476,7 @@ export const MsgUpdateModelVersion = {
     message.otaFileSize !== undefined && (obj.otaFileSize = Math.round(message.otaFileSize));
     message.otaChecksum !== undefined && (obj.otaChecksum = message.otaChecksum);
     message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
+    message.otaChecksumType !== undefined && (obj.otaChecksumType = Math.round(message.otaChecksumType));
     return obj;
   },
 
@@ -1473,6 +1494,7 @@ export const MsgUpdateModelVersion = {
     message.otaFileSize = object.otaFileSize ?? 0;
     message.otaChecksum = object.otaChecksum ?? "";
     message.schemaVersion = object.schemaVersion ?? 0;
+    message.otaChecksumType = object.otaChecksumType ?? 0;
     return message;
   },
 };

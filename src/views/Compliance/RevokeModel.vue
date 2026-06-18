@@ -1,5 +1,6 @@
 <script>
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import { required, minValue } from '@vuelidate/validators';
@@ -11,6 +12,7 @@ export default {
     name: 'RevokeModel',
     components: {
         InputText,
+        Dropdown,
         MultiSelect,
         Button,
         Message
@@ -22,7 +24,7 @@ export default {
             txProcessing: false,
             submitted: false,
             error: null,
-            certificationType: ['zigbee', 'matter'],
+            certificationType: ['zigbee', 'matter', 'aliro'],
             msgRevokeModel: MsgRevokeModel.fromPartial({})
         };
     },
@@ -112,6 +114,7 @@ export default {
     },
     created() {
         this.msgRevokeModel = MsgRevokeModel.fromPartial(this.certifiedModel);
+        this.msgRevokeModel.schemaVersion = 1;
     }
 };
 </script>
@@ -159,7 +162,7 @@ export default {
                 <!-- Field for certificationType -->
                 <div class="field">
                     <label for="certificationType">Certification Type <span class="required">*</span></label>
-                    <InputText id="certificationType" type="text" v-model="v$.msgRevokeModel.certificationType.$model" :class="{ 'p-invalid': v$.msgRevokeModel.certificationType.$invalid && submitted }" />
+                    <Dropdown id="certificationType" v-model="v$.msgRevokeModel.certificationType.$model" :options="certificationType" :class="{ 'p-invalid': v$.msgRevokeModel.certificationType.$invalid && submitted }" />
                     <div v-if="v$.msgRevokeModel.certificationType.$invalid && submitted" class="p-error">Certification Type is required</div>
                 </div>
 

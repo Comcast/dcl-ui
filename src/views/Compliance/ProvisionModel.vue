@@ -1,5 +1,6 @@
 <script>
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import { required, minValue } from '@vuelidate/validators';
@@ -13,6 +14,7 @@ export default {
 
     components: {
         InputText,
+        Dropdown,
         MultiSelect,
         Button,
         Message
@@ -23,7 +25,7 @@ export default {
             txProcessing: false,
             submitted: false,
             error: null,
-            certificationType: ['zigbee', 'matter'],
+            certificationType: ['zigbee', 'matter', 'aliro'],
             msgProvisionModel: MsgProvisionModel.fromPartial({})
         };
     },
@@ -52,7 +54,10 @@ export default {
                 certificationType: {
                     required
                 },
-                reason: {}
+                reason: {},
+                specificationVersion: {
+                    required
+                }
             }
         };
     },
@@ -114,6 +119,7 @@ export default {
     },
     created() {
         this.msgProvisionModel = MsgProvisionModel.fromPartial(this.model || {});
+        this.msgProvisionModel.schemaVersion = 1;
     }
 };
 </script>
@@ -161,8 +167,15 @@ export default {
                 <!-- Field for certificationType -->
                 <div class="field">
                     <label for="certificationType">Certification Type <span class="required">*</span></label>
-                    <InputText id="certificationType" type="text" v-model="v$.msgProvisionModel.certificationType.$model" :class="{ 'p-invalid': v$.msgProvisionModel.certificationType.$invalid && submitted }" />
+                    <Dropdown id="certificationType" v-model="v$.msgProvisionModel.certificationType.$model" :options="certificationType" :class="{ 'p-invalid': v$.msgProvisionModel.certificationType.$invalid && submitted }" />
                     <div v-if="v$.msgProvisionModel.certificationType.$invalid && submitted" class="p-error">Certification Type is required</div>
+                </div>
+
+                <!-- Field for specificationVersion -->
+                <div class="field">
+                    <label for="specificationVersion">Specification Version <span class="required">*</span></label>
+                    <InputText id="specificationVersion" type="text" v-model="v$.msgProvisionModel.specificationVersion.$model" :class="{ 'p-invalid': v$.msgProvisionModel.specificationVersion.$invalid && submitted }" />
+                    <div v-if="v$.msgProvisionModel.specificationVersion.$invalid && submitted" class="p-error">Specification Version is required (e.g. 0x01040200 for v1.4.2.0)</div>
                 </div>
 
                 <!-- Field for reason -->
