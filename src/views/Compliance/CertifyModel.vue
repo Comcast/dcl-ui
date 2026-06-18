@@ -3,7 +3,7 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
-import { required, minValue } from '@vuelidate/validators';
+import { required, minValue, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import Message from 'primevue/message';
 import { MsgCertifyModel } from 'zigbee-alliance-distributed-compliance-ledger-client-ts/zigbeealliance.distributedcomplianceledger.compliance/types';
@@ -25,7 +25,7 @@ export default {
             txProcessing: false,
             submitted: false,
             error: null,
-            certificationType: ['zigbee', 'matter'],
+            certificationType: ['zigbee', 'matter', 'aliro'],
             msgCertifyModel: MsgCertifyModel.fromPartial({})
         };
     },
@@ -57,6 +57,11 @@ export default {
                 reason: {},
                 programTypeVersion: {},
                 cDCertificateId: {
+                    required,
+                    minLength: minLength(19),
+                    maxLength: maxLength(19)
+                },
+                specificationVersion: {
                     required
                 },
                 familyId: {},
@@ -141,6 +146,7 @@ export default {
         // Set default as 1 for cDVersionNumber and 'matter' for certificationType
         this.msgCertifyModel.cDVersionNumber = 1;
         this.msgCertifyModel.certificationType = 'matter';
+        this.msgCertifyModel.schemaVersion = 1;
     }
 };
 </script>
@@ -189,6 +195,10 @@ export default {
                 <tr>
                     <td>CD Certificate Id</td>
                     <td>{{ msgCertifyModel.cDCertificateId }}</td>
+                </tr>
+                <tr>
+                    <td>Specification Version</td>
+                    <td>{{ msgCertifyModel.specificationVersion }}</td>
                 </tr>
                 <tr>
                     <td>Family Id</td>
@@ -272,7 +282,14 @@ export default {
                 <div class="field">
                     <label for="cDCertificateId"> CD Certificate Id <span class="required">*</span> </label>
                     <InputText id="cDCertificateId" type="text" v-model="v$.msgCertifyModel.cDCertificateId.$model" :class="{ 'p-invalid': v$.msgCertifyModel.cDCertificateId.$invalid && submitted }" />
-                    <div v-if="v$.msgCertifyModel.cDCertificateId.$invalid && submitted" class="p-error">CD Certificate Id is required</div>
+                    <div v-if="v$.msgCertifyModel.cDCertificateId.$invalid && submitted" class="p-error">CD Certificate Id is required and must be exactly 19 characters</div>
+                </div>
+
+                <!-- Field for specificationVersion -->
+                <div class="field">
+                    <label for="specificationVersion"> Specification Version <span class="required">*</span> </label>
+                    <InputText id="specificationVersion" type="text" v-model="v$.msgCertifyModel.specificationVersion.$model" :class="{ 'p-invalid': v$.msgCertifyModel.specificationVersion.$invalid && submitted }" />
+                    <div v-if="v$.msgCertifyModel.specificationVersion.$invalid && submitted" class="p-error">Specification Version is required (e.g. 0x01040200 for v1.4.2.0)</div>
                 </div>
 
                 <!-- Field for CD Version Number -->

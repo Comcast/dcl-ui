@@ -1,16 +1,26 @@
 // vite.config.js
 
 import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
+import https from 'node:https';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import NodePolyfills from 'rollup-plugin-polyfill-node';
 
-const useLocal = false; // set to false to use the test-net
-const apiTarget = useLocal ? 'http://localhost:26640' : 'https://on.test-net.dcl.csa-iot.org';
-const rpcTarget = useLocal ? 'http://localhost:26657' : 'https://on.test-net.dcl.csa-iot.org:26657';
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '');
+    const useLocal = false;
+    const apiTarget = env.VITE_PROXY_API_TARGET || (useLocal ? 'http://localhost:26640' : 'https://on.test-net.dcl.csa-iot.org');
+    const rpcTarget = env.VITE_PROXY_RPC_TARGET || (useLocal ? 'http://localhost:26657' : 'https://on.test-net.dcl.csa-iot.org:26657');
+    const proxyTimeout = Number(env.VITE_PROXY_TIMEOUT_MS || 60000);
+    const proxyAgent = new https.Agent({ rejectUnauthorized: false });
 
-export default defineConfig(() => {
+    const withProxyErrorLogging = (target) => (proxy) => {
+        proxy.on('error', (err, req) => {
+            console.error(`[vite-proxy] ${req.method} ${req.url} -> ${target}:`, err.code || err.message);
+        });
+    };
+
     return {
         plugins: [
             vue(),
@@ -57,19 +67,34 @@ export default defineConfig(() => {
                 '/api': {
                     target: apiTarget,
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api/, '')
+                    secure: false,
+                    agent: proxyAgent,
+                    rewrite: (path) => path.replace(/^\/api/, ''),
+                    timeout: proxyTimeout,
+                    proxyTimeout,
+                    configure: withProxyErrorLogging(apiTarget)
                 },
                 '/rpc': {
                     target: rpcTarget,
                     changeOrigin: true,
+                    secure: false,
+                    agent: proxyAgent,
                     rewrite: (path) => path.replace(/^\/rpc/, ''),
-                    ws: true
+                    ws: true,
+                    timeout: proxyTimeout,
+                    proxyTimeout,
+                    configure: withProxyErrorLogging(rpcTarget)
                 },
                 '/websocket': {
                     target: rpcTarget,
                     changeOrigin: true,
+                    secure: false,
+                    agent: proxyAgent,
                     ws: true,
-                    upgrade: true
+                    upgrade: true,
+                    timeout: proxyTimeout,
+                    proxyTimeout,
+                    configure: withProxyErrorLogging(rpcTarget)
                 }
             }
         }

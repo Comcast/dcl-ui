@@ -7,7 +7,7 @@ import { RevokedModel } from "./types/zigbeealliance/distributedcomplianceledger
 import { MsgCertifyModel, MsgRevokeModel, MsgProvisionModel } from "./types/zigbeealliance/distributedcomplianceledger/compliance/tx"
 
 
-export {
+export {     
     CertifiedModel,
     ComplianceHistoryItem,
     ComplianceInfo,
@@ -17,5 +17,5 @@ export {
     MsgCertifyModel,
     MsgRevokeModel,
     MsgProvisionModel,
-
+    
  }
