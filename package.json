@@ -1,11 +1,11 @@
 {
   "name": "dcl-ui",
-  "version": "1.15.6",
+  "version": "1.15.7",
   "description": "A Vuejs based application for managing CSA Distributed Compliance Ledger",
   "author": "Comcast Inc.",
   "private": true,
   "scripts": {
-    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
