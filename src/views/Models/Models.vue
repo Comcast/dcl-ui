@@ -125,7 +125,7 @@ export default {
         },
 
         getHexValue(value) {
-            if (value) return `${value} (0x${value.toString(16)})`;
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
             else return value;
         }
     },

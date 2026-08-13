@@ -116,7 +116,7 @@ export default {
             this.showProvisionalModel = false;
         },
         hexValue(value) {
-            if (value) return `${value} (0x${value.toString(16)})`;
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
             else return value;
         },
         populateModelData(complianceArray, allComplianceInfo) {

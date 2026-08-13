@@ -132,6 +132,10 @@ export default {
             } else {
                 return null;
             }
+        },
+        hexValue(value) {
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
+            else return value;
         }
     },
     created() {
@@ -158,11 +162,11 @@ export default {
             <table>
                 <tr>
                     <td class="p-text">Vendor ID</td>
-                    <td>{{ msgCertifyModel.vid }}</td>
+                    <td>{{ hexValue(msgCertifyModel.vid) }}</td>
                 </tr>
                 <tr>
                     <td>Product ID</td>
-                    <td>{{ msgCertifyModel.pid }}</td>
+                    <td>{{ hexValue(msgCertifyModel.pid) }}</td>
                 </tr>
                 <tr>
                     <td>Software Version</td>

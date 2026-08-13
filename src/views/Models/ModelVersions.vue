@@ -164,7 +164,7 @@ export default {
     },
 		getHexValue(value) {
 			if (value)
-				return `${value} (0x${value.toString(16)})`;
+				return `${value} (0x${value.toString(16).toUpperCase()})`;
 			else
 				return value;
 		},
@@ -323,7 +323,7 @@ export default {
     </div>
     <div v-else>
       <h5>
-        No Software Versions available for VID : {{ vid }} and PID : {{ pid }}
+        No Software Versions available for VID: {{ getHexValue(vid) }} and PID: {{ getHexValue(pid) }}
       </h5>
     </div>
 
