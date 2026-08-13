@@ -72,7 +72,7 @@ export default {
         },
 
         addHexValueToVendorID(vendorID) {
-            if (vendorID) return `${vendorID} (0x${vendorID.toString(16)})`;
+            if (vendorID) return `${vendorID} (0x${vendorID.toString(16).toUpperCase()})`;
             else return 'Not Set';
         },
         formatDate(timestamp) {

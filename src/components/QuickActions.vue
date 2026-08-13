@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="text-500 text-sm text-truncate">
                                         Serial: {{ cert?.serialNumber || 'N/A' }}
-                                        <span v-if="cert?.vid"> | VID: {{ cert.vid }}</span>
+                                        <span v-if="cert?.vid"> | VID: {{ hexValue(cert.vid) }}</span>
                                     </div>
                                 </div>
                                 <Badge :value="`${cert?.approvals?.length || 0} approvals`" severity="warning" class="ml-2 flex-shrink-0"></Badge>
@@ -276,6 +276,11 @@ export default {
 
             // Fallback
             return 'Unknown Certificate';
+        },
+
+        hexValue(value) {
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
+            else return value;
         },
 
 

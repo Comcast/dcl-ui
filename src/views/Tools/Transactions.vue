@@ -304,6 +304,22 @@ export default {
       return new Intl.NumberFormat('en-US').format(number)
     }
 
+    const hexValue = (value) => {
+      if (value && !isNaN(value)) {
+        const num = parseInt(value)
+        return `${num} (0x${num.toString(16).toUpperCase()})`
+      }
+      return value
+    }
+
+    const formatValue = (key, value) => {
+      // Format VID and PID with hex
+      if ((key === 'vid' || key === 'pid') && value && !isNaN(value)) {
+        return hexValue(value)
+      }
+      return value
+    }
+
     const fetchUpgradeInfo = async () => {
       try {
         const response = await fetch(`${restEndpoint}/dcl/dclupgrade/approved-upgrades`)
@@ -417,6 +433,7 @@ export default {
       formatKey,
       getMessageContent,
       formatNumber,
+      formatValue,
       searchText,
       filteredTransactions
     }
@@ -563,7 +580,7 @@ export default {
                   <template v-for="(value, key) in getMessageContent(msg)" :key="key">
                     <div class="col-12 sm:col-6 lg:col-4 mb-2">
                       <div class="text-500 text-sm">{{ formatKey(key) }}</div>
-                      <div class="text-900 break-all">{{ value }}</div>
+                      <div class="text-900 break-all">{{ formatValue(key, value) }}</div>
                     </div>
                   </template>
                 </div>

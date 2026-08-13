@@ -116,7 +116,7 @@ export default {
             this.showProvisionalModel = false;
         },
         hexValue(value) {
-            if (value) return `${value} (0x${value.toString(16)})`;
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
             else return value;
         },
         populateModelData(complianceArray, allComplianceInfo) {
@@ -179,17 +179,6 @@ export default {
                                     class="p-button-rounded p-button-secondary p-button-text"
                                     v-bind:class="{ 'p-disabled': !isSignedIn }"
                                     v-tooltip="'Update Compliance Info'"
-                                />
-                            </span>
-                            <span style="margin-right: 0.1rem">
-                                <Button
-                                    label=""
-                                    @click="showRevokeModelDialog(data)"
-                                    iconPos="left"
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger p-button-text"
-                                    v-bind:class="{ 'p-disabled': !isSignedIn }"
-                                    v-tooltip="'Revoke Certified Model'"
                                 />
                             </span>
                         </template>

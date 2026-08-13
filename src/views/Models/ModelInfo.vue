@@ -149,12 +149,15 @@ export default {
             this.update = true;
         } else {
             /*
-             default value for commissioningModeInitialStepsHint is set to 1
-             commissioningModeInitialStepsHint SHALL identify a hint for the steps that can be used to put 
-             into commissioning mode a device that has not yet been commissioned. This field is a bitmap with 
-             values defined in the Pairing Hint Table. For example, a value of 1 (bit 0 is set) 
-             indicates that a device that has not yet been commissioned will enter Commissioning Mode 
-             upon a power cycle (default 1).
+             Matter Specification 5.7.1 requirement:
+             For Standard Commissioning Flow devices (CommissioningCustomFlow = 0), the 
+             CommissioningModeInitialStepsHint field MUST be set to a non-zero integer value,
+             with bit 0 (Power Cycle) being set to 1.
+             
+             Default value for commissioningModeInitialStepsHint is set to 1.
+             This field is a bitmap with values defined in the Pairing Hint Table. 
+             A value of 1 (bit 0 is set) indicates that a device that has not yet been 
+             commissioned will enter Commissioning Mode upon a power cycle.
             */
             this.model.commissioningModeInitialStepsHint = 1;
 
@@ -406,12 +409,13 @@ export default {
                     <!-- Field for commissioningModeInitialStepsHint -->
                     <div class="field">
                         <label for="commissioningModeInitialStepsHint">
-                            <IconField v-tooltip.top="'Hint for steps to put uncommissioned device into commissioning mode. Default: 1 (power cycle)'">
+                            <IconField v-tooltip.top="'Matter Specification 5.7.1 requires this field to be non-zero for Standard Commissioning Flow devices, with bit 0 (Power Cycle) set to 1. This is a bitmap with values defined in the Pairing Hint Table.'">
                                 Commissioning Mode Initial Steps Hint
                                 <i class="pi pi-info-circle ml-2"></i>
                             </IconField>
                         </label>
-                        <InputText id="commissioningModeInitialStepsHint" type="text" v-model="v$.model.commissioningModeInitialStepsHint.$model" :class="{ 'p-invalid': v$.model.commissioningModeInitialStepsHint.$invalid && submitted }" />
+                        <InputText id="commissioningModeInitialStepsHint" type="text" placeholder="1" v-model="v$.model.commissioningModeInitialStepsHint.$model" :class="{ 'p-invalid': v$.model.commissioningModeInitialStepsHint.$invalid && submitted }" />
+                        <small class="p-text-secondary">Per Matter Specification 5.7.1: Must be non-zero (typically 1) for Standard Commissioning Flow (CommissioningCustomFlow = 0)</small>
                         <div v-if="v$.model.commissioningModeInitialStepsHint.$invalid && submitted" class="p-error">Commissioning Mode Initial Steps Hint is required</div>
                     </div>
 

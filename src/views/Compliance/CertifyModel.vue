@@ -72,8 +72,7 @@ export default {
                 certificationRoute: {},
                 programType: {},
                 transport: {},
-                parentChild: {},
-                certificationIdOfSoftwareComponent: {}
+                parentChild: {}
             }
         };
     },
@@ -132,6 +131,10 @@ export default {
             } else {
                 return null;
             }
+        },
+        hexValue(value) {
+            if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
+            else return value;
         }
     },
     created() {
@@ -158,11 +161,11 @@ export default {
             <table>
                 <tr>
                     <td class="p-text">Vendor ID</td>
-                    <td>{{ msgCertifyModel.vid }}</td>
+                    <td>{{ hexValue(msgCertifyModel.vid) }}</td>
                 </tr>
                 <tr>
                     <td>Product ID</td>
-                    <td>{{ msgCertifyModel.pid }}</td>
+                    <td>{{ hexValue(msgCertifyModel.pid) }}</td>
                 </tr>
                 <tr>
                     <td>Software Version</td>
@@ -235,10 +238,6 @@ export default {
                 <tr>
                     <td>ParentChild</td>
                     <td>{{ msgCertifyModel.parentChild }}</td>
-                </tr>
-                <tr>
-                    <td>CertificationId Of SoftwareComponent</td>
-                    <td>{{ msgCertifyModel.certificationIdOfSoftwareComponent }}</td>
                 </tr>
             </table>
         </div>
@@ -381,18 +380,6 @@ export default {
                     <label for="parentChild"> ParentChild </label>
                     <InputText id="parentChild" type="text" v-model="v$.msgCertifyModel.parentChild.$model" :class="{ 'p-invalid': v$.msgCertifyModel.parentChild.$invalid && submitted }" />
                     <div v-if="v$.msgCertifyModel.parentChild.$invalid && submitted" class="p-error">ParentChild is required</div>
-                </div>
-
-                <!-- Field for certificationIdOfSoftwareComponent -->
-                <div class="field">
-                    <label for="certificationIdOfSoftwareComponent"> CertificationId Of SoftwareComponent </label>
-                    <InputText
-                        id="certificationIdOfSoftwareComponent"
-                        type="text"
-                        v-model="v$.msgCertifyModel.certificationIdOfSoftwareComponent.$model"
-                        :class="{ 'p-invalid': v$.msgCertifyModel.certificationIdOfSoftwareComponent.$invalid && submitted }"
-                    />
-                    <div v-if="v$.msgCertifyModel.certificationIdOfSoftwareComponent.$invalid && submitted" class="p-error">CertificationId Of SoftwareComponent is required</div>
                 </div>
 
                 <div class="field">

@@ -19,7 +19,7 @@ export default defineComponent({
     methods: {
         formatVendorId(vendorId) {
             if (!vendorId) return 'Not Set';
-            return `${vendorId} (0x${vendorId.toString(16)})`;
+            return `${vendorId} (0x${vendorId.toString(16).toUpperCase()})`;
         },
 
         getRoleConfig(role) {
@@ -75,12 +75,24 @@ export default defineComponent({
 
             if (!this.creatorAccount?.approvals?.length) return '';
             
-            const csaProposal = this.creatorAccount.approvals.find(
-                approval => approval.info.includes('CSA proposal for')
+            // Check for CSA/Alliance proposal patterns and extract vendor name
+            const proposal = this.creatorAccount.approvals.find(
+                approval => approval.info && (
+                    approval.info.includes('CSA proposal for') || 
+                    approval.info.includes('Alliance proposal for') ||
+                    approval.info.includes('Alliance proposal of')
+                )
             );
             
-            if (csaProposal) {
-                return csaProposal.info.replace('CSA proposal for ', '').trim();
+            if (proposal) {
+                let name = proposal.info;
+                // Remove "CSA proposal for" prefix
+                name = name.replace(/^CSA proposal for\s+/i, '');
+                // Remove "Alliance proposal for" prefix
+                name = name.replace(/^Alliance proposal for\s+/i, '');
+                // Remove "Alliance proposal of" prefix
+                name = name.replace(/^Alliance proposal of\s+/i, '');
+                return name.trim();
             }
             
             if (this.creatorAccount.approvals[0]?.info) {

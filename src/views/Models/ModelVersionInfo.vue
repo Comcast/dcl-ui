@@ -49,7 +49,9 @@ export default {
                 },
                 cdVersionNumber: {},
                 firmwareInformation: {},
-                softwareVersionValid: {},
+                softwareVersionValid: {
+                    required
+                },
                 otaUrl: {},
                 otaFileSize: {},
                 otaChecksum: {},
