@@ -181,17 +181,6 @@ export default {
                                     v-tooltip="'Update Compliance Info'"
                                 />
                             </span>
-                            <span style="margin-right: 0.1rem">
-                                <Button
-                                    label=""
-                                    @click="showRevokeModelDialog(data)"
-                                    iconPos="left"
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger p-button-text"
-                                    v-bind:class="{ 'p-disabled': !isSignedIn }"
-                                    v-tooltip="'Revoke Certified Model'"
-                                />
-                            </span>
                         </template>
                     </Column>
                 </DataTable>
