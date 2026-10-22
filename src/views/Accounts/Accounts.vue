@@ -134,6 +134,13 @@ export default {
             return loggedIn;
         },
 
+        isTrustee() {
+            const address = this.$store.state.selectedKeplrAccount?.address;
+            if (!this.isSignedIn || !address) return false;
+            const accounts = this.$store.getters['zigbeealliance.distributedcomplianceledger.dclauth/getAccountAll']()?.account || [];
+            return !!accounts.find((a) => a.base_account.address === address)?.roles?.includes('Trustee');
+        },
+
         grantActionHeader() {
             switch (this.grantAction) {
                 case 'ApproveAddAccount':
@@ -268,7 +275,7 @@ export default {
                             />
                         </template>
                     </Column>
-                    <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+                    <Column v-if="isTrustee" field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="{ data }">
                             <Button label="Revoke" @click="showGrantActionAccountDialog(data, 'ProposeRevokeAccount')" iconPos="left" icon="pi pi-ban" class="p-button-danger" v-bind:class="{ 'p-disabled': !isSignedIn }" />
                         </template>
@@ -403,7 +410,7 @@ export default {
                             />
                         </template>
                     </Column>
-                    <Column field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+                    <Column v-if="isTrustee" field="account" headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="{ data }">
                             <Button label="Revoke" @click="showGrantActionAccountDialog(data, 'ApproveRevokeAccount')" iconPos="left" icon="pi pi-ban" class="p-button-danger" v-bind:class="{ 'p-disabled': !isSignedIn }" />
                         </template>
