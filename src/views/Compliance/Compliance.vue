@@ -12,9 +12,39 @@ import Tag from 'primevue/tag';
 import CertifyModel from './CertifyModel.vue';
 import RevokeModel from './RevokeModel.vue';
 import ProvisionModel from './ProvisionModel.vue';
-import { FilterMatchMode } from 'primevue/api';
+import { useStore } from 'vuex';
+import LazyTableHeader from '@/components/LazyTableHeader.vue';
+import { fetchPage, searchByVidPid, enrichRows, clearComplianceInfoCache, parseId } from '@/store/compliance-paged';
+import { useLazyTable } from '@/store/lazy-table';
+
+const KINDS = ['certified', 'revoked', 'provisional'];
+const hex = (value) => (value ? `${value} (0x${value.toString(16).toUpperCase()})` : value);
+
 export default {
     name: 'Compliance',
+    setup() {
+        const store = useStore();
+        const tabs = {};
+        for (const kind of KINDS) {
+            tabs[kind] = useLazyTable({
+                cacheKey: `compliance-${kind}`,
+                fetchPage: (opts) => fetchPage(store, kind, opts),
+                search: (vidText, pidText) => {
+                    const vid = parseId(vidText);
+                    const pid = parseId(pidText);
+                    if (vid === null || pid === null) throw new Error('Enter both Vendor ID and Product ID (decimal or 0x hex).');
+                    return searchByVidPid(store, kind, vid, pid);
+                },
+                decorate: (m) => {
+                    m.vidHex = hex(m.vid);
+                    m.pidHex = hex(m.pid);
+                },
+                enrich: (rows) => enrichRows(store, rows),
+                filterFields: ['certificationType', 'vidHex', 'pidHex', 'softwareVersion', 'softwareVersionString', 'cDCertificateId']
+            });
+        }
+        return { tabs };
+    },
     data() {
         return {
             selectedCertifiedModel: null,
@@ -22,10 +52,7 @@ export default {
             showCertifyModel: false,
             showRevokeModel: false,
             showProvisionalModel: false,
-            showCertifyModelViewOnly: false,
-            filters: {
-                global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-            }
+            showCertifyModelViewOnly: false
         };
     },
 
@@ -40,59 +67,27 @@ export default {
         InputIcon,
         InputText,
         Tag,
+        LazyTableHeader,
         CertifyModel,
         RevokeModel,
         ProvisionModel
     },
 
     computed: {
-        allCertifiedModels() {
-            const certifiedModelArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.compliance/getCertifiedModelAll']();
-            // Add Hex Values for vid, pid
-            certifiedModelArray?.certifiedModel?.forEach((certifiedModel) => {
-                certifiedModel.vidHex = this.hexValue(certifiedModel.vid);
-                certifiedModel.pidHex = this.hexValue(certifiedModel.pid);
-            });
-            this.populateModelData(certifiedModelArray?.certifiedModel, this.allComplianceInfo);
-            return certifiedModelArray?.certifiedModel;
-        },
-
-        allRevokedModels() {
-            const revokedModelArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.compliance/getRevokedModelAll']();
-            // Add Hex Values for vid, pid
-            revokedModelArray?.revokedModel?.forEach((revokedModel) => {
-                revokedModel.vidHex = this.hexValue(revokedModel.vid);
-                revokedModel.pidHex = this.hexValue(revokedModel.pid);
-            });
-            this.populateModelData(revokedModelArray?.revokedModel, this.allComplianceInfo);
-            return revokedModelArray?.revokedModel;
-        },
-
-        allProvisionalModels() {
-            const allProvisionalModels = this.$store.getters['zigbeealliance.distributedcomplianceledger.compliance/getProvisionalModelAll']();
-            // Add Hex Values for vid, pid
-            allProvisionalModels?.provisionalModel?.forEach((provisionalModel) => {
-                provisionalModel.vidHex = this.hexValue(provisionalModel.vid);
-                provisionalModel.pidHex = this.hexValue(provisionalModel.pid);
-            });
-
-            return allProvisionalModels?.provisionalModel;
-        },
-
-        allComplianceInfo() {
-            const allComplianceInfo = this.$store.getters['zigbeealliance.distributedcomplianceledger.compliance/getComplianceInfoAll']();
-            return allComplianceInfo?.complianceInfo;
-        },
-
         isSignedIn() {
             return this.$store.getters['loggedIn']
         }
     },
 
-    created: function () {
+    created() {
+        this.tabs.certified.loadPage();
     },
 
     methods: {
+        onTabChange(event) {
+            const table = this.tabs[KINDS[event.index]];
+            if (table.rows.length === 0 && !table.loading) table.loadPage();
+        },
         showCertifyModelDialog(model, viewOnly = false) {
             this.selectedRevokedModel = model;
             this.showCertifyModel = true;
@@ -100,6 +95,11 @@ export default {
         },
         dismissCertifyModelDialog() {
             this.showCertifyModel = false;
+            clearComplianceInfoCache();
+            Object.values(this.tabs).forEach((table) => {
+                table.reset();
+                if (table.mode === 'all' || table.rows.length) table.refresh();
+            });
         },
         showRevokeModelDialog(model) {
             this.selectedCertifiedModel = model;
@@ -119,44 +119,21 @@ export default {
             if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
             else return value;
         },
-        populateModelData(complianceArray, allComplianceInfo) {
-            if (!allComplianceInfo || allComplianceInfo.length === 0) {
-                return;
-            }
-            for (const certifiedModel of complianceArray || []) {
-                const { vid, pid, softwareVersion } = certifiedModel;
-                const complianceInfo = allComplianceInfo.find((complianceInfo) => {
-                    return complianceInfo.vid === vid && complianceInfo.pid === pid && complianceInfo.softwareVersion === softwareVersion;
-                });
-                if (complianceInfo) {
-                    // Populate all properties from complianceInfo into certifiedModel
-                    Object.assign(certifiedModel, complianceInfo);
-                    certifiedModel.certificationDate = complianceInfo.date;
-                }
-            }
-        }
     }
 };
 </script>
 
 <template>
     <div class="prime-vue-container">
-        <TabView>
+        <TabView @tab-change="onTabChange">
             <TabPanel>
                 <template #header>
                     <i class="pi pi-verified text-green-500 mr-2"></i>
                     <span class="font-semibold">Certified Models</span>
                 </template>
-                <DataTable :value="allCertifiedModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="tabs.certified.mode === 'all' ? tabs.certified.allRows : tabs.certified.rows" :lazy="tabs.certified.mode === 'paged'" :class="{ 'lazy-paged': tabs.certified.mode === 'paged' }" :loading="tabs.certified.loading" :totalRecords="tabs.certified.total" :first="tabs.certified.first" v-model:filters="tabs.certified.filters" :globalFilterFields="tabs.certified.filterFields" @page="tabs.certified.onPage($event)" @value-change="tabs.certified.onValueChange($event)" :auto-layout="true" :paginator="true" :rows="tabs.certified.perPage" :rowsPerPageOptions="[10, 20, 50, 100]" showGridlines stripedRows>
                     <template #header>
-                        <div class="flex justify-content-end">
-                            <IconField>
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filters['global'].value" placeholder="Search" />
-                            </IconField>
-                        </div>
+                        <LazyTableHeader :table="tabs.certified" />
                     </template>
 
                     <Column field="certificationType" header="Certification Type" :sortable="true"></Column>
@@ -195,16 +172,9 @@ export default {
                 <Button @click="showRevokeModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Revoke Model" /> 
                 -->
 
-                <DataTable :value="allRevokedModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="tabs.revoked.mode === 'all' ? tabs.revoked.allRows : tabs.revoked.rows" :lazy="tabs.revoked.mode === 'paged'" :class="{ 'lazy-paged': tabs.revoked.mode === 'paged' }" :loading="tabs.revoked.loading" :totalRecords="tabs.revoked.total" :first="tabs.revoked.first" v-model:filters="tabs.revoked.filters" :globalFilterFields="tabs.revoked.filterFields" @page="tabs.revoked.onPage($event)" @value-change="tabs.revoked.onValueChange($event)" :auto-layout="true" :paginator="true" :rows="tabs.revoked.perPage" :rowsPerPageOptions="[10, 20, 50, 100]" showGridlines stripedRows>
                     <template #header>
-                        <div class="flex justify-content-end">
-                            <IconField>
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filters['global'].value" placeholder="Search" />
-                            </IconField>
-                        </div>
+                        <LazyTableHeader :table="tabs.revoked" />
                     </template>
                     <Column field="certificationType" header="Certification Type" :sortable="true"></Column>
                     <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
@@ -228,16 +198,9 @@ export default {
                 <!-- Disabled per request from CSA
                 <Button @click="showProvisionalModelDialog" class="p-button-primary mb-4" v-bind:class="{ 'p-disabled': !isSignedIn }" label="Provision Model" />
                  -->
-                <DataTable :value="allProvisionalModels" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" filterDisplay="row" showGridlines stripedRows>
+                <DataTable :value="tabs.provisional.mode === 'all' ? tabs.provisional.allRows : tabs.provisional.rows" :lazy="tabs.provisional.mode === 'paged'" :class="{ 'lazy-paged': tabs.provisional.mode === 'paged' }" :loading="tabs.provisional.loading" :totalRecords="tabs.provisional.total" :first="tabs.provisional.first" v-model:filters="tabs.provisional.filters" :globalFilterFields="tabs.provisional.filterFields" @page="tabs.provisional.onPage($event)" @value-change="tabs.provisional.onValueChange($event)" :auto-layout="true" :paginator="true" :rows="tabs.provisional.perPage" :rowsPerPageOptions="[10, 20, 50, 100]" showGridlines stripedRows>
                     <template #header>
-                        <div class="flex justify-content-end">
-                            <IconField>
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filters['global'].value" placeholder="Search" />
-                            </IconField>
-                        </div>
+                        <LazyTableHeader :table="tabs.provisional" />
                     </template>
                     <Column field="certificationType" header="Certification Type" :sortable="true"></Column>
                     <Column field="vidHex" header="Vendor ID" :sortable="true"></Column>
