@@ -132,6 +132,11 @@ export default {
                 return null;
             }
         },
+        specificationVersionHex(value) {
+            const n = Number(value);
+            if (!value || !Number.isInteger(n)) return value;
+            return `${n} (0x${n.toString(16).toUpperCase().padStart(8, '0')})`;
+        },
         hexValue(value) {
             if (value) return `${value} (0x${value.toString(16).toUpperCase()})`;
             else return value;
@@ -201,7 +206,7 @@ export default {
                 </tr>
                 <tr>
                     <td>Specification Version</td>
-                    <td>{{ msgCertifyModel.specificationVersion }}</td>
+                    <td>{{ specificationVersionHex(msgCertifyModel.specificationVersion) }}</td>
                 </tr>
                 <tr>
                     <td>Family Id</td>

@@ -32,11 +32,12 @@ export default {
         const table = useLazyTable({
             cacheKey: 'models',
             fetchPage: (opts) => fetchModelPage(store, opts),
-            search: (vidText, pidText) => {
-                const vid = parseId(vidText);
-                const pid = parseId(pidText);
-                if (vid === null || (pidText.trim() && pid === null)) {
-                    throw new Error('Enter a Vendor ID (and optionally a Product ID), decimal or 0x hex.');
+            search: (query) => {
+                const parts = query.trim().split(/[\s,/]+/).filter(Boolean);
+                const vid = parseId(parts[0]);
+                const pid = parts.length > 1 ? parseId(parts[1]) : null;
+                if (parts.length > 2 || vid === null || (parts.length > 1 && pid === null)) {
+                    throw new Error('Enter a Vendor ID and optional Product ID in the same box, decimal or 0x hex.');
                 }
                 return searchModels(store, vid, pid);
             },
@@ -206,7 +207,7 @@ export default {
             stripedRows
         >
             <template #header>
-                <LazyTableHeader :table="table" vidOnlyAllowed />
+                <LazyTableHeader :table="table" searchPlaceholder="Search VID [PID] (decimal or 0x hex)" />
             </template>
 
             <Column :expander="true" headerStyle="width: 3rem" />
@@ -242,6 +243,4 @@ export default {
         </Dialog>
     </div>
 </template>
-
-
 
