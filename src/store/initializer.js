@@ -20,24 +20,8 @@ export default {
         options: { subscribe: true, all: true }
       }),
 
-      // Models
-      store.dispatch('zigbeealliance.distributedcomplianceledger.model/QueryModelAll', {
-        options: { subscribe: true, all: true }
-      }),
+      // Model and compliance lists are loaded page-by-page in their views
 
-      // Compliance
-      store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryComplianceInfoAll', {
-        options: { subscribe: true, all: true }
-      }),
-      store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryCertifiedModelAll', {
-        options: { subscribe: true, all: true }
-      }),
-      store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryRevokedModelAll', {
-        options: { subscribe: true, all: true }
-      }),
-      store.dispatch('zigbeealliance.distributedcomplianceledger.compliance/QueryProvisionalModelAll', {
-        options: { subscribe: true, all: true }
-      }),
 
       // Vendor info
       store.dispatch('zigbeealliance.distributedcomplianceledger.vendorinfo/QueryVendorInfoAll', {

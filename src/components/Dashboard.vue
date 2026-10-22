@@ -274,6 +274,8 @@ import Vue3autocounter from 'vue3-autocounter';
 import { decodePubkey } from '@cosmjs/proto-signing';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import QuickActions from './QuickActions.vue';
+import { fetchTotal } from '@/store/compliance-paged';
+import { fetchModelTotal } from '@/store/models-paged';
 
 export default {
     name: 'Dashboard',
@@ -287,47 +289,25 @@ export default {
             scaleClass: false,
             pubKey: null,
             loadValues: {},
-            nodeInfo: {},
-            queries: [
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.model',
-                    method: 'QueryModelAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.dclauth',
-                    method: 'QueryAccountAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.dclauth',
-                    method: 'QueryPendingAccountAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.dclauth',
-                    method: 'QueryPendingAccountRevocationAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.validator',
-                    method: 'QueryValidatorAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.compliance',
-                    method: 'QueryCertifiedModelAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.pki',
-                    method: 'QueryApprovedCertificatesAll'
-                },
-                {
-                    namespace: 'zigbeealliance.distributedcomplianceledger.vendorinfo',
-                    method: 'QueryVendorInfoAll'
-                }
-            ]
+            certifiedTotal: 0,
+            modelTotal: 0,
+            nodeInfo: {}
         };
     },
     watch: {},
 
     created() {
         // Get the initial values
+        fetchTotal(this.$store, 'certified')
+            .then((total) => {
+                this.certifiedTotal = total;
+            })
+            .catch((error) => console.error('Error fetching certified model count:', error));
+        fetchModelTotal(this.$store)
+            .then((total) => {
+                this.modelTotal = total;
+            })
+            .catch((error) => console.error('Error fetching model count:', error));
         fetch(import.meta.env.VITE_APP_DCL_RPC_NODE + '/block')
             .then((response) => response.json())
             .then((data) => {
@@ -341,16 +321,7 @@ export default {
             })
             .catch((error) => {
                 console.error('Error fetching node info:', error);
-            });            
-
-        this.queries.forEach((query) => {
-            this.$store.dispatch(`${query.namespace}/${query.method}`, {
-                options: {
-                    subscribe: true,
-                    all: true
-                }
             });
-        });
     },
     computed: {
         isTestnetOrLocalhost() {
@@ -400,8 +371,7 @@ export default {
         },
 
         modelCount() {
-            const modelInfoArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.model/getModelAll']();
-            return modelInfoArray?.model?.length || 0;
+            return this.modelTotal;
         },
 
         certificateCount() {
@@ -411,8 +381,7 @@ export default {
         },
 
         certifiedModelCount() {
-            const certifiedModelInfoArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.compliance/getCertifiedModelAll']();
-            return certifiedModelInfoArray?.certifiedModel?.length || 0;
+            return this.certifiedTotal;
         },
 
         validatorCount() {
