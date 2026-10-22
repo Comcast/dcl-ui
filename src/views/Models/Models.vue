@@ -6,7 +6,13 @@ import Dialog from 'primevue/dialog';
 import ModelInfo from './ModelInfo.vue';
 import ModelVersions from './ModelVersions.vue';
 import Message from 'primevue/message';
-import { FilterMatchMode } from 'primevue/api';
+import { useStore } from 'vuex';
+import LazyTableHeader from '@/components/LazyTableHeader.vue';
+import { parseId } from '@/store/compliance-paged';
+import { useLazyTable } from '@/store/lazy-table';
+import { fetchModelPage, searchModels } from '@/store/models-paged';
+
+const hex = (value) => (value ? `${value} (0x${value.toString(16).toUpperCase()})` : value);
 
 export default {
     name: 'Models',
@@ -17,7 +23,31 @@ export default {
         Dialog,
         ModelInfo,
         ModelVersions,
-        Message
+        Message,
+        LazyTableHeader
+    },
+
+    setup() {
+        const store = useStore();
+        const table = useLazyTable({
+            cacheKey: 'models',
+            fetchPage: (opts) => fetchModelPage(store, opts),
+            search: (vidText, pidText) => {
+                const vid = parseId(vidText);
+                const pid = parseId(pidText);
+                if (vid === null || (pidText.trim() && pid === null)) {
+                    throw new Error('Enter a Vendor ID (and optionally a Product ID), decimal or 0x hex.');
+                }
+                return searchModels(store, vid, pid);
+            },
+            decorate: (model) => {
+                model.vidHex = hex(model.vid);
+                model.pidHex = hex(model.pid);
+                model.deviceTypeIdHex = hex(model.deviceTypeId);
+            },
+            filterFields: ['vidHex', 'pidHex', 'deviceTypeIdHex', 'productName', 'productLabel']
+        });
+        return { table };
     },
 
     data() {
@@ -27,16 +57,22 @@ export default {
             viewOnly: false,
             error: null,
             modelVersions: [],
-            expandedRows: [],
-            filters: {
-                global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-            }
+            expandedRows: []
         };
     },
 
+    created() {
+        this.table.loadPage();
+    },
+
     methods: {
+        reload() {
+            this.table.reset();
+            this.table.refresh();
+        },
         dismissModelInfoDialog() {
             this.showModelInfo = false;
+            this.reload();
         },
         showModelInfoDialog(modelInfo, viewOnly) {
             this.showModelInfo = true;
@@ -78,6 +114,7 @@ export default {
                         loader.hide();
                         if (response.code == 0) {
                             this.error = null;
+                            this.reload();
                             this.$toast.add({
                                 severity: 'success',
                                 summary: 'Successful Tx',
@@ -131,25 +168,9 @@ export default {
     },
 
     computed: {
-        allModels() {
-            const ModelInfoArray = this.$store.getters['zigbeealliance.distributedcomplianceledger.model/getModelAll']();
-            // Add hex values for vid and pid
-            if (ModelInfoArray && ModelInfoArray.model) {
-                ModelInfoArray.model.forEach((model) => {
-                    model.vidHex = this.getHexValue(model.vid);
-                    model.pidHex = this.getHexValue(model.pid);
-                    model.deviceTypeIdHex = this.getHexValue(model.deviceTypeId);
-                });
-            }
-            return ModelInfoArray?.model;
-        },
-
         isSignedIn() {
             return this.$store.getters['loggedIn'];
         }
-    },
-
-    created: function () {
     }
 };
 </script>
@@ -163,16 +184,29 @@ export default {
             <Button @click="showNewModelInfoDialog" icon="pi pi-check" v-bind:class="{ 'p-disabled': !isSignedIn }" label="New Model">New Model</Button>
         </div>
 
-        <DataTable :value="allModels" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" :auto-layout="true" :paginator="true" :rows="10" :rowsPerPageOptions="[10, 20, 50, 100]" v-model:filters="filters" v-model:expandedRows="expandedRows" filterDisplay="row" showGridlines stripedRows>
+        <DataTable
+            :value="table.mode === 'all' ? table.allRows : table.rows"
+            :lazy="table.mode === 'paged'"
+            :class="{ 'lazy-paged': table.mode === 'paged' }"
+            :loading="table.loading"
+            :totalRecords="table.total"
+            :first="table.first"
+            v-model:filters="table.filters"
+            :globalFilterFields="table.filterFields"
+            @page="table.onPage($event)"
+            @value-change="table.onValueChange($event)"
+            @rowExpand="onRowExpand"
+            @rowCollapse="onRowCollapse"
+            :auto-layout="true"
+            :paginator="true"
+            :rows="table.perPage"
+            :rowsPerPageOptions="[10, 20, 50, 100]"
+            v-model:expandedRows="expandedRows"
+            showGridlines
+            stripedRows
+        >
             <template #header>
-                <div class="flex justify-content-end">
-                    <IconField>
-                        <InputIcon>
-                            <i class="pi pi-search" />
-                        </InputIcon>
-                        <InputText v-model="filters['global'].value" placeholder="Search" />
-                    </IconField>
-                </div>
+                <LazyTableHeader :table="table" vidOnlyAllowed />
             </template>
 
             <Column :expander="true" headerStyle="width: 3rem" />
