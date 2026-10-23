@@ -38,7 +38,7 @@ export default {
                 <InputIcon>
                     <i class="pi pi-search" />
                 </InputIcon>
-                <InputText v-model="table.filters.global.value" placeholder="Search loaded records" />
+                <InputText v-model="table.filters['global'].value" placeholder="Search loaded records" />
             </IconField>
         </div>
 

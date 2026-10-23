@@ -75,7 +75,7 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
 
         clearSearch() {
             t.searchText = '';
-            t.filters.global.value = null;
+            t.filters['global'].value = null;
             t.error = null;
             if (t.mode === 'all') return;
             t.first = 0;
@@ -126,7 +126,7 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
         backToPaged() {
             t.mode = 'paged';
             t.allRows = [];
-            t.filters.global.value = null;
+            t.filters['global'].value = null;
             t.searchText = '';
             t.first = 0;
             t.loadPage();
@@ -147,7 +147,7 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
         t.total = rows.length;
         t.mode = 'all';
         t.first = 0;
-        t.filters.global.value = null;
+        t.filters['global'].value = null;
         t.searchText = '';
         t.error = null;
         processed = t.allRows;
