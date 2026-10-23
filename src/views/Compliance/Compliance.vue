@@ -14,7 +14,7 @@ import RevokeModel from './RevokeModel.vue';
 import ProvisionModel from './ProvisionModel.vue';
 import { useStore } from 'vuex';
 import LazyTableHeader from '@/components/LazyTableHeader.vue';
-import { fetchPage, searchByVidPid, enrichRows, clearComplianceInfoCache, parseId } from '@/store/compliance-paged';
+import { fetchPage, searchByVidPid, enrichRows, enrichAllRows, clearComplianceInfoCache, parseId } from '@/store/compliance-paged';
 import { useLazyTable } from '@/store/lazy-table';
 
 const KINDS = ['certified', 'revoked', 'provisional'];
@@ -43,6 +43,7 @@ export default {
                     m.pidHex = hex(m.pid);
                 },
                 enrich: (rows) => enrichRows(store, rows),
+                enrichAll: (rows) => enrichAllRows(store, rows),
                 filterFields: ['certificationType', 'vidHex', 'pidHex', 'softwareVersion', 'softwareVersionString', 'cDCertificateId']
             });
         }
