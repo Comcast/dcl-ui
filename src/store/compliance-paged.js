@@ -84,12 +84,46 @@ export async function searchByVidPid(store, kind, vid, pid) {
     return results.filter((r) => r && (kind !== 'certified' || r.value !== false));
 }
 
+const infoKey = (r) => `${r.vid}/${r.pid}/${r.softwareVersion}/${r.certificationType}`;
+
+function mergeInfo(row, info) {
+    Object.assign(row, info);
+    row.certificationDate = info.date;
+}
+
+// Pages through the full ComplianceInfo list (~total/100 requests) and merges it into rows, so every row is searchable.
+export async function enrichAllRows(store, rows, { pageSize = 100, batch = 5 } = {}) {
+    const api = complianceApi(store);
+    const fetchInfoPage = (offset) =>
+        api.queryComplianceInfoAll({
+            'pagination.offset': String(offset),
+            'pagination.limit': String(pageSize),
+            'pagination.count_total': offset === 0
+        });
+    const { data: first } = await fetchInfoPage(0);
+    const infos = [...(first.complianceInfo ?? [])];
+    const total = Number(first.pagination?.total ?? infos.length);
+    const offsets = [];
+    for (let o = pageSize; o < total; o += pageSize) offsets.push(o);
+    for (let i = 0; i < offsets.length; i += batch) {
+        const pages = await Promise.all(offsets.slice(i, i + batch).map(fetchInfoPage));
+        pages.forEach(({ data }) => infos.push(...(data.complianceInfo ?? [])));
+    }
+    const byKey = new Map(infos.map((info) => [infoKey(info), info]));
+    byKey.forEach((info, key) => complianceInfoCache.set(key, Promise.resolve(info)));
+    rows.forEach((row) => {
+        const info = byKey.get(infoKey(row));
+        if (info) mergeInfo(row, info);
+    });
+    return rows;
+}
+
 // Fetches and caches ComplianceInfo for each row, then merges it in.
 export async function enrichRows(store, rows) {
     const api = complianceApi(store);
     await Promise.all(
         rows.map(async (row) => {
-            const key = `${row.vid}/${row.pid}/${row.softwareVersion}/${row.certificationType}`;
+            const key = infoKey(row);
             if (!complianceInfoCache.has(key)) {
                 complianceInfoCache.set(
                     key,
@@ -103,10 +137,7 @@ export async function enrichRows(store, rows) {
                 );
             }
             const info = await complianceInfoCache.get(key);
-            if (info) {
-                Object.assign(row, info);
-                row.certificationDate = info.date;
-            }
+            if (info) mergeInfo(row, info);
         })
     );
     return rows;

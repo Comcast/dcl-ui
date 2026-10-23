@@ -3,15 +3,12 @@ import { reactive } from 'vue';
 
 const PAGE_SIZE = 100;
 const BATCH = 5;
-const ENRICH_BATCH_SIZE = 50;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const allCache = new Map();
 
-export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {}, enrich = async () => {}, filterFields = [] }) {
+export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {}, enrich = async () => {}, enrichAll = null, filterFields = [] }) {
     let cancelled = false;
     let processed = null;
-    let allRowsEnrichedForSearch = false;
-    let allSearchEnrichment = null;
 
     const t = reactive({
         mode: 'paged',
@@ -58,30 +55,6 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
             if (t.mode === 'all') enrichVisible();
         },
 
-        async onSearchInput() {
-            if (t.mode !== 'all') return;
-            t.error = null;
-            if (!t.searchText.trim()) {
-                t.filters.global.value = null;
-                return;
-            }
-            try {
-                if (!allRowsEnrichedForSearch) {
-                    allSearchEnrichment ??= (async () => {
-                        for (let i = 0; i < t.allRows.length; i += ENRICH_BATCH_SIZE) {
-                            await enrich(t.allRows.slice(i, i + ENRICH_BATCH_SIZE));
-                        }
-                    })();
-                    await allSearchEnrichment;
-                    allRowsEnrichedForSearch = true;
-                }
-                t.filters.global.value = t.searchText || null;
-            } catch (e) {
-                allSearchEnrichment = null;
-                t.error = `Failed to prepare search: ${e.message}`;
-            }
-        },
-
         async search() {
             t.loading = true;
             t.error = null;
@@ -102,7 +75,7 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
 
         clearSearch() {
             t.searchText = '';
-            t.filters.global.value = null;
+            t.filters['global'].value = null;
             t.error = null;
             if (t.mode === 'all') return;
             t.first = 0;
@@ -134,9 +107,9 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
                 if (cancelled) return;
                 const rows = pages.flat();
                 rows.forEach(decorate);
+                if (enrichAll) await enrichAll(rows);
+                if (cancelled) return;
                 allCache.set(cacheKey, { at: Date.now(), rows });
-                allRowsEnrichedForSearch = false;
-                allSearchEnrichment = null;
                 enterAllMode(rows);
             } catch (e) {
                 t.error = `Failed to load: ${e.message}`;
@@ -153,10 +126,8 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
         backToPaged() {
             t.mode = 'paged';
             t.allRows = [];
-            t.filters.global.value = null;
+            t.filters['global'].value = null;
             t.searchText = '';
-            allRowsEnrichedForSearch = false;
-            allSearchEnrichment = null;
             t.first = 0;
             t.loadPage();
         },
@@ -176,10 +147,11 @@ export function useLazyTable({ cacheKey, fetchPage, search, decorate = () => {},
         t.total = rows.length;
         t.mode = 'all';
         t.first = 0;
-        t.filters.global.value = null;
+        t.filters['global'].value = null;
+        t.searchText = '';
+        t.error = null;
         processed = t.allRows;
         enrichVisible();
-        if (t.searchText) t.onSearchInput();
     }
 
     async function enrichVisible() {
